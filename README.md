@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AnetAIS
 
-## Getting Started
+AnetAIS is a multi-provider AI SaaS platform UI mockup — a dark-themed dashboard for chat, image generation, video generation, AI utility tools, and usage-based billing, modeled after a real product reference. This is a **UI/UX prototype**: all data is mocked and held in client-side React state — there's no backend, database, or real model calls.
 
-First, run the development server:
+## Modules
+
+- **Chat** — multi-provider model picker (Bailian, Anthropic, Google, xAI, Doubao, OpenAI, DeepSeek, Grok), per-chat threads, assistant marketplace with persona-based greetings, FAQ shortcuts, a generation-params popover (temperature, top_p, presence/frequency penalty), and a collapsible chat list with live search.
+- **Image Studio** — prompt-to-image flow with model/size/count controls, an Explore gallery, and a working "My Creations" tab that fills in as you generate.
+- **Video Studio** — text-to-video and image-to-video modes, aspect ratio/duration/advanced settings (CFG scale, negative prompt, sub-model), and a generated-video sidebar with a mock player.
+- **AI Tools** — Remove Background tool with upload → process → result flow, plus a History tab of past results.
+- **Billing** — usage dashboard (Used Quota / RPM / TPM) wired to a shared `UsageContext` that updates in real time as you use Chat/Image/Video, a compute-credits usage table, and a Plans & Pricing tab (Free / Pro / Team).
+- **Account** — profile panel reachable from the sidebar avatar, with session/message stats and profile detail editing.
+
+## Tech stack
+
+- [Next.js 16](https://nextjs.org/) (App Router, Turbopack)
+- React 19 + TypeScript
+- Tailwind CSS v4
+- [lucide-react](https://lucide.dev/) for icons
+
+All interactivity (chat threads, generation flows, toasts, usage tracking) is local client state — no API routes or persistence layer.
+
+## Getting started
+
+> **Node version:** this project needs Node **≥ 20.9** (Next.js 16 requirement).
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) — it redirects to `/chat`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/
+    chat/             Chat module
+    image-studio/      Image Studio module
+    video-studio/       Video Studio module
+    tools/             AI Tools (Remove Background)
+    billing/           Usage + Plans
+    account/           Profile / account settings
+  components/
+    layout/            Sidebar, AppShell, ProfileMenu
+    chat/               ModelPicker, GenerationParams
+    ui/                 Card, IconButton, Slider, Toast, UsageContext
+  lib/
+    mock-data.ts        Mock chats, providers, assistants, plans, gallery data
+    utils.ts            cn() class-merging helper
+```
