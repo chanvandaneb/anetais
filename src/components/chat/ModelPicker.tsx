@@ -20,7 +20,8 @@ export function ModelPicker({ onClose, onSelect }: { onClose: () => void; onSele
   return (
     <div
       ref={ref}
-      className="absolute left-0 top-full z-50 mt-2 w-72 rounded-xl border border-white/10 bg-[#121212] p-2 shadow-2xl"
+      className="absolute left-0 top-full z-50 mt-2 w-72 rounded-xl border p-2 shadow-2xl"
+      style={{ borderColor: "var(--border)", background: "var(--bg-base)" }}
     >
       {providers.map((p) => (
         <button
@@ -30,10 +31,11 @@ export function ModelPicker({ onClose, onSelect }: { onClose: () => void; onSele
             onSelect(p.name);
             onClose();
           }}
-          className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm text-zinc-200 transition-colors hover:bg-white/10"
+          className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-colors hover:bg-[var(--bg-hover)]"
+          style={{ color: "var(--text-secondary)" }}
         >
           <span className="flex items-center gap-2.5">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-white/10">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--bg-active)]">
               <Cpu className="h-3.5 w-3.5 text-yellow-500" />
             </span>
             <span>

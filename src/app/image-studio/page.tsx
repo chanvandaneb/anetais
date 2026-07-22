@@ -33,14 +33,14 @@ export default function ImageStudioPage() {
   }
 
   return (
-    <div className="flex h-screen flex-col overflow-y-auto">
+    <div className="flex h-screen flex-col overflow-y-auto" style={{ background: "var(--bg-base)", color: "var(--text-primary)" }}>
       {/* Banner */}
-      <div className="relative flex h-56 flex-shrink-0 items-end overflow-hidden border-b border-white/10">
+      <div className="relative flex h-56 flex-shrink-0 items-end overflow-hidden border-b" style={{ borderColor: "var(--border)" }}>
         <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-600/40 via-indigo-600/30 to-amber-500/30 blur-2xl" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent" />
         <h1
-          className="relative px-8 pb-6 text-3xl italic text-white"
-          style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+          className="relative px-8 pb-6 text-3xl italic"
+          style={{ color: "var(--text-primary)", fontFamily: "Georgia, 'Times New Roman', serif" }}
         >
           Transform your ideas into stunning visuals
         </h1>
@@ -48,28 +48,27 @@ export default function ImageStudioPage() {
 
       <div className="px-8 py-6">
         {/* Prompt bar */}
-        <div className="mx-auto max-w-4xl rounded-xl border border-white/10 bg-white/[0.03] p-4">
+        <div className="mx-auto max-w-4xl rounded-xl border p-4" style={{ borderColor: "var(--border)", background: "var(--bg-subtle)" }}>
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Describe what you want to generate..."
             rows={3}
-            className="w-full resize-none bg-transparent text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none"
+            className="w-full resize-none bg-transparent text-sm placeholder:text-[var(--text-tertiary)] focus:outline-none"
+            style={{ color: "var(--text-primary)" }}
           />
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <button className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-zinc-300 hover:bg-white/10">
-              <Cpu className="h-3.5 w-3.5 text-yellow-500" />
-              qwen-image-edit-2509
-            </button>
-            <button className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-zinc-300 hover:bg-white/10">
-              <Maximize2 className="h-3.5 w-3.5" />
-              1024x1024
-            </button>
-            <button className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-zinc-300 hover:bg-white/10">
-              <Hash className="h-3.5 w-3.5" />
-              1 image
-            </button>
-            <button className="flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-1.5 text-zinc-300 hover:bg-white/10">
+            {[
+              { icon: Cpu, label: "qwen-image-edit-2509", yellow: true },
+              { icon: Maximize2, label: "1024x1024", yellow: false },
+              { icon: Hash, label: "1 image", yellow: false },
+            ].map(({ icon: Icon, label, yellow }) => (
+              <button key={label} className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors hover:bg-[var(--bg-hover)]" style={{ borderColor: "var(--border)", background: "var(--bg-muted)", color: "var(--text-secondary)" }}>
+                <Icon className={cn("h-3.5 w-3.5", yellow && "text-yellow-500")} />
+                {label}
+              </button>
+            ))}
+            <button className="flex items-center justify-center rounded-full border p-1.5 transition-colors hover:bg-[var(--bg-hover)]" style={{ borderColor: "var(--border)", background: "var(--bg-muted)", color: "var(--text-secondary)" }}>
               <Paperclip className="h-3.5 w-3.5" />
             </button>
             <button
@@ -78,40 +77,29 @@ export default function ImageStudioPage() {
               disabled={!prompt.trim() || generating}
               className="ml-auto flex items-center gap-1.5 rounded-lg bg-yellow-500 px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {generating ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Sparkles className="h-4 w-4" />
-              )}
+              {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
               {generating ? "Generating…" : "Generate"}
             </button>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="mx-auto mt-8 flex max-w-4xl items-center gap-6 border-b border-white/10">
-          <button
-            onClick={() => setTab("explore")}
-            className={cn(
-              "border-b-2 px-1 pb-3 text-sm font-medium transition-colors",
-              tab === "explore"
-                ? "border-yellow-500 text-white"
-                : "border-transparent text-zinc-500 hover:text-zinc-300"
-            )}
-          >
-            Explore
-          </button>
-          <button
-            onClick={() => setTab("creations")}
-            className={cn(
-              "border-b-2 px-1 pb-3 text-sm font-medium transition-colors",
-              tab === "creations"
-                ? "border-yellow-500 text-white"
-                : "border-transparent text-zinc-500 hover:text-zinc-300"
-            )}
-          >
-            My Creations{creations.length > 0 ? ` (${creations.length})` : ""}
-          </button>
+        <div className="mx-auto mt-8 flex max-w-4xl items-center gap-6 border-b" style={{ borderColor: "var(--border)" }}>
+          {(["explore", "creations"] as const).map((t) => (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              className={cn(
+                "border-b-2 px-1 pb-3 text-sm font-medium transition-colors capitalize",
+                tab === t
+                  ? "border-yellow-500 text-yellow-500"
+                  : "border-transparent hover:text-[var(--text-secondary)]"
+              )}
+              style={tab !== t ? { color: "var(--text-tertiary)" } : {}}
+            >
+              {t === "creations" ? `My Creations${creations.length > 0 ? ` (${creations.length})` : ""}` : "Explore"}
+            </button>
+          ))}
         </div>
 
         {/* Grid */}
@@ -121,34 +109,26 @@ export default function ImageStudioPage() {
               {galleryImages.map((img) => (
                 <div
                   key={img.id}
-                  className={cn(
-                    "rounded-xl bg-gradient-to-br opacity-90 transition-opacity hover:opacity-100",
-                    img.gradient,
-                    img.tall ? "aspect-[3/4]" : "aspect-square"
-                  )}
+                  className={cn("rounded-xl bg-gradient-to-br opacity-90 transition-opacity hover:opacity-100", img.gradient, img.tall ? "aspect-[3/4]" : "aspect-square")}
                 />
               ))}
             </div>
           ) : creations.length === 0 && !generating ? (
-            <div className="flex flex-col items-center justify-center py-20 text-center text-zinc-500">
+            <div className="flex flex-col items-center justify-center py-20 text-center" style={{ color: "var(--text-tertiary)" }}>
               <Sparkles className="h-8 w-8" />
               <p className="mt-3 text-sm">No creations yet. Generate your first image above.</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
               {generating && (
-                <div className="flex aspect-square animate-pulse items-center justify-center rounded-xl border border-white/10 bg-white/5">
-                  <Loader2 className="h-6 w-6 animate-spin text-zinc-500" />
+                <div className="flex aspect-square animate-pulse items-center justify-center rounded-xl border bg-[var(--bg-muted)]" style={{ borderColor: "var(--border)" }}>
+                  <Loader2 className="h-6 w-6 animate-spin" style={{ color: "var(--text-tertiary)" }} />
                 </div>
               )}
               {creations.map((img) => (
                 <div
                   key={img.id}
-                  className={cn(
-                    "rounded-xl bg-gradient-to-br opacity-90 transition-opacity hover:opacity-100",
-                    img.gradient,
-                    img.tall ? "aspect-[3/4]" : "aspect-square"
-                  )}
+                  className={cn("rounded-xl bg-gradient-to-br opacity-90 transition-opacity hover:opacity-100", img.gradient, img.tall ? "aspect-[3/4]" : "aspect-square")}
                 />
               ))}
             </div>

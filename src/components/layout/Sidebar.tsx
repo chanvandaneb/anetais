@@ -12,10 +12,13 @@ import {
   Monitor,
   Languages,
   SlidersHorizontal,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sidebarUser } from "@/lib/mock-data";
 import { ProfileMenu } from "./ProfileMenu";
+import { useTheme } from "@/components/ui/ThemeContext";
 
 const navItems = [
   { href: "/chat", icon: MessageSquare, label: "Chat" },
@@ -36,9 +39,10 @@ export function Sidebar() {
   const pathname = usePathname();
   const [profileOpen, setProfileOpen] = useState(false);
   const avatarRef = useRef<HTMLButtonElement>(null);
+  const { theme, toggle } = useTheme();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 flex w-[60px] flex-col items-center justify-between border-r border-white/10 bg-[#0a0a0a] py-4">
+    <aside className="fixed inset-y-0 left-0 z-40 flex w-[60px] flex-col items-center justify-between border-r app-border app-bg-subtle py-4 transition-colors duration-200">
       <div className="flex flex-col items-center gap-4">
         <div className="relative">
           <button
@@ -64,8 +68,8 @@ export function Sidebar() {
                 href={item.href}
                 title={item.label}
                 className={cn(
-                  "flex h-10 w-10 items-center justify-center rounded-xl text-zinc-500 transition-colors hover:bg-white/10 hover:text-white",
-                  active && "bg-white/10 text-white"
+                  "flex h-10 w-10 items-center justify-center rounded-xl app-text-3 transition-colors hover:app-bg-active hover:app-text",
+                  active ? "bg-[var(--bg-active)] text-[var(--text-primary)]" : "text-[var(--text-tertiary)]"
                 )}
               >
                 <Icon className="h-5 w-5" />
@@ -83,12 +87,23 @@ export function Sidebar() {
               key={item.label}
               type="button"
               title={item.label}
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-zinc-500 transition-colors hover:bg-white/10 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--text-tertiary)] transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]"
             >
               <Icon className="h-5 w-5" />
             </button>
           );
         })}
+
+        {/* Theme toggle */}
+        <button
+          type="button"
+          onClick={toggle}
+          title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          className="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--text-tertiary)] transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]"
+        >
+          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+        </button>
+
         {bottomNavItems.map((item) => {
           const Icon = item.icon;
           const active = pathname?.startsWith(item.href);
@@ -98,8 +113,10 @@ export function Sidebar() {
               href={item.href}
               title={item.label}
               className={cn(
-                "flex h-10 w-10 items-center justify-center rounded-xl text-zinc-500 transition-colors hover:bg-white/10 hover:text-white",
-                active && "bg-white/10 text-white"
+                "flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]",
+                active
+                  ? "bg-[var(--bg-active)] text-[var(--text-primary)]"
+                  : "text-[var(--text-tertiary)]"
               )}
             >
               <Icon className="h-5 w-5" />

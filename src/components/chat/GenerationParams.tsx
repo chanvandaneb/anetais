@@ -23,7 +23,8 @@ export function GenerationParams({ onClose }: { onClose: () => void }) {
   return (
     <div
       ref={ref}
-      className="absolute bottom-full left-0 z-50 mb-2 w-80 space-y-5 rounded-xl border border-white/10 bg-[#121212] p-4 shadow-2xl"
+      className="absolute bottom-full left-0 z-50 mb-2 w-80 space-y-5 rounded-xl border p-4 shadow-2xl"
+      style={{ borderColor: "var(--border)", background: "var(--bg-base)" }}
     >
       <Slider
         label="Creativity Level"

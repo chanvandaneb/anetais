@@ -38,7 +38,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               "pointer-events-auto flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm shadow-lg backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]",
               t.variant === "success"
                 ? "border-yellow-500/30 bg-yellow-500/10 text-yellow-200"
-                : "border-white/10 bg-zinc-900/95 text-zinc-200"
+                : "border-[var(--border)] bg-[var(--bg-base)] text-[var(--text-secondary)]"
             )}
           >
             {t.variant === "success" ? (
