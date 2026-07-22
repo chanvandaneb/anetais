@@ -42,7 +42,10 @@ export function Sidebar() {
   const { theme, toggle } = useTheme();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 flex w-[60px] flex-col items-center justify-between border-r app-border app-bg-subtle py-4 transition-colors duration-200">
+    <aside
+      className="fixed inset-y-0 left-0 z-40 flex w-[60px] flex-col items-center justify-between border-r py-4 transition-colors duration-200"
+      style={{ background: "var(--bg-subtle)", borderColor: "var(--border)" }}
+    >
       <div className="flex flex-col items-center gap-4">
         <div className="relative">
           <button

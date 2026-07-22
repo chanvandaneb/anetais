@@ -24,7 +24,7 @@
   /* ── Light theme ── */
   [data-theme="light"] {
     --bg-base:         #f5f5f5;
-    --bg-subtle:       rgba(0,0,0,0.02);
+    --bg-subtle:       #f5f5f5;
     --bg-muted:        rgba(0,0,0,0.05);
     --bg-hover:        rgba(0,0,0,0.07);
     --bg-active:       rgba(0,0,0,0.10);
@@ -100,6 +100,14 @@ input[type="range"]::-moz-range-thumb {
   background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
   background-color: var(--checkered-bg);
 }
+
+/* ── Theme utility classes ── */
+.app-bg        { background: var(--bg-base); }
+.app-bg-subtle { background: var(--bg-subtle); }
+.app-border    { border-color: var(--border); }
+.app-text      { color: var(--text-primary); }
+.app-text-2    { color: var(--text-secondary); }
+.app-text-3    { color: var(--text-tertiary); }
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
