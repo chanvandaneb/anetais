@@ -14,6 +14,7 @@ import {
   SlidersHorizontal,
   Sun,
   Moon,
+  Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sidebarUser } from "@/lib/mock-data";
@@ -35,7 +36,7 @@ const bottomButtonItems = [
   { icon: Languages, label: "Language" },
 ];
 
-export function Sidebar() {
+export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
   const pathname = usePathname();
   const [profileOpen, setProfileOpen] = useState(false);
   const avatarRef = useRef<HTMLButtonElement>(null);
@@ -83,6 +84,15 @@ export function Sidebar() {
       </div>
 
       <div className="flex flex-col items-center gap-1">
+        <button
+          type="button"
+          title="Search / Command palette (⌘K)"
+          onClick={onOpenCmd}
+          className="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--text-tertiary)] transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]"
+        >
+          <Search className="h-5 w-5" />
+        </button>
+
         {bottomButtonItems.map((item) => {
           const Icon = item.icon;
           return (

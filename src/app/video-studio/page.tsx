@@ -13,6 +13,8 @@ import {
   Sparkles,
   Play,
   Loader2,
+  Download,
+  CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
@@ -42,23 +44,47 @@ export default function VideoStudioPage() {
   const [videos, setVideos] = useState<GeneratedVideo[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
+  const [genStage, setGenStage] = useState(0);
+  const [genPct, setGenPct] = useState(0);
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const { showToast } = useToast();
   const { addUsage } = useUsage();
 
+  const VIDEO_STAGES = [
+    { label: "Queuing job", pct: 8 },
+    { label: "Analyzing prompt", pct: 22 },
+    { label: "Rendering frames", pct: 55 },
+    { label: "Encoding video", pct: 80 },
+    { label: "Post-processing", pct: 94 },
+  ];
+
   function handleGenerate() {
     if (!prompt.trim() || generating) return;
     setGenerating(true);
+    setGenStage(0);
+    setGenPct(0);
+
+    let s = 0;
+    const tick = () => {
+      if (s >= VIDEO_STAGES.length) return;
+      setGenStage(s);
+      setGenPct(VIDEO_STAGES[s].pct);
+      s++;
+      if (s < VIDEO_STAGES.length) setTimeout(tick, 450 + Math.random() * 300);
+    };
+    tick();
+
     const id = `video-${Date.now()}`;
     setTimeout(() => {
       const video: GeneratedVideo = { id, prompt, gradient: randomGradient(), duration, aspectRatio };
       setVideos((prev) => [video, ...prev]);
       setSelectedVideo(id);
       setGenerating(false);
+      setGenPct(100);
       showToast("Video generated successfully");
       addUsage("Text-to-Video", "kling-v1-6", duration === "10s" ? 200 : 100, duration === "10s" ? 80 : 40);
       setPrompt("");
-    }, 2400);
+    }, 2800);
   }
 
   const activeVideo = videos.find((v) => v.id === selectedVideo);
@@ -250,10 +276,37 @@ export default function VideoStudioPage() {
       <div className="flex flex-1 overflow-hidden">
         <div className="flex flex-1 flex-col items-center justify-center gap-6 overflow-y-auto px-8 py-8">
           {generating ? (
-            <div className="flex flex-col items-center text-center" style={{ color: "var(--text-tertiary)" }}>
-              <Loader2 className="h-10 w-10 animate-spin text-indigo-500" />
-              <h2 className="mt-3 text-base font-medium" style={{ color: "var(--text-secondary)" }}>Rendering your video…</h2>
-              <p className="mt-1 text-sm">This usually takes a few seconds.</p>
+            <div className="flex w-full max-w-md flex-col items-center gap-4 text-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10">
+                <Loader2 className="h-8 w-8 animate-spin text-indigo-500" />
+              </div>
+              <div>
+                <h2 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
+                  {VIDEO_STAGES[genStage]?.label ?? "Processing…"}
+                </h2>
+                <p className="mt-1 text-sm" style={{ color: "var(--text-tertiary)" }}>Hang tight — this takes a moment</p>
+              </div>
+              <div className="w-full">
+                <div className="mb-2 flex justify-between text-[11px]" style={{ color: "var(--text-tertiary)" }}>
+                  <span>Progress</span>
+                  <span>{genPct}%</span>
+                </div>
+                <div className="h-2 w-full overflow-hidden rounded-full" style={{ background: "var(--bg-muted)" }}>
+                  <div className="h-full rounded-full bg-indigo-500 transition-all duration-500" style={{ width: `${genPct}%` }} />
+                </div>
+                <div className="mt-4 grid grid-cols-5 gap-1">
+                  {VIDEO_STAGES.map((stage, i) => (
+                    <div key={stage.label} className="flex flex-col items-center gap-1">
+                      <div className={cn("flex h-6 w-6 items-center justify-center rounded-full transition-colors", i < genStage ? "bg-indigo-500" : i === genStage ? "border-2 border-indigo-500" : "border")}
+                        style={i >= genStage ? { borderColor: "var(--border)" } : {}}>
+                        {i < genStage && <CheckCircle2 className="h-3.5 w-3.5 text-white" />}
+                        {i === genStage && <span className="h-2 w-2 rounded-full bg-indigo-400" />}
+                      </div>
+                      <span className="text-center text-[9px] leading-tight" style={{ color: i <= genStage ? "var(--text-secondary)" : "var(--text-tertiary)" }}>{stage.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : activeVideo ? (
             <div
@@ -266,9 +319,15 @@ export default function VideoStudioPage() {
               <button className="flex h-16 w-16 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-transform hover:scale-105">
                 <Play className="h-7 w-7 fill-current" />
               </button>
-              <div className="absolute bottom-3 left-3 right-3 rounded-lg bg-black/40 px-3 py-2 text-left text-xs text-white/90 backdrop-blur-sm">
+              <div className="absolute bottom-3 left-3 right-16 rounded-lg bg-black/40 px-3 py-2 text-left text-xs text-white/90 backdrop-blur-sm">
                 {activeVideo.prompt}
               </div>
+              <button
+                onClick={() => showToast("Video downloaded", "info")}
+                className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-lg bg-black/50 px-3 py-2 text-xs text-white/90 backdrop-blur-sm hover:bg-black/70"
+              >
+                <Download className="h-3.5 w-3.5" />
+              </button>
               <span className="absolute right-3 top-3 rounded bg-black/40 px-2 py-1 text-[10px] text-white/80 backdrop-blur-sm">
                 {activeVideo.duration} · {activeVideo.aspectRatio}
               </span>
