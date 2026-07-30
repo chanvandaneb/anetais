@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Sparkles, Eye, EyeOff, ArrowRight, GitBranch, Check } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, GitBranch, Check } from "lucide-react";
 
 const PERKS = [
   "1,000 free credits every month",
@@ -59,10 +59,8 @@ export default function RegisterPage() {
 
       {/* Left panel — perks */}
       <div className="relative hidden flex-col justify-between p-12 lg:flex lg:w-[420px]" style={{ borderRight: "1px solid rgba(255,255,255,0.06)" }}>
-        <Link href="/landing" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl" style={{ background: "linear-gradient(135deg,#1D7BFF,#8B5CF6)" }}>
-            <Sparkles className="h-4 w-4 text-white" />
-          </div>
+        <Link href="/home" className="flex items-center gap-2">
+          <img src="/logo.svg" alt="AnetAIS" className="h-9 w-9 rounded-xl" />
           <span className="text-lg font-bold">AnetAIS</span>
         </Link>
 
@@ -105,10 +103,8 @@ export default function RegisterPage() {
       {/* Right panel — form */}
       <div className="relative flex flex-1 flex-col items-center justify-center px-6 py-16">
         {/* Mobile logo */}
-        <Link href="/landing" className="mb-8 flex items-center gap-2 lg:hidden">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: "linear-gradient(135deg,#1D7BFF,#8B5CF6)" }}>
-            <Sparkles className="h-4 w-4 text-white" />
-          </div>
+        <Link href="/home" className="mb-8 flex items-center gap-2 lg:hidden">
+          <img src="/logo.svg" alt="AnetAIS" className="h-8 w-8 rounded-lg" />
           <span className="font-bold">AnetAIS</span>
         </Link>
 

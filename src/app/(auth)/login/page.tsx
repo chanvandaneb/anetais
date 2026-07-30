@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Sparkles, Eye, EyeOff, ArrowRight, GitBranch } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, GitBranch } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -32,10 +32,8 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md">
         {/* Logo */}
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <Link href="/landing" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: "linear-gradient(135deg,#1D7BFF,#8B5CF6)" }}>
-              <Sparkles className="h-5 w-5 text-white" />
-            </div>
+          <Link href="/home" className="flex items-center gap-2">
+            <img src="/logo.svg" alt="AnetAIS" className="h-10 w-10 rounded-xl" />
             <span className="text-xl font-bold">AnetAIS</span>
           </Link>
           <h1 className="text-2xl font-bold">Welcome back</h1>
