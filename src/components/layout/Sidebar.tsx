@@ -35,11 +35,8 @@ export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
       {/* TOP — logo + nav */}
       <div className="flex w-full flex-col items-center gap-1">
         {/* Logo */}
-        <Link href="/home" className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: "linear-gradient(135deg,#1D7BFF,#06B6D4)" }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M12 3L4 21h3.5l1.5-4h6l1.5 4H20L12 3z" fill="white" />
-            <path d="M10 14l2-5.5 2 5.5H10z" fill="rgba(255,255,255,0.35)" />
-          </svg>
+        <Link href="/home" className="mb-3 block h-10 w-10 overflow-hidden rounded-xl">
+          <img src="/logo.svg" alt="AnetAIS" className="h-full w-full object-cover" />
         </Link>
 
         {/* Nav items */}
