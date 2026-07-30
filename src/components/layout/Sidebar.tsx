@@ -4,36 +4,21 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  MessageSquare,
-  Image as ImageIcon,
-  Video,
-  Sparkles,
-  Wand2,
-  Monitor,
-  Languages,
-  SlidersHorizontal,
-  Sun,
-  Moon,
-  Search,
+  Home, MessageSquare, Image as ImageIcon, Video,
+  Wand2, Sparkles, SlidersHorizontal, Sun, Moon, Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sidebarUser } from "@/lib/mock-data";
 import { ProfileMenu } from "./ProfileMenu";
 import { useTheme } from "@/components/ui/ThemeContext";
 
-const navItems = [
-  { href: "/chat", icon: MessageSquare, label: "Chat" },
-  { href: "/image-studio", icon: ImageIcon, label: "Image Studio" },
-  { href: "/video-studio", icon: Video, label: "Video Studio" },
-  { href: "/chat", icon: Sparkles, label: "Assistants" },
-  { href: "/tools", icon: Wand2, label: "AI Tools" },
-];
-
-const bottomNavItems = [{ href: "/billing", icon: SlidersHorizontal, label: "Billing / Settings" }];
-
-const bottomButtonItems = [
-  { icon: Monitor, label: "Desktop App" },
-  { icon: Languages, label: "Language" },
+const NAV = [
+  { href: "/home",         icon: Home,           label: "Explore"  },
+  { href: "/chat",         icon: MessageSquare,  label: "Chat"     },
+  { href: "/image-studio", icon: ImageIcon,      label: "Image"    },
+  { href: "/video-studio", icon: Video,          label: "Video"    },
+  { href: "/tools",        icon: Wand2,          label: "Tools"    },
+  { href: "/chat",         icon: Sparkles,       label: "Assistants", exact: false },
 ];
 
 export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
@@ -44,98 +29,91 @@ export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
 
   return (
     <aside
-      className="fixed inset-y-0 left-0 z-40 flex w-[60px] flex-col items-center justify-between border-r py-4 transition-colors duration-200"
+      className="fixed inset-y-0 left-0 z-40 flex w-[72px] flex-col items-center justify-between border-r py-3"
       style={{ background: "var(--bg-subtle)", borderColor: "var(--border)" }}
     >
-      <div className="flex flex-col items-center gap-4">
-        <div className="relative">
-          <button
-            ref={avatarRef}
-            type="button"
-            onClick={() => setProfileOpen((v) => !v)}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 text-xs font-semibold text-black"
-          >
-            {sidebarUser.initials}
-          </button>
-          {profileOpen && (
-            <ProfileMenu onClose={() => setProfileOpen(false)} />
-          )}
-        </div>
+      {/* TOP — logo + nav */}
+      <div className="flex w-full flex-col items-center gap-1">
+        {/* Logo */}
+        <Link href="/home" className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)" }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 3l1.9 5.8H20l-5 3.6 1.9 5.8L12 15l-4.9 3.2L9 12.4 4 8.8h6.1z" />
+          </svg>
+        </Link>
 
-        <nav className="flex flex-col items-center gap-1">
-          {navItems.map((item, i) => {
-            const active = pathname?.startsWith(item.href) && item.label !== "Assistants";
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.label + i}
-                href={item.href}
-                title={item.label}
-                className={cn(
-                  "flex h-10 w-10 items-center justify-center rounded-xl app-text-3 transition-colors hover:app-bg-active hover:app-text",
-                  active ? "bg-[var(--bg-active)] text-[var(--text-primary)]" : "text-[var(--text-tertiary)]"
-                )}
-              >
-                <Icon className="h-5 w-5" />
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
-
-      <div className="flex flex-col items-center gap-1">
-        <button
-          type="button"
-          title="Search / Command palette (⌘K)"
-          onClick={onOpenCmd}
-          className="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--text-tertiary)] transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]"
-        >
-          <Search className="h-5 w-5" />
-        </button>
-
-        {bottomButtonItems.map((item) => {
+        {/* Nav items */}
+        {NAV.map((item, i) => {
+          const active = item.href === "/home"
+            ? pathname === "/home"
+            : pathname?.startsWith(item.href) && item.label !== "Assistants";
           const Icon = item.icon;
-          return (
-            <button
-              key={item.label}
-              type="button"
-              title={item.label}
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--text-tertiary)] transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]"
-            >
-              <Icon className="h-5 w-5" />
-            </button>
-          );
-        })}
-
-        {/* Theme toggle */}
-        <button
-          type="button"
-          onClick={toggle}
-          title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-          className="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--text-tertiary)] transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]"
-        >
-          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-        </button>
-
-        {bottomNavItems.map((item) => {
-          const Icon = item.icon;
-          const active = pathname?.startsWith(item.href);
           return (
             <Link
-              key={item.label}
+              key={i}
               href={item.href}
-              title={item.label}
               className={cn(
-                "flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]",
+                "flex w-full flex-col items-center gap-0.5 rounded-xl px-1 py-2 transition-colors",
                 active
-                  ? "bg-[var(--bg-active)] text-[var(--text-primary)]"
-                  : "text-[var(--text-tertiary)]"
+                  ? "text-[var(--text-primary)]"
+                  : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
               )}
+              style={active ? { background: "var(--bg-active)" } : {}}
             >
               <Icon className="h-5 w-5" />
+              <span className="text-[9px] font-medium leading-none">{item.label}</span>
             </Link>
           );
         })}
+      </div>
+
+      {/* BOTTOM — actions + profile */}
+      <div className="flex w-full flex-col items-center gap-1">
+        <button
+          type="button"
+          onClick={onOpenCmd}
+          title="Search (⌘K)"
+          className="flex w-full flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[var(--text-tertiary)] transition-colors hover:text-[var(--text-secondary)]"
+        >
+          <Search className="h-5 w-5" />
+          <span className="text-[9px] font-medium leading-none">Search</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={toggle}
+          title={theme === "dark" ? "Light mode" : "Dark mode"}
+          className="flex w-full flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[var(--text-tertiary)] transition-colors hover:text-[var(--text-secondary)]"
+        >
+          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          <span className="text-[9px] font-medium leading-none">Theme</span>
+        </button>
+
+        <Link
+          href="/billing"
+          className={cn(
+            "flex w-full flex-col items-center gap-0.5 rounded-xl px-1 py-2 transition-colors",
+            pathname?.startsWith("/billing")
+              ? "text-[var(--text-primary)]"
+              : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
+          )}
+          style={pathname?.startsWith("/billing") ? { background: "var(--bg-active)" } : {}}
+        >
+          <SlidersHorizontal className="h-5 w-5" />
+          <span className="text-[9px] font-medium leading-none">Settings</span>
+        </Link>
+
+        {/* Avatar */}
+        <div className="relative mt-1">
+          <button
+            ref={avatarRef}
+            type="button"
+            onClick={() => setProfileOpen(v => !v)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 text-xs font-bold text-white"
+          >
+            {sidebarUser.initials}
+          </button>
+          {profileOpen && <ProfileMenu onClose={() => setProfileOpen(false)} />}
+        </div>
       </div>
     </aside>
   );

@@ -24,7 +24,7 @@ function AppShellInner({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen transition-colors duration-200" style={{ background: "var(--bg-base)" }}>
       <Sidebar onOpenCmd={() => setCmdOpen(true)} />
-      <div className="flex min-h-screen flex-1 flex-col pl-[60px]">{children}</div>
+      <div className="flex min-h-screen flex-1 flex-col pl-[72px]">{children}</div>
       <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
     </div>
   );
