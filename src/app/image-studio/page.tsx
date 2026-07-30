@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Cpu, Maximize2, Hash, Paperclip, Sparkles, Loader2, Download, ZoomIn, X, ChevronLeft, ChevronRight as ChevronRightIcon, Wand2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { galleryImages, randomGradient, type GalleryImage } from "@/lib/mock-data";
+import { galleryImages, randomCreationImage, type GalleryImage } from "@/lib/mock-data";
 import { useToast } from "@/components/ui/Toast";
 import { useUsage } from "@/components/ui/UsageContext";
 
@@ -43,16 +43,16 @@ function LightboxModal({ images, startIdx, onClose }: { images: GalleryImage[]; 
   }, [images.length, onClose]);
 
   return (
-    <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/85 backdrop-blur-md" onClick={onClose}>
       <button
-        className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
+        className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/25 transition-colors"
         onClick={onClose}
       >
         <X className="h-5 w-5" />
       </button>
       {idx > 0 && (
         <button
-          className="absolute left-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
+          className="absolute left-5 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/25 transition-colors"
           onClick={e => { e.stopPropagation(); setIdx(i => i - 1); }}
         >
           <ChevronLeft className="h-5 w-5" />
@@ -60,23 +60,31 @@ function LightboxModal({ images, startIdx, onClose }: { images: GalleryImage[]; 
       )}
       {idx < images.length - 1 && (
         <button
-          className="absolute right-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
+          className="absolute right-5 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/25 transition-colors"
           onClick={e => { e.stopPropagation(); setIdx(i => i + 1); }}
         >
           <ChevronRightIcon className="h-5 w-5" />
         </button>
       )}
       <div
-        className={cn("relative h-[70vh] max-w-2xl w-full rounded-2xl bg-gradient-to-br shadow-2xl mx-16", img.gradient, img.tall ? "aspect-[3/4]" : "aspect-square")}
+        className="relative mx-20 flex max-h-[85vh] max-w-3xl flex-col overflow-hidden rounded-2xl shadow-2xl"
         onClick={e => e.stopPropagation()}
       >
-        <div className="absolute bottom-4 right-4 flex gap-2">
-          <button className="flex items-center gap-1.5 rounded-lg bg-black/50 px-3 py-2 text-xs text-white/90 backdrop-blur-sm hover:bg-black/70">
+        <img
+          src={img.src}
+          alt={img.prompt}
+          className="max-h-[75vh] w-auto object-contain"
+        />
+        <div className="flex items-center justify-between bg-black/70 px-4 py-3 backdrop-blur-sm">
+          <div className="min-w-0 flex-1">
+            {img.prompt && <p className="truncate text-sm text-white/90">{img.prompt}</p>}
+            <p className="text-xs text-white/50">{idx + 1} / {images.length}</p>
+          </div>
+          <button className="ml-4 flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-2 text-xs text-white/90 hover:bg-white/20 transition-colors flex-shrink-0">
             <Download className="h-3.5 w-3.5" />
             Download
           </button>
         </div>
-        <div className="absolute bottom-4 left-4 text-xs text-white/60">{idx + 1} / {images.length}</div>
       </div>
     </div>
   );
@@ -84,23 +92,36 @@ function LightboxModal({ images, startIdx, onClose }: { images: GalleryImage[]; 
 
 function ImageCard({ img, onView, onDownload }: { img: GalleryImage; onView: () => void; onDownload: () => void }) {
   return (
-    <div className={cn("group relative overflow-hidden rounded-xl bg-gradient-to-br cursor-pointer", img.gradient, img.tall ? "aspect-[3/4]" : "aspect-square")}>
-      <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/30" />
-      <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+    <div className={cn("group relative overflow-hidden rounded-xl cursor-pointer bg-[var(--bg-muted)]", img.tall ? "aspect-[3/4]" : "aspect-square")}>
+      <img
+        src={img.src}
+        alt={img.prompt}
+        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        loading="lazy"
+      />
+      {/* Hover overlay */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/0 opacity-0 transition-all duration-200 group-hover:bg-black/40 group-hover:opacity-100">
         <button
           onClick={onView}
-          className="flex items-center gap-1.5 rounded-lg bg-black/60 px-3 py-2 text-xs text-white backdrop-blur-sm hover:bg-black/80"
+          className="flex items-center gap-1.5 rounded-lg bg-black/70 px-3 py-2 text-xs font-medium text-white backdrop-blur-sm hover:bg-black/90"
         >
           <ZoomIn className="h-3.5 w-3.5" />
-          View
+          View full
         </button>
         <button
           onClick={e => { e.stopPropagation(); onDownload(); }}
-          className="flex items-center gap-1.5 rounded-lg bg-black/60 px-3 py-2 text-xs text-white backdrop-blur-sm hover:bg-black/80"
+          className="flex items-center gap-1.5 rounded-lg bg-black/70 px-3 py-2 text-xs font-medium text-white backdrop-blur-sm hover:bg-black/90"
         >
           <Download className="h-3.5 w-3.5" />
+          Download
         </button>
       </div>
+      {/* Prompt tooltip at bottom */}
+      {img.prompt && (
+        <div className="absolute inset-x-0 bottom-0 translate-y-full bg-black/70 px-3 py-1.5 text-[11px] leading-snug text-white/90 backdrop-blur-sm transition-transform duration-200 group-hover:translate-y-0">
+          {img.prompt}
+        </div>
+      )}
     </div>
   );
 }
@@ -141,12 +162,11 @@ export default function ImageStudioPage() {
     };
     advance();
 
-    const id = `creation-${Date.now()}`;
+    const capturedPrompt = prompt.trim();
     setTimeout(() => {
-      setCreations((prev) => [
-        { id, gradient: randomGradient(), tall: Math.random() > 0.6 },
-        ...prev,
-      ]);
+      const newImg = randomCreationImage(Math.random() > 0.6);
+      newImg.prompt = capturedPrompt;
+      setCreations((prev) => [newImg, ...prev]);
       setGenerating(false);
       setGenPct(100);
       showToast("Image generated successfully");

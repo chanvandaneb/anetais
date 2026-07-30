@@ -87,28 +87,49 @@ export const faqAnswers: Record<string, string> = {
 
 export type GalleryImage = {
   id: string;
-  gradient: string;
+  src: string;
+  prompt: string;
   tall?: boolean;
+  gradient?: string;
 };
 
-const gradients = [
-  "from-pink-500 via-fuchsia-500 to-purple-600",
-  "from-amber-400 via-orange-500 to-rose-500",
-  "from-cyan-400 via-blue-500 to-indigo-600",
-  "from-emerald-400 via-teal-500 to-cyan-600",
-  "from-violet-500 via-purple-500 to-fuchsia-600",
-  "from-lime-400 via-green-500 to-emerald-600",
-  "from-red-500 via-rose-500 to-pink-600",
-  "from-sky-400 via-indigo-500 to-violet-600",
-  "from-yellow-400 via-amber-500 to-orange-600",
-  "from-teal-400 via-cyan-500 to-blue-600",
+const GALLERY_ITEMS: { seed: string; prompt: string; tall?: boolean }[] = [
+  { seed: "nature1",    prompt: "Misty mountain range at golden hour" },
+  { seed: "city2",      prompt: "Neon-lit Tokyo street at night", tall: true },
+  { seed: "ocean3",     prompt: "Turquoise ocean waves crashing on white sand" },
+  { seed: "forest4",    prompt: "Ancient redwood forest with light rays" },
+  { seed: "space5",     prompt: "Nebula swirling with violet and gold dust" },
+  { seed: "arch6",      prompt: "Minimalist white architecture in desert", tall: true },
+  { seed: "food7",      prompt: "Artisan ramen bowl with soft-boiled egg" },
+  { seed: "portrait8",  prompt: "Cinematic portrait in warm studio light" },
+  { seed: "abstract9",  prompt: "Fluid ink art in electric blue and magenta" },
+  { seed: "macro10",    prompt: "Macro dewdrop on spider web at sunrise", tall: true },
 ];
 
-export const galleryImages: GalleryImage[] = gradients.map((gradient, i) => ({
+export const galleryImages: GalleryImage[] = GALLERY_ITEMS.map((item, i) => ({
   id: `img-${i}`,
-  gradient,
-  tall: i % 3 === 1,
+  src: `https://picsum.photos/seed/${item.seed}/600/${item.tall ? 800 : 600}`,
+  prompt: item.prompt,
+  tall: item.tall,
 }));
+
+const CREATION_SEEDS = [
+  "gen1","gen2","gen3","gen4","gen5","gen6","gen7","gen8","gen9","gen10",
+  "gen11","gen12","gen13","gen14","gen15",
+];
+let _creationIdx = 0;
+export function randomCreationImage(tall?: boolean): GalleryImage {
+  const seed = CREATION_SEEDS[_creationIdx % CREATION_SEEDS.length];
+  _creationIdx++;
+  const w = 600;
+  const h = tall ? 800 : 600;
+  return {
+    id: `creation-${Date.now()}-${_creationIdx}`,
+    src: `https://picsum.photos/seed/${seed}/${w}/${h}`,
+    prompt: "",
+    tall,
+  };
+}
 
 export type BillingRow = {
   id: string;
