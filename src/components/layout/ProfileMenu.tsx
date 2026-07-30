@@ -39,7 +39,7 @@ export function ProfileMenu({ onClose }: { onClose: () => void }) {
       style={{ background: "var(--bg-base)", borderColor: "var(--border)" }}
     >
       <div className="flex items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 text-sm font-semibold text-black">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 text-sm font-semibold text-black">
           {sidebarUser.initials}
         </div>
         <div>

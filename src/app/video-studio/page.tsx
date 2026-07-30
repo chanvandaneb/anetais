@@ -68,7 +68,7 @@ export default function VideoStudioPage() {
       onClick={onClick}
       className={cn(
         "flex-1 rounded-md py-1.5 text-xs font-medium transition-colors",
-        active ? "bg-yellow-500 text-black" : "hover:text-[var(--text-primary)]"
+        active ? "bg-indigo-500 text-black" : "hover:text-[var(--text-primary)]"
       )}
       style={!active ? { color: "var(--text-tertiary)" } : {}}
     >
@@ -112,7 +112,7 @@ export default function VideoStudioPage() {
           <div className="px-5">
             <button className="flex w-full items-center justify-between rounded-lg border px-3 py-2.5 text-sm transition-colors hover:bg-[var(--bg-hover)]" style={{ borderColor: "var(--border)", background: "var(--bg-muted)", color: "var(--text-secondary)" }}>
               <span className="flex items-center gap-2">
-                <Brain className="h-4 w-4 text-yellow-500" />
+                <Brain className="h-4 w-4 text-indigo-500" />
                 kling-video
               </span>
               <ChevronDown className="h-4 w-4" style={{ color: "var(--text-tertiary)" }} />
@@ -147,7 +147,7 @@ export default function VideoStudioPage() {
                     })}
                   </div>
                 </div>
-                <button className="mt-3 flex w-full flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed px-4 py-6 text-center hover:border-yellow-500/40 hover:bg-[var(--bg-hover)]" style={{ borderColor: "var(--border-hover)" }}>
+                <button className="mt-3 flex w-full flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed px-4 py-6 text-center hover:border-indigo-500/40 hover:bg-[var(--bg-hover)]" style={{ borderColor: "var(--border-hover)" }}>
                   <Upload className="h-5 w-5" style={{ color: "var(--text-tertiary)" }} />
                   <span className="text-xs" style={{ color: "var(--text-secondary)" }}>Click or drag to upload images</span>
                   <span className="text-[11px]" style={{ color: "var(--text-tertiary)" }}>Supports multiple image selection</span>
@@ -180,7 +180,7 @@ export default function VideoStudioPage() {
                     <button
                       key={ratio}
                       onClick={() => setAspectRatio(ratio)}
-                      className={cn("rounded-md border px-2.5 py-1.5 text-xs transition-colors", aspectRatio === ratio ? "border-yellow-500 bg-yellow-500/10 text-yellow-400" : "hover:bg-[var(--bg-hover)]")}
+                      className={cn("rounded-md border px-2.5 py-1.5 text-xs transition-colors", aspectRatio === ratio ? "border-indigo-500 bg-indigo-500/10 text-indigo-400" : "hover:bg-[var(--bg-hover)]")}
                       style={aspectRatio !== ratio ? { borderColor: "var(--border)", background: "var(--bg-muted)", color: "var(--text-secondary)" } : {}}
                     >
                       {ratio}
@@ -237,7 +237,7 @@ export default function VideoStudioPage() {
               type="button"
               onClick={handleGenerate}
               disabled={!prompt.trim() || generating}
-              className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-yellow-500 py-2.5 text-sm font-medium text-black transition-colors hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-indigo-500 py-2.5 text-sm font-medium text-black transition-colors hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
               {generating ? "Generating…" : "Generate"}
@@ -251,7 +251,7 @@ export default function VideoStudioPage() {
         <div className="flex flex-1 flex-col items-center justify-center gap-6 overflow-y-auto px-8 py-8">
           {generating ? (
             <div className="flex flex-col items-center text-center" style={{ color: "var(--text-tertiary)" }}>
-              <Loader2 className="h-10 w-10 animate-spin text-yellow-500" />
+              <Loader2 className="h-10 w-10 animate-spin text-indigo-500" />
               <h2 className="mt-3 text-base font-medium" style={{ color: "var(--text-secondary)" }}>Rendering your video…</h2>
               <p className="mt-1 text-sm">This usually takes a few seconds.</p>
             </div>
@@ -295,7 +295,7 @@ export default function VideoStudioPage() {
                   className={cn(
                     "relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br ring-2 ring-transparent",
                     v.gradient,
-                    v.id === selectedVideo && "ring-yellow-500"
+                    v.id === selectedVideo && "ring-indigo-500"
                   )}
                 >
                   <Play className="h-5 w-5 fill-current text-white/90" />

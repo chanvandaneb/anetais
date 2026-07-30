@@ -52,7 +52,7 @@ export function Sidebar() {
             ref={avatarRef}
             type="button"
             onClick={() => setProfileOpen((v) => !v)}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 text-xs font-semibold text-black"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 text-xs font-semibold text-black"
           >
             {sidebarUser.initials}
           </button>

@@ -36,7 +36,7 @@ export function ModelPicker({ onClose, onSelect }: { onClose: () => void; onSele
         >
           <span className="flex items-center gap-2.5">
             <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--bg-active)]">
-              <Cpu className="h-3.5 w-3.5 text-yellow-500" />
+              <Cpu className="h-3.5 w-3.5 text-indigo-500" />
             </span>
             <span>
               {p.name}

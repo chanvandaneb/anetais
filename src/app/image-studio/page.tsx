@@ -36,7 +36,7 @@ export default function ImageStudioPage() {
     <div className="flex h-screen flex-col overflow-y-auto" style={{ background: "var(--bg-base)", color: "var(--text-primary)" }}>
       {/* Banner */}
       <div className="relative flex h-56 flex-shrink-0 items-end overflow-hidden border-b" style={{ borderColor: "var(--border)" }}>
-        <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-600/40 via-indigo-600/30 to-amber-500/30 blur-2xl" />
+        <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-600/40 via-indigo-600/30 to-violet-500/30 blur-2xl" />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent" />
         <h1
           className="relative px-8 pb-6 text-3xl italic"
@@ -64,7 +64,7 @@ export default function ImageStudioPage() {
               { icon: Hash, label: "1 image", yellow: false },
             ].map(({ icon: Icon, label, yellow }) => (
               <button key={label} className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors hover:bg-[var(--bg-hover)]" style={{ borderColor: "var(--border)", background: "var(--bg-muted)", color: "var(--text-secondary)" }}>
-                <Icon className={cn("h-3.5 w-3.5", yellow && "text-yellow-500")} />
+                <Icon className={cn("h-3.5 w-3.5", yellow && "text-indigo-500")} />
                 {label}
               </button>
             ))}
@@ -75,7 +75,7 @@ export default function ImageStudioPage() {
               type="button"
               onClick={handleGenerate}
               disabled={!prompt.trim() || generating}
-              className="ml-auto flex items-center gap-1.5 rounded-lg bg-yellow-500 px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-50"
+              className="ml-auto flex items-center gap-1.5 rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
               {generating ? "Generating…" : "Generate"}
@@ -92,7 +92,7 @@ export default function ImageStudioPage() {
               className={cn(
                 "border-b-2 px-1 pb-3 text-sm font-medium transition-colors capitalize",
                 tab === t
-                  ? "border-yellow-500 text-yellow-500"
+                  ? "border-indigo-500 text-indigo-500"
                   : "border-transparent hover:text-[var(--text-secondary)]"
               )}
               style={tab !== t ? { color: "var(--text-tertiary)" } : {}}

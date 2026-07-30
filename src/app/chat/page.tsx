@@ -153,7 +153,7 @@ export default function ChatPage() {
       ) : (
         <div className="flex w-[340px] flex-shrink-0 flex-col border-r" style={{ borderColor: "var(--border)", background: "var(--bg-subtle)" }}>
           <div className="flex items-center justify-between px-4 py-4">
-            <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-lg font-bold tracking-tight text-transparent">
+            <span className="bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-lg font-bold tracking-tight text-transparent">
               AnetAIS
             </span>
             <button
@@ -243,14 +243,14 @@ export default function ChatPage() {
       {/* RIGHT PANE */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex items-center gap-3 border-b px-6 py-3.5" style={{ borderColor: "var(--border)" }}>
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-amber-600">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600">
             <Bot className="h-4 w-4 text-black" />
           </div>
           <div className="relative">
             <button
               type="button"
               onClick={() => setModelPickerOpen((v) => !v)}
-              className="flex items-center gap-1.5 rounded-lg border border-blue-500/30 bg-blue-500/10 px-3 py-1.5 text-sm text-blue-400 hover:bg-blue-500/20"
+              className="flex items-center gap-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-sm text-indigo-400 hover:bg-indigo-500/20"
             >
               {modelName}
               <ChevronDown className="h-3.5 w-3.5" />
@@ -322,8 +322,8 @@ export default function ChatPage() {
                     className={cn(
                       "flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full",
                       m.role === "user"
-                        ? "bg-gradient-to-br from-yellow-400 to-amber-600 text-black"
-                        : "bg-[var(--bg-active)] text-yellow-500"
+                        ? "bg-gradient-to-br from-indigo-400 to-indigo-600 text-black"
+                        : "bg-[var(--bg-active)] text-indigo-500"
                     )}
                   >
                     {m.role === "user" ? (
@@ -336,7 +336,7 @@ export default function ChatPage() {
                     className={cn(
                       "max-w-md rounded-xl px-4 py-2.5 text-sm leading-relaxed",
                       m.role === "user"
-                        ? "bg-yellow-500/15 text-[var(--text-primary)]"
+                        ? "bg-indigo-500/15 text-[var(--text-primary)]"
                         : "border bg-[var(--bg-subtle)] text-[var(--text-secondary)]"
                     )}
                     style={m.role === "assistant" ? { borderColor: "var(--border)" } : {}}
@@ -347,7 +347,7 @@ export default function ChatPage() {
               ))}
               {isTyping && (
                 <div className="flex items-start gap-3">
-                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[var(--bg-active)] text-yellow-500">
+                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[var(--bg-active)] text-indigo-500">
                     <Bot className="h-4 w-4" />
                   </div>
                   <div className="flex items-center gap-1 rounded-xl border bg-[var(--bg-subtle)] px-4 py-3" style={{ borderColor: "var(--border)" }}>
@@ -394,7 +394,7 @@ export default function ChatPage() {
 
             <div className="flex items-center justify-between px-3 py-2">
               <div className="flex items-center gap-0.5">
-                <button className="rounded-md p-1.5 text-yellow-500 hover:bg-[var(--bg-hover)]">
+                <button className="rounded-md p-1.5 text-indigo-500 hover:bg-[var(--bg-hover)]">
                   <Sparkles className="h-4 w-4" />
                 </button>
                 {[Eraser, Globe, Paperclip].map((Icon, i) => (
@@ -425,7 +425,7 @@ export default function ChatPage() {
               <button
                 type="button"
                 onClick={handleSend}
-                className="rounded-lg bg-yellow-500 px-4 py-1.5 text-sm font-medium text-black transition-colors hover:bg-yellow-400"
+                className="rounded-lg bg-indigo-500 px-4 py-1.5 text-sm font-medium text-black transition-colors hover:bg-indigo-400"
               >
                 Send
               </button>

@@ -42,7 +42,7 @@ export default function ToolsPage() {
       onClick={() => setTab(id)}
       className={cn(
         "border-b-2 px-1 pb-3 text-sm font-medium transition-colors",
-        tab === id ? "border-yellow-500 text-yellow-500" : "border-transparent hover:text-[var(--text-secondary)]"
+        tab === id ? "border-indigo-500 text-indigo-500" : "border-transparent hover:text-[var(--text-secondary)]"
       )}
       style={tab !== id ? { color: "var(--text-tertiary)" } : {}}
     >
@@ -72,7 +72,7 @@ export default function ToolsPage() {
               {!uploaded ? (
                 <button
                   onClick={() => setUploaded(true)}
-                  className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed py-14 text-center hover:border-yellow-500/40 hover:bg-[var(--bg-hover)]"
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed py-14 text-center hover:border-indigo-500/40 hover:bg-[var(--bg-hover)]"
                   style={{ borderColor: "var(--border-hover)" }}
                 >
                   <Upload className="h-6 w-6" style={{ color: "var(--text-tertiary)" }} />
@@ -95,7 +95,7 @@ export default function ToolsPage() {
             <button
               onClick={handleRemoveBackground}
               disabled={!uploaded}
-              className="mt-6 flex w-full items-center justify-center gap-1.5 rounded-lg bg-yellow-500 py-2.5 text-sm font-medium text-black transition-colors hover:bg-yellow-400 disabled:cursor-not-allowed disabled:bg-yellow-500/30 disabled:text-black/40"
+              className="mt-6 flex w-full items-center justify-center gap-1.5 rounded-lg bg-indigo-500 py-2.5 text-sm font-medium text-black transition-colors hover:bg-indigo-400 disabled:cursor-not-allowed disabled:bg-indigo-500/30 disabled:text-black/40"
             >
               <Sparkles className="h-4 w-4" />
               {processing ? "Removing Background..." : "Remove Background"}

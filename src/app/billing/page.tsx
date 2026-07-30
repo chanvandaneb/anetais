@@ -42,7 +42,7 @@ export default function BillingPage() {
       )}
       style={{ color: section === id ? "var(--text-primary)" : "var(--text-secondary)" }}
     >
-      <Icon className="h-4 w-4 text-yellow-500" />
+      <Icon className="h-4 w-4 text-indigo-500" />
       {label}
     </button>
   );
@@ -74,10 +74,10 @@ export default function BillingPage() {
               return (
                 <Card
                   key={plan.id}
-                  className={cn("flex flex-col p-6", plan.highlight && "border-yellow-500/40 bg-yellow-500/[0.04]")}
+                  className={cn("flex flex-col p-6", plan.highlight && "border-indigo-500/40 bg-indigo-500/[0.04]")}
                 >
                   {plan.highlight && (
-                    <span className="mb-3 inline-block w-fit rounded-full bg-yellow-500/15 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-yellow-400">
+                    <span className="mb-3 inline-block w-fit rounded-full bg-indigo-500/15 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-indigo-400">
                       Most Popular
                     </span>
                   )}
@@ -91,7 +91,7 @@ export default function BillingPage() {
                   <ul className="mt-5 flex-1 space-y-2.5">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "var(--text-secondary)" }}>
-                        <Check className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-yellow-500" />
+                        <Check className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-indigo-500" />
                         {f}
                       </li>
                     ))}
@@ -105,7 +105,7 @@ export default function BillingPage() {
                       isCurrent
                         ? "cursor-not-allowed bg-[var(--bg-muted)] text-[var(--text-tertiary)]"
                         : plan.highlight
-                        ? "bg-yellow-500 text-black hover:bg-yellow-400"
+                        ? "bg-indigo-500 text-black hover:bg-indigo-400"
                         : "border border-[var(--border)] bg-[var(--bg-muted)] hover:bg-[var(--bg-hover)]"
                     )}
                     style={!isCurrent && !plan.highlight ? { color: "var(--text-primary)" } : {}}
@@ -129,7 +129,7 @@ export default function BillingPage() {
             ].map(({ icon: Icon, label, value }) => (
               <Card key={label} className="p-5">
                 <div className="flex items-center gap-2 text-xs" style={{ color: "var(--text-tertiary)" }}>
-                  <Icon className="h-4 w-4 text-yellow-500" />
+                  <Icon className="h-4 w-4 text-indigo-500" />
                   {label}
                 </div>
                 <div className="mt-3 text-2xl font-semibold" style={{ color: "var(--text-primary)" }}>{value}</div>
