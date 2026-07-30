@@ -17,8 +17,8 @@ const TOOLS = [
     icon: MessageSquare,
     label: "Chat",
     sub: "10+ AI models",
-    color: "#6366F1",
-    bg: "rgba(99,102,241,0.12)",
+    color: "#1D7BFF",
+    bg: "rgba(29,123,255,0.12)",
     badge: null,
   },
   {
@@ -138,12 +138,12 @@ export default function HomePage() {
           </div>
           <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(30,16,53,0.92) 0%, rgba(30,16,53,0.5) 60%, transparent 100%)" }} />
           <div className="relative z-10 flex h-full flex-col justify-end p-7" style={{ minHeight: 200 }}>
-            <div className="mb-2 inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold" style={{ background: "rgba(99,102,241,0.25)", color: "#A5B4FC", border: "1px solid rgba(99,102,241,0.35)" }}>
+            <div className="mb-2 inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold" style={{ background: "rgba(29,123,255,0.25)", color: "#93C5FD", border: "1px solid rgba(29,123,255,0.35)" }}>
               <Zap className="h-3 w-3" /> Multi-model workspace
             </div>
             <h1 className="text-2xl font-black leading-tight text-white md:text-3xl">
               Every AI model.<br />
-              <span style={{ background: "linear-gradient(90deg,#818CF8,#C084FC)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              <span style={{ background: "linear-gradient(90deg,#60A5FA,#C084FC)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 One creative studio.
               </span>
             </h1>
@@ -153,7 +153,7 @@ export default function HomePage() {
             <Link
               href="/chat"
               className="mt-4 inline-flex w-fit items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white transition-all hover:scale-105"
-              style={{ background: "#6366F1", boxShadow: "0 4px 20px rgba(99,102,241,0.45)" }}
+              style={{ background: "#1D7BFF", boxShadow: "0 4px 20px rgba(29,123,255,0.45)" }}
             >
               Start creating <ArrowRight className="h-4 w-4" />
             </Link>
@@ -247,7 +247,7 @@ export default function HomePage() {
                     : "hover:text-[var(--text-secondary)]"
                 )}
                 style={activeTab === tab
-                  ? { background: "#6366F1" }
+                  ? { background: "#1D7BFF" }
                   : { color: "var(--text-tertiary)", background: "transparent" }
                 }
               >

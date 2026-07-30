@@ -201,7 +201,7 @@ export const plans: Plan[] = [
 export const gradientPalette = [
   "from-pink-500 via-fuchsia-500 to-purple-600",
   "from-amber-400 via-orange-500 to-rose-500",
-  "from-cyan-400 via-blue-500 to-indigo-600",
+  "from-cyan-400 via-blue-500 to-[#06B6D4]",
   "from-emerald-400 via-teal-500 to-cyan-600",
   "from-violet-500 via-purple-500 to-fuchsia-600",
   "from-lime-400 via-green-500 to-emerald-600",

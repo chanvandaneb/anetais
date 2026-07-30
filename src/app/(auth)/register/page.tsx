@@ -15,7 +15,7 @@ const PERKS = [
 function StrengthBar({ password }: { password: string }) {
   const score = [/.{8,}/, /[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/].filter(r => r.test(password)).length;
   const labels = ["", "Weak", "Fair", "Good", "Strong"];
-  const colors = ["", "#EF4444", "#F59E0B", "#10B981", "#6366F1"];
+  const colors = ["", "#EF4444", "#F59E0B", "#10B981", "#1D7BFF"];
   if (!password) return null;
   return (
     <div className="mt-1.5 flex flex-col gap-1">
@@ -54,13 +54,13 @@ export default function RegisterPage() {
       {/* Background glow */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute right-0 top-0 h-[500px] w-[500px] rounded-full" style={{ background: "radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 65%)" }} />
-        <div className="absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full" style={{ background: "radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 65%)" }} />
+        <div className="absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full" style={{ background: "radial-gradient(circle, rgba(29,123,255,0.10) 0%, transparent 65%)" }} />
       </div>
 
       {/* Left panel — perks */}
       <div className="relative hidden flex-col justify-between p-12 lg:flex lg:w-[420px]" style={{ borderRight: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/landing" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl" style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)" }}>
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl" style={{ background: "linear-gradient(135deg,#1D7BFF,#8B5CF6)" }}>
             <Sparkles className="h-4 w-4 text-white" />
           </div>
           <span className="text-lg font-bold">AnetAIS</span>
@@ -69,7 +69,7 @@ export default function RegisterPage() {
         <div>
           <h2 className="text-3xl font-bold leading-snug">
             The AI workspace<br />
-            <span style={{ background: "linear-gradient(135deg,#6366F1,#A78BFA)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            <span style={{ background: "linear-gradient(135deg,#1D7BFF,#A78BFA)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               for everything.
             </span>
           </h2>
@@ -79,8 +79,8 @@ export default function RegisterPage() {
           <ul className="mt-8 flex flex-col gap-3">
             {PERKS.map(p => (
               <li key={p} className="flex items-center gap-3 text-sm" style={{ color: "#D1D5DB" }}>
-                <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full" style={{ background: "rgba(99,102,241,0.20)" }}>
-                  <Check className="h-3 w-3" style={{ color: "#6366F1" }} />
+                <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full" style={{ background: "rgba(29,123,255,0.20)" }}>
+                  <Check className="h-3 w-3" style={{ color: "#1D7BFF" }} />
                 </div>
                 {p}
               </li>
@@ -106,7 +106,7 @@ export default function RegisterPage() {
       <div className="relative flex flex-1 flex-col items-center justify-center px-6 py-16">
         {/* Mobile logo */}
         <Link href="/landing" className="mb-8 flex items-center gap-2 lg:hidden">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)" }}>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: "linear-gradient(135deg,#1D7BFF,#8B5CF6)" }}>
             <Sparkles className="h-4 w-4 text-white" />
           </div>
           <span className="font-bold">AnetAIS</span>
@@ -198,8 +198,8 @@ export default function RegisterPage() {
                   onClick={() => setAgree(v => !v)}
                   className="mt-0.5 flex h-4.5 w-4.5 flex-shrink-0 cursor-pointer items-center justify-center rounded border transition-all"
                   style={{
-                    background: agree ? "#6366F1" : "transparent",
-                    border: agree ? "1px solid #6366F1" : "1px solid rgba(255,255,255,0.20)",
+                    background: agree ? "#1D7BFF" : "transparent",
+                    border: agree ? "1px solid #1D7BFF" : "1px solid rgba(255,255,255,0.20)",
                     minWidth: "18px", minHeight: "18px",
                   }}
                 >
@@ -207,9 +207,9 @@ export default function RegisterPage() {
                 </div>
                 <span className="text-xs leading-relaxed" style={{ color: "#9CA3AF" }}>
                   I agree to the{" "}
-                  <span className="transition-colors hover:text-white" style={{ color: "#6366F1" }}>Terms of Service</span>
+                  <span className="transition-colors hover:text-white" style={{ color: "#1D7BFF" }}>Terms of Service</span>
                   {" "}and{" "}
-                  <span className="transition-colors hover:text-white" style={{ color: "#6366F1" }}>Privacy Policy</span>
+                  <span className="transition-colors hover:text-white" style={{ color: "#1D7BFF" }}>Privacy Policy</span>
                 </span>
               </label>
 
@@ -217,7 +217,7 @@ export default function RegisterPage() {
                 type="submit"
                 disabled={loading}
                 className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
-                style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)", boxShadow: "0 4px 20px rgba(99,102,241,0.35)" }}
+                style={{ background: "linear-gradient(135deg,#1D7BFF,#8B5CF6)", boxShadow: "0 4px 20px rgba(29,123,255,0.35)" }}
               >
                 {loading ? (
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
@@ -229,7 +229,7 @@ export default function RegisterPage() {
 
             <p className="mt-6 text-center text-sm" style={{ color: "#6B7280" }}>
               Already have an account?{" "}
-              <Link href="/login" className="font-medium transition-colors hover:text-white" style={{ color: "#6366F1" }}>
+              <Link href="/login" className="font-medium transition-colors hover:text-white" style={{ color: "#1D7BFF" }}>
                 Sign in
               </Link>
             </p>

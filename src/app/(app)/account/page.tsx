@@ -18,7 +18,7 @@ export default function AccountPage() {
       {/* LEFT PANEL */}
       <div className="flex w-[300px] flex-shrink-0 flex-col border-r p-6" style={{ borderColor: "var(--border)", background: "var(--bg-subtle)" }}>
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 text-sm font-semibold text-black">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#1D7BFF] to-[#06B6D4] text-sm font-semibold text-black">
             {sidebarUser.initials}
           </div>
           <div>
@@ -75,14 +75,14 @@ export default function AccountPage() {
         <div className="mt-6 max-w-xl space-y-4">
           <div className="rounded-xl border p-5" style={{ borderColor: "var(--border)", background: "var(--bg-subtle)" }}>
             <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 text-base font-semibold text-black">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#1D7BFF] to-[#06B6D4] text-base font-semibold text-black">
                 {sidebarUser.initials}
               </div>
               <div className="flex-1">
                 <div className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{sidebarUser.name}</div>
                 <div className="text-xs" style={{ color: "var(--text-tertiary)" }}>{sidebarUser.handle}</div>
               </div>
-              <button className="text-xs font-medium text-indigo-500 hover:text-indigo-400">
+              <button className="text-xs font-medium text-[#1D7BFF] hover:text-[#60A5FA]">
                 Update profile
               </button>
             </div>
@@ -96,7 +96,7 @@ export default function AccountPage() {
               <div className="text-xs font-medium uppercase tracking-wide" style={{ color: "var(--text-tertiary)" }}>{label}</div>
               <div className="mt-2 flex items-center justify-between">
                 <span className="text-sm" style={{ color: muted ? "var(--text-tertiary)" : "var(--text-secondary)" }}>{value}</span>
-                <button className="text-xs font-medium text-indigo-500 hover:text-indigo-400">{action}</button>
+                <button className="text-xs font-medium text-[#1D7BFF] hover:text-[#60A5FA]">{action}</button>
               </div>
             </div>
           ))}

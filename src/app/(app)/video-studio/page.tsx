@@ -94,7 +94,7 @@ export default function VideoStudioPage() {
       onClick={onClick}
       className={cn(
         "flex-1 rounded-md py-1.5 text-xs font-medium transition-colors",
-        active ? "bg-indigo-500 text-black" : "hover:text-[var(--text-primary)]"
+        active ? "bg-[#1D7BFF] text-black" : "hover:text-[var(--text-primary)]"
       )}
       style={!active ? { color: "var(--text-tertiary)" } : {}}
     >
@@ -138,7 +138,7 @@ export default function VideoStudioPage() {
           <div className="px-5">
             <button className="flex w-full items-center justify-between rounded-lg border px-3 py-2.5 text-sm transition-colors hover:bg-[var(--bg-hover)]" style={{ borderColor: "var(--border)", background: "var(--bg-muted)", color: "var(--text-secondary)" }}>
               <span className="flex items-center gap-2">
-                <Brain className="h-4 w-4 text-indigo-500" />
+                <Brain className="h-4 w-4 text-[#1D7BFF]" />
                 kling-video
               </span>
               <ChevronDown className="h-4 w-4" style={{ color: "var(--text-tertiary)" }} />
@@ -173,7 +173,7 @@ export default function VideoStudioPage() {
                     })}
                   </div>
                 </div>
-                <button className="mt-3 flex w-full flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed px-4 py-6 text-center hover:border-indigo-500/40 hover:bg-[var(--bg-hover)]" style={{ borderColor: "var(--border-hover)" }}>
+                <button className="mt-3 flex w-full flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed px-4 py-6 text-center hover:border-[#1D7BFF]/40 hover:bg-[var(--bg-hover)]" style={{ borderColor: "var(--border-hover)" }}>
                   <Upload className="h-5 w-5" style={{ color: "var(--text-tertiary)" }} />
                   <span className="text-xs" style={{ color: "var(--text-secondary)" }}>Click or drag to upload images</span>
                   <span className="text-[11px]" style={{ color: "var(--text-tertiary)" }}>Supports multiple image selection</span>
@@ -206,7 +206,7 @@ export default function VideoStudioPage() {
                     <button
                       key={ratio}
                       onClick={() => setAspectRatio(ratio)}
-                      className={cn("rounded-md border px-2.5 py-1.5 text-xs transition-colors", aspectRatio === ratio ? "border-indigo-500 bg-indigo-500/10 text-indigo-400" : "hover:bg-[var(--bg-hover)]")}
+                      className={cn("rounded-md border px-2.5 py-1.5 text-xs transition-colors", aspectRatio === ratio ? "border-[#1D7BFF] bg-[#1D7BFF]/10 text-[#60A5FA]" : "hover:bg-[var(--bg-hover)]")}
                       style={aspectRatio !== ratio ? { borderColor: "var(--border)", background: "var(--bg-muted)", color: "var(--text-secondary)" } : {}}
                     >
                       {ratio}
@@ -263,7 +263,7 @@ export default function VideoStudioPage() {
               type="button"
               onClick={handleGenerate}
               disabled={!prompt.trim() || generating}
-              className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-indigo-500 py-2.5 text-sm font-medium text-black transition-colors hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#1D7BFF] py-2.5 text-sm font-medium text-black transition-colors hover:bg-[#1666E8] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
               {generating ? "Generating…" : "Generate"}
@@ -277,8 +277,8 @@ export default function VideoStudioPage() {
         <div className="flex flex-1 flex-col items-center justify-center gap-6 overflow-y-auto px-8 py-8">
           {generating ? (
             <div className="flex w-full max-w-md flex-col items-center gap-4 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10">
-                <Loader2 className="h-8 w-8 animate-spin text-indigo-500" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#1D7BFF]/10">
+                <Loader2 className="h-8 w-8 animate-spin text-[#1D7BFF]" />
               </div>
               <div>
                 <h2 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
@@ -292,15 +292,15 @@ export default function VideoStudioPage() {
                   <span>{genPct}%</span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full" style={{ background: "var(--bg-muted)" }}>
-                  <div className="h-full rounded-full bg-indigo-500 transition-all duration-500" style={{ width: `${genPct}%` }} />
+                  <div className="h-full rounded-full bg-[#1D7BFF] transition-all duration-500" style={{ width: `${genPct}%` }} />
                 </div>
                 <div className="mt-4 grid grid-cols-5 gap-1">
                   {VIDEO_STAGES.map((stage, i) => (
                     <div key={stage.label} className="flex flex-col items-center gap-1">
-                      <div className={cn("flex h-6 w-6 items-center justify-center rounded-full transition-colors", i < genStage ? "bg-indigo-500" : i === genStage ? "border-2 border-indigo-500" : "border")}
+                      <div className={cn("flex h-6 w-6 items-center justify-center rounded-full transition-colors", i < genStage ? "bg-[#1D7BFF]" : i === genStage ? "border-2 border-[#1D7BFF]" : "border")}
                         style={i >= genStage ? { borderColor: "var(--border)" } : {}}>
                         {i < genStage && <CheckCircle2 className="h-3.5 w-3.5 text-white" />}
-                        {i === genStage && <span className="h-2 w-2 rounded-full bg-indigo-400" />}
+                        {i === genStage && <span className="h-2 w-2 rounded-full bg-[#60A5FA]" />}
                       </div>
                       <span className="text-center text-[9px] leading-tight" style={{ color: i <= genStage ? "var(--text-secondary)" : "var(--text-tertiary)" }}>{stage.label}</span>
                     </div>
@@ -354,7 +354,7 @@ export default function VideoStudioPage() {
                   className={cn(
                     "relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br ring-2 ring-transparent",
                     v.gradient,
-                    v.id === selectedVideo && "ring-indigo-500"
+                    v.id === selectedVideo && "ring-[#1D7BFF]"
                   )}
                 >
                   <Play className="h-5 w-5 fill-current text-white/90" />

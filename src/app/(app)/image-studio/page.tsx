@@ -189,7 +189,7 @@ export default function ImageStudioPage() {
 
       {/* Banner */}
       <div className="relative flex h-48 flex-shrink-0 items-end overflow-hidden border-b" style={{ borderColor: "var(--border)" }}>
-        <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-600/40 via-indigo-600/30 to-violet-500/30 blur-2xl" />
+        <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-600/40 via-[#1666E8]/30 to-violet-500/30 blur-2xl" />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent" />
         <div className="relative px-8 pb-6">
           <h1 className="text-3xl font-light italic" style={{ color: "var(--text-primary)", fontFamily: "Georgia, 'Times New Roman', serif" }}>
@@ -231,7 +231,7 @@ export default function ImageStudioPage() {
                 className={cn(
                   "flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors",
                   stylePreset === p.id
-                    ? "border-indigo-500 bg-indigo-500/10 text-indigo-400"
+                    ? "border-[#1D7BFF] bg-[#1D7BFF]/10 text-[#60A5FA]"
                     : "hover:bg-[var(--bg-hover)]"
                 )}
                 style={stylePreset !== p.id ? { borderColor: "var(--border)", color: "var(--text-tertiary)" } : {}}
@@ -248,13 +248,13 @@ export default function ImageStudioPage() {
               { icon: Hash, label: "1 image", primary: false },
             ].map(({ icon: Icon, label, primary }) => (
               <button key={label} className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors hover:bg-[var(--bg-hover)]" style={{ borderColor: "var(--border)", background: "var(--bg-muted)", color: "var(--text-secondary)" }}>
-                <Icon className={cn("h-3.5 w-3.5", primary && "text-indigo-500")} />
+                <Icon className={cn("h-3.5 w-3.5", primary && "text-[#1D7BFF]")} />
                 {label}
               </button>
             ))}
             <button
               onClick={() => setShowNeg(v => !v)}
-              className={cn("flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors hover:bg-[var(--bg-hover)]", showNeg && "border-indigo-500/30 bg-indigo-500/10 text-indigo-400")}
+              className={cn("flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors hover:bg-[var(--bg-hover)]", showNeg && "border-[#1D7BFF]/30 bg-[#1D7BFF]/10 text-[#60A5FA]")}
               style={!showNeg ? { borderColor: "var(--border)", background: "var(--bg-muted)", color: "var(--text-secondary)" } : {}}
             >
               <Wand2 className="h-3.5 w-3.5" />
@@ -267,7 +267,7 @@ export default function ImageStudioPage() {
               type="button"
               onClick={handleGenerate}
               disabled={!prompt.trim() || generating}
-              className="ml-auto flex items-center gap-1.5 rounded-lg bg-indigo-500 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-50"
+              className="ml-auto flex items-center gap-1.5 rounded-lg bg-[#1D7BFF] px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1666E8] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
               {generating ? GEN_STAGES[genStage]?.label ?? "Generating…" : "Generate"}
@@ -283,7 +283,7 @@ export default function ImageStudioPage() {
               </div>
               <div className="h-1.5 w-full overflow-hidden rounded-full" style={{ background: "var(--bg-muted)" }}>
                 <div
-                  className="h-full rounded-full bg-indigo-500 transition-all duration-500"
+                  className="h-full rounded-full bg-[#1D7BFF] transition-all duration-500"
                   style={{ width: `${genPct}%` }}
                 />
               </div>
@@ -300,7 +300,7 @@ export default function ImageStudioPage() {
               onClick={() => setSize(s)}
               className={cn(
                 "rounded-md border px-2.5 py-1 text-xs transition-colors",
-                size === s ? "border-indigo-500 bg-indigo-500/10 text-indigo-400" : "hover:bg-[var(--bg-hover)]"
+                size === s ? "border-[#1D7BFF] bg-[#1D7BFF]/10 text-[#60A5FA]" : "hover:bg-[var(--bg-hover)]"
               )}
               style={size !== s ? { borderColor: "var(--border)", color: "var(--text-tertiary)" } : {}}
             >
@@ -317,7 +317,7 @@ export default function ImageStudioPage() {
               onClick={() => setTab(t)}
               className={cn(
                 "border-b-2 px-1 pb-3 text-sm font-medium transition-colors capitalize",
-                tab === t ? "border-indigo-500 text-indigo-500" : "border-transparent hover:text-[var(--text-secondary)]"
+                tab === t ? "border-[#1D7BFF] text-[#1D7BFF]" : "border-transparent hover:text-[var(--text-secondary)]"
               )}
               style={tab !== t ? { color: "var(--text-tertiary)" } : {}}
             >
@@ -349,7 +349,7 @@ export default function ImageStudioPage() {
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
               {generating && (
                 <div className="aspect-square animate-pulse flex flex-col items-center justify-center gap-2 rounded-xl border" style={{ borderColor: "var(--border)", background: "var(--bg-muted)" }}>
-                  <Loader2 className="h-6 w-6 animate-spin text-indigo-500" />
+                  <Loader2 className="h-6 w-6 animate-spin text-[#1D7BFF]" />
                   <span className="text-[10px]" style={{ color: "var(--text-tertiary)" }}>{genPct}%</span>
                 </div>
               )}

@@ -70,7 +70,7 @@ export default function ToolsPage() {
       setHistory((prev) => [
         {
           id: `hist-${Date.now()}`,
-          gradient: "from-sky-400 via-indigo-500 to-fuchsia-600",
+          gradient: "from-sky-400 via-[#1D7BFF] to-fuchsia-600",
           time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           name: fileName,
         },
@@ -99,7 +99,7 @@ export default function ToolsPage() {
       onClick={() => setTab(id)}
       className={cn(
         "border-b-2 px-1 pb-3 text-sm font-medium transition-colors",
-        tab === id ? "border-indigo-500 text-indigo-500" : "border-transparent hover:text-[var(--text-secondary)]"
+        tab === id ? "border-[#1D7BFF] text-[#1D7BFF]" : "border-transparent hover:text-[var(--text-secondary)]"
       )}
       style={tab !== id ? { color: "var(--text-tertiary)" } : {}}
     >
@@ -135,12 +135,12 @@ export default function ToolsPage() {
                   onClick={() => { setFileName("sample.png"); setUploaded(true); setProcessed(false); }}
                   className={cn(
                     "flex w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed py-16 text-center transition-all",
-                    dropTarget ? "border-indigo-500 bg-indigo-500/5" : "hover:border-indigo-500/40 hover:bg-[var(--bg-hover)]"
+                    dropTarget ? "border-[#1D7BFF] bg-[#1D7BFF]/5" : "hover:border-[#1D7BFF]/40 hover:bg-[var(--bg-hover)]"
                   )}
                   style={{ borderColor: dropTarget ? undefined : "var(--border-hover)" }}
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-500/10">
-                    <Upload className="h-6 w-6 text-indigo-500" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#1D7BFF]/10">
+                    <Upload className="h-6 w-6 text-[#1D7BFF]" />
                   </div>
                   <div>
                     <p className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
@@ -151,7 +151,7 @@ export default function ToolsPage() {
                 </div>
               ) : (
                 <div className="relative overflow-hidden rounded-xl border" style={{ borderColor: "var(--border)" }}>
-                  <div className="aspect-square w-full bg-gradient-to-br from-sky-400 via-indigo-500 to-fuchsia-600" />
+                  <div className="aspect-square w-full bg-gradient-to-br from-sky-400 via-[#1D7BFF] to-fuchsia-600" />
                   {processed && (
                     <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-green-500/90 px-2 py-0.5 text-[11px] font-medium text-white">
                       <CheckCircle2 className="h-3 w-3" />
@@ -183,12 +183,12 @@ export default function ToolsPage() {
                   <span>{pct}%</span>
                 </div>
                 <div className="h-1.5 w-full overflow-hidden rounded-full" style={{ background: "var(--bg-hover)" }}>
-                  <div className="h-full rounded-full bg-indigo-500 transition-all duration-500" style={{ width: `${pct}%` }} />
+                  <div className="h-full rounded-full bg-[#1D7BFF] transition-all duration-500" style={{ width: `${pct}%` }} />
                 </div>
                 <div className="mt-3 grid grid-cols-4 gap-1">
                   {PROCESS_STAGES.map((st, i) => (
                     <div key={st.label} className="flex flex-col items-center gap-1">
-                      <div className={cn("h-1.5 w-full rounded-full transition-colors", i <= stage ? "bg-indigo-500" : "")}
+                      <div className={cn("h-1.5 w-full rounded-full transition-colors", i <= stage ? "bg-[#1D7BFF]" : "")}
                         style={i > stage ? { background: "var(--bg-hover)" } : {}} />
                       <span className="text-center text-[9px]" style={{ color: i <= stage ? "var(--text-secondary)" : "var(--text-tertiary)" }}>
                         {st.label}
@@ -202,7 +202,7 @@ export default function ToolsPage() {
             <button
               onClick={handleRemoveBackground}
               disabled={!uploaded || processing}
-              className="mt-6 flex w-full items-center justify-center gap-1.5 rounded-lg bg-indigo-500 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-40"
+              className="mt-6 flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#1D7BFF] py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1666E8] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Sparkles className="h-4 w-4" />
               {processing ? "Processing…" : processed ? "Process Again" : "Remove Background"}
@@ -236,13 +236,13 @@ export default function ToolsPage() {
                   {/* After (background removed) */}
                   <div className="absolute inset-0 checkered-bg">
                     <div
-                      className="absolute inset-0 m-auto h-3/4 w-3/4 bg-gradient-to-br from-sky-400 via-indigo-500 to-fuchsia-600"
+                      className="absolute inset-0 m-auto h-3/4 w-3/4 bg-gradient-to-br from-sky-400 via-[#1D7BFF] to-fuchsia-600"
                       style={{ clipPath: "polygon(20% 5%, 80% 5%, 95% 30%, 90% 70%, 70% 95%, 30% 95%, 5% 65%, 10% 25%)" }}
                     />
                   </div>
                   {/* Before (original) clipped to left half */}
                   <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - sliderX}% 0 0)` }}>
-                    <div className="absolute inset-0 bg-gradient-to-br from-sky-400 via-indigo-500 to-fuchsia-600" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-sky-400 via-[#1D7BFF] to-fuchsia-600" />
                   </div>
                   {/* Slider handle */}
                   <div
@@ -263,7 +263,7 @@ export default function ToolsPage() {
             ) : (
               <div className="flex flex-col items-center text-center" style={{ color: "var(--text-tertiary)" }}>
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl" style={{ background: "var(--bg-muted)" }}>
-                  <Sparkles className="h-8 w-8 text-indigo-500/50" />
+                  <Sparkles className="h-8 w-8 text-[#1D7BFF]/50" />
                 </div>
                 <h2 className="mt-4 text-base font-medium" style={{ color: "var(--text-secondary)" }}>No result yet</h2>
                 <p className="mt-1 max-w-xs text-sm">

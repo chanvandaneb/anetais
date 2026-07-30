@@ -35,9 +35,10 @@ export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
       {/* TOP — logo + nav */}
       <div className="flex w-full flex-col items-center gap-1">
         {/* Logo */}
-        <Link href="/home" className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)" }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 3l1.9 5.8H20l-5 3.6 1.9 5.8L12 15l-4.9 3.2L9 12.4 4 8.8h6.1z" />
+        <Link href="/home" className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: "linear-gradient(135deg,#1D7BFF,#06B6D4)" }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 3L4 21h3.5l1.5-4h6l1.5 4H20L12 3z" fill="white" />
+            <path d="M10 14l2-5.5 2 5.5H10z" fill="rgba(255,255,255,0.35)" />
           </svg>
         </Link>
 
@@ -108,7 +109,7 @@ export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
             ref={avatarRef}
             type="button"
             onClick={() => setProfileOpen(v => !v)}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 text-xs font-bold text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#1D7BFF] to-[#06B6D4] text-xs font-bold text-white"
           >
             {sidebarUser.initials}
           </button>

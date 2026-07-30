@@ -26,14 +26,14 @@ export default function LoginPage() {
     <div className="relative flex min-h-screen items-center justify-center px-4">
       {/* Background glow */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: "radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 65%)" }} />
+        <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: "radial-gradient(circle, rgba(29,123,255,0.12) 0%, transparent 65%)" }} />
       </div>
 
       <div className="relative w-full max-w-md">
         {/* Logo */}
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
           <Link href="/landing" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)" }}>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: "linear-gradient(135deg,#1D7BFF,#8B5CF6)" }}>
               <Sparkles className="h-5 w-5 text-white" />
             </div>
             <span className="text-xl font-bold">AnetAIS</span>
@@ -82,7 +82,7 @@ export default function LoginPage() {
                   border: "1px solid rgba(255,255,255,0.08)",
                   color: "#F9FAFB",
                   // @ts-ignore
-                  "--tw-ring-color": "#6366F1",
+                  "--tw-ring-color": "#1D7BFF",
                 }}
               />
             </div>
@@ -90,7 +90,7 @@ export default function LoginPage() {
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-medium" style={{ color: "#9CA3AF" }}>Password</label>
-                <button type="button" className="text-xs transition-colors hover:text-white" style={{ color: "#6366F1" }}>
+                <button type="button" className="text-xs transition-colors hover:text-white" style={{ color: "#1D7BFF" }}>
                   Forgot password?
                 </button>
               </div>
@@ -123,7 +123,7 @@ export default function LoginPage() {
               type="submit"
               disabled={loading}
               className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
-              style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)", boxShadow: "0 4px 20px rgba(99,102,241,0.35)" }}
+              style={{ background: "linear-gradient(135deg,#1D7BFF,#8B5CF6)", boxShadow: "0 4px 20px rgba(29,123,255,0.35)" }}
             >
               {loading ? (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
@@ -135,7 +135,7 @@ export default function LoginPage() {
 
           <p className="mt-6 text-center text-sm" style={{ color: "#6B7280" }}>
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-medium transition-colors hover:text-white" style={{ color: "#6366F1" }}>
+            <Link href="/register" className="font-medium transition-colors hover:text-white" style={{ color: "#1D7BFF" }}>
               Create one free
             </Link>
           </p>
