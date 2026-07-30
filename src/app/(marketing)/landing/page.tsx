@@ -2,409 +2,398 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import {
-  Sparkles, MessageSquare, Image, Video, Wand2, Zap,
-  ChevronRight, Star, Check, ArrowRight, Play, Globe,
-  Shield, Brain, Layers, Users, TrendingUp, Code2,
-} from "lucide-react";
+import { Sparkles, ArrowRight, Check, X, ChevronRight, Play, Star } from "lucide-react";
 
-const MODELS = ["GPT-4o", "Claude 3.7", "Gemini 2.0", "DeepSeek V3", "Grok 4", "Qwen 2.5"];
-const HERO_PROMPTS = [
-  "Generate a photorealistic sunset over Tokyo",
-  "Write a marketing email that converts",
-  "Create a cinematic sci-fi video clip",
-  "Refactor my React component to use hooks",
-  "Summarize this 40-page research paper",
-];
-
-function useTypewriter(texts: string[], speed = 45) {
-  const [display, setDisplay] = useState("");
-  const [textIdx, setTextIdx] = useState(0);
-  const [charIdx, setCharIdx] = useState(0);
-  const [deleting, setDeleting] = useState(false);
-
+/* ── helpers ── */
+function useInterval(fn: () => void, ms: number) {
   useEffect(() => {
-    const current = texts[textIdx];
-    let timer: ReturnType<typeof setTimeout>;
-
-    if (!deleting && charIdx < current.length) {
-      timer = setTimeout(() => setCharIdx(i => i + 1), speed);
-    } else if (!deleting && charIdx === current.length) {
-      timer = setTimeout(() => setDeleting(true), 1800);
-    } else if (deleting && charIdx > 0) {
-      timer = setTimeout(() => setCharIdx(i => i - 1), speed / 2);
-    } else {
-      setDeleting(false);
-      setTextIdx(i => (i + 1) % texts.length);
-    }
-    setDisplay(current.slice(0, charIdx));
-    return () => clearTimeout(timer);
-  }, [charIdx, deleting, textIdx, texts, speed]);
-
-  return display;
+    const t = setInterval(fn, ms);
+    return () => clearInterval(t);
+  }, [fn, ms]);
 }
 
-function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const [val, setVal] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
+/* ── Marquee of AI-generated images ── */
+const MARQUEE_IMAGES = [
+  { seed: "city2",     label: "Neon Tokyo at night" },
+  { seed: "nature1",   label: "Mountain golden hour" },
+  { seed: "space5",    label: "Nebula in deep space" },
+  { seed: "arch6",     label: "Desert white villa" },
+  { seed: "portrait8", label: "Cinematic portrait" },
+  { seed: "ocean3",    label: "Turquoise waves" },
+  { seed: "food7",     label: "Artisan ramen bowl" },
+  { seed: "forest4",   label: "Redwood light rays" },
+  { seed: "abstract9", label: "Ink art in blue" },
+  { seed: "macro10",   label: "Dewdrop web" },
+  { seed: "gen1",      label: "Futuristic city" },
+  { seed: "gen3",      label: "Oil painting style" },
+  { seed: "gen5",      label: "Watercolor sunrise" },
+  { seed: "gen7",      label: "Pixel art landscape" },
+  { seed: "gen9",      label: "3D render crystal" },
+];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      observer.disconnect();
-      let start = 0;
-      const step = target / 60;
-      const tick = () => {
-        start += step;
-        if (start >= target) { setVal(target); return; }
-        setVal(Math.floor(start));
-        requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    }, { threshold: 0.5 });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [target]);
-
-  return <span ref={ref}>{val.toLocaleString()}{suffix}</span>;
+function MarqueeRow({ reverse = false, offset = 0 }: { reverse?: boolean; offset?: number }) {
+  const imgs = [...MARQUEE_IMAGES, ...MARQUEE_IMAGES]; // duplicate for seamless loop
+  const duration = reverse ? "55s" : "45s";
+  return (
+    <div className="overflow-hidden">
+      <div
+        className="flex gap-3"
+        style={{
+          animation: `marquee${reverse ? "Rev" : ""} ${duration} linear infinite`,
+          width: "max-content",
+        }}
+      >
+        {imgs.map((img, i) => (
+          <div
+            key={i}
+            className="relative flex-shrink-0 overflow-hidden rounded-xl"
+            style={{ width: 180, height: 130 }}
+          >
+            <img
+              src={`https://picsum.photos/seed/${img.seed}/360/260`}
+              alt={img.label}
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 55%)" }} />
+            <span className="absolute bottom-2 left-2.5 text-[10px] font-medium text-white/80 leading-tight">{img.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
-const FEATURES = [
-  {
-    icon: MessageSquare,
-    title: "Multi-Model Chat",
-    desc: "Switch between GPT-4o, Claude, Gemini, DeepSeek and more in a single conversation. Compare answers side-by-side.",
-    color: "#6366F1",
-  },
-  {
-    icon: Image,
-    title: "Image Studio",
-    desc: "Generate stunning visuals with style presets — Photorealistic, Anime, Cinematic, Oil Painting and more.",
-    color: "#8B5CF6",
-  },
-  {
-    icon: Video,
-    title: "Video Studio",
-    desc: "Turn prompts into short AI-generated video clips with multi-stage rendering and live progress tracking.",
-    color: "#EC4899",
-  },
-  {
-    icon: Wand2,
-    title: "AI Tools",
-    desc: "Remove backgrounds, upscale images, and process media with real-time before/after comparison sliders.",
-    color: "#F59E0B",
-  },
-  {
-    icon: Brain,
-    title: "Smart Assistants",
-    desc: "Pre-built AI personas for code review, academic writing, creative storytelling, and more.",
-    color: "#10B981",
-  },
-  {
-    icon: Zap,
-    title: "Streaming Responses",
-    desc: "Real-time character-by-character streaming with copy, react, and regenerate controls on every message.",
-    color: "#3B82F6",
-  },
-];
+/* ── Bento card ── */
+function BentoCard({
+  label, title, desc, img, wide, tall, accent, tag,
+}: {
+  label: string; title: string; desc: string; img?: string;
+  wide?: boolean; tall?: boolean; accent?: string; tag?: string;
+}) {
+  const [hov, setHov] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      className="group relative flex flex-col justify-end overflow-hidden rounded-2xl transition-transform duration-300"
+      style={{
+        gridColumn: wide ? "span 2" : "span 1",
+        gridRow: tall ? "span 2" : "span 1",
+        minHeight: tall ? 480 : 240,
+        background: img ? undefined : "rgba(255,255,255,0.03)",
+        border: "1px solid rgba(255,255,255,0.07)",
+        transform: hov ? "scale(1.01)" : "scale(1)",
+      }}
+    >
+      {img && (
+        <>
+          <img src={img} alt={title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)" }} />
+        </>
+      )}
+      {!img && accent && (
+        <div className="absolute inset-0 opacity-20" style={{ background: `radial-gradient(circle at 30% 30%, ${accent}, transparent 70%)` }} />
+      )}
 
-const TESTIMONIALS = [
-  {
-    name: "Sarah K.",
-    role: "Product Designer",
-    avatar: "https://picsum.photos/seed/sarah/48/48",
-    quote: "AnetAIS replaced four different AI subscriptions for me. The image studio alone is worth it.",
-    stars: 5,
-  },
-  {
-    name: "Marcus T.",
-    role: "Full-Stack Engineer",
-    avatar: "https://picsum.photos/seed/marcus/48/48",
-    quote: "Being able to switch models mid-conversation without losing context is a game-changer.",
-    stars: 5,
-  },
-  {
-    name: "Priya R.",
-    role: "Content Strategist",
-    avatar: "https://picsum.photos/seed/priya/48/48",
-    quote: "The streaming responses feel so natural. It's the closest thing to talking to a real assistant.",
-    stars: 5,
-  },
-];
+      <div className="relative z-10 p-6">
+        <div className="mb-2 flex items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: accent ?? "#6366F1" }}>{label}</span>
+          {tag && (
+            <span className="rounded-full px-2 py-0.5 text-[9px] font-bold uppercase" style={{ background: accent ? `${accent}25` : "rgba(99,102,241,0.2)", color: accent ?? "#6366F1", border: `1px solid ${accent ?? "#6366F1"}40` }}>
+              {tag}
+            </span>
+          )}
+        </div>
+        <h3 className="text-xl font-bold leading-tight text-white">{title}</h3>
+        <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.60)" }}>{desc}</p>
+      </div>
+    </div>
+  );
+}
 
+/* ── Pricing ── */
 const PLANS = [
-  {
-    name: "Free",
-    price: "$0",
-    period: "/month",
-    features: ["1,000 credits/mo", "All chat models", "5 images/day", "Community support"],
-    cta: "Get Started",
-    highlight: false,
-  },
-  {
-    name: "Pro",
-    price: "$9.99",
-    period: "/month",
-    features: ["20,000 credits/mo", "Unlimited image generation", "Video Studio access", "Priority speed", "API access"],
-    cta: "Start Free Trial",
-    highlight: true,
-  },
-  {
-    name: "Team",
-    price: "$29.99",
-    period: "/month",
-    features: ["80,000 shared credits", "5 seats included", "Shared workspaces", "Admin dashboard", "Dedicated support"],
-    cta: "Contact Sales",
-    highlight: false,
-  },
+  { name: "FREE", price: "$0", period: "/mo", features: ["1,000 credits/month", "All chat models", "5 images/day", "Community support"], cta: "Get started", highlight: false },
+  { name: "PRO", price: "$9.99", period: "/mo", features: ["20,000 credits/month", "Unlimited image gen", "Video Studio", "Priority speed", "API access"], cta: "Start free trial", highlight: true },
+  { name: "TEAM", price: "$29.99", period: "/mo", features: ["80,000 shared credits", "5 seats included", "Admin dashboard", "Usage analytics", "Dedicated support"], cta: "Contact sales", highlight: false },
 ];
+
+/* ── Model pill ticker ── */
+const MODELS = ["GPT-4o", "Claude 3.7 Sonnet", "Gemini 2.0 Flash", "DeepSeek V3", "Grok 4", "Qwen 2.5-VL", "Mistral Large", "Llama 3.3"];
 
 export default function LandingPage() {
-  const typed = useTypewriter(HERO_PROMPTS);
+  const [barDismissed, setBarDismissed] = useState(false);
   const [modelIdx, setModelIdx] = useState(0);
+  const [modelFading, setModelFading] = useState(false);
 
+  // Model ticker
   useEffect(() => {
-    const t = setInterval(() => setModelIdx(i => (i + 1) % MODELS.length), 1800);
+    const t = setInterval(() => {
+      setModelFading(true);
+      setTimeout(() => {
+        setModelIdx(i => (i + 1) % MODELS.length);
+        setModelFading(false);
+      }, 300);
+    }, 2000);
     return () => clearInterval(t);
   }, []);
 
   return (
-    <div className="min-h-screen overflow-x-hidden" style={{ background: "#0a0a0f", color: "#F9FAFB", fontFamily: "var(--font-inter, Inter, sans-serif)" }}>
+    <div style={{ background: "#08080c", color: "#F9FAFB", fontFamily: "var(--font-inter, Inter, sans-serif)", overflowX: "hidden" }}>
+
+      {/* ── KEYFRAMES ── */}
+      <style>{`
+        @keyframes marquee    { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+        @keyframes marqueeRev { from { transform: translateX(-50%) } to { transform: translateX(0) } }
+        @keyframes fadeUp     { from { opacity:0; transform:translateY(24px) } to { opacity:1; transform:translateY(0) } }
+        @keyframes pulse-ring { 0%,100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.5) } 50% { box-shadow: 0 0 0 8px rgba(99,102,241,0) } }
+        .animate-fade-up { animation: fadeUp 0.7s ease both; }
+      `}</style>
+
+      {/* ── ANNOUNCEMENT BAR ── */}
+      {!barDismissed && (
+        <div className="relative flex items-center justify-center gap-3 px-6 py-2.5 text-sm font-medium" style={{ background: "linear-gradient(90deg,#4F46E5,#7C3AED,#6366F1)", color: "white" }}>
+          <Sparkles className="h-4 w-4 flex-shrink-0" />
+          <span>
+            <strong>Free forever plan.</strong> No credit card required — start generating with GPT-4o, Claude & more today.
+          </span>
+          <Link href="/register" className="flex-shrink-0 rounded-full bg-white/20 px-3 py-1 text-xs font-bold transition-colors hover:bg-white/30">
+            Sign up free →
+          </Link>
+          <button onClick={() => setBarDismissed(true)} className="absolute right-4 text-white/60 hover:text-white transition-colors">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
 
       {/* ── NAV ── */}
-      <nav className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md" style={{ background: "rgba(10,10,15,0.8)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="flex items-center gap-2">
+      <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-3" style={{ background: "rgba(8,8,12,0.85)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <Link href="/landing" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)" }}>
             <Sparkles className="h-4 w-4 text-white" />
           </div>
-          <span className="text-base font-bold tracking-tight">AnetAIS</span>
+          <span className="text-sm font-bold tracking-tight">AnetAIS</span>
+        </Link>
+
+        <div className="hidden items-center gap-1 md:flex">
+          {["Chat", "Image", "Video", "Tools"].map(item => (
+            <Link
+              key={item}
+              href="/chat"
+              className="rounded-lg px-3.5 py-2 text-sm transition-colors hover:bg-white/5 hover:text-white"
+              style={{ color: "#9CA3AF" }}
+            >
+              {item}
+            </Link>
+          ))}
+          <span className="mx-2 h-4 w-px" style={{ background: "rgba(255,255,255,0.10)" }} />
+          <a href="#pricing" className="rounded-lg px-3.5 py-2 text-sm transition-colors hover:bg-white/5 hover:text-white" style={{ color: "#9CA3AF" }}>Pricing</a>
         </div>
-        <div className="hidden items-center gap-7 text-sm md:flex" style={{ color: "#9CA3AF" }}>
-          <a href="#features" className="transition-colors hover:text-white">Features</a>
-          <a href="#pricing" className="transition-colors hover:text-white">Pricing</a>
-          <a href="#testimonials" className="transition-colors hover:text-white">Reviews</a>
-        </div>
+
         <div className="flex items-center gap-3">
-          <Link href="/login" className="hidden text-sm transition-colors hover:text-white md:block" style={{ color: "#9CA3AF" }}>Sign in</Link>
+          <Link href="/login" className="hidden text-sm transition-colors hover:text-white md:block" style={{ color: "#9CA3AF" }}>Log in</Link>
           <Link
             href="/register"
-            className="rounded-lg px-4 py-2 text-sm font-medium text-white transition-all hover:scale-105 hover:shadow-lg"
-            style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)", boxShadow: "0 0 20px rgba(99,102,241,0.35)" }}
+            className="rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all hover:opacity-90"
+            style={{ background: "#6366F1" }}
           >
-            Get Started Free
+            Get started free
           </Link>
         </div>
       </nav>
 
       {/* ── HERO ── */}
-      <section className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center">
-        {/* Glow orbs */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute left-1/4 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: "radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%)" }} />
-          <div className="absolute right-1/4 top-1/3 h-[400px] w-[400px] rounded-full" style={{ background: "radial-gradient(circle, rgba(139,92,246,0.14) 0%, transparent 70%)" }} />
-          <div className="absolute bottom-1/4 left-1/2 h-[300px] w-[300px] -translate-x-1/2 rounded-full" style={{ background: "radial-gradient(circle, rgba(236,72,153,0.10) 0%, transparent 70%)" }} />
+      <section className="relative px-6 pb-8 pt-20 text-center">
+        {/* BIG glow */}
+        <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-10">
+          <div style={{ width: 800, height: 500, background: "radial-gradient(ellipse at center top, rgba(99,102,241,0.20) 0%, transparent 65%)" }} />
         </div>
 
         {/* Badge */}
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium" style={{ border: "1px solid rgba(99,102,241,0.35)", background: "rgba(99,102,241,0.08)", color: "#A5B4FC" }}>
-          <Sparkles className="h-3.5 w-3.5" />
-          Powered by 10+ leading AI models
+        <div className="animate-fade-up mb-5 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold" style={{ border: "1px solid rgba(99,102,241,0.35)", background: "rgba(99,102,241,0.08)", color: "#A5B4FC", animationDelay: "0ms" }}>
+          <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse" />
+          10+ AI models — one workspace
         </div>
 
-        <h1 className="max-w-4xl text-5xl font-bold leading-tight tracking-tight md:text-7xl">
-          Every AI model.{" "}
-          <span style={{ background: "linear-gradient(135deg,#6366F1,#A78BFA,#EC4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            One platform.
+        {/* Headline */}
+        <h1 className="animate-fade-up mx-auto max-w-5xl text-6xl font-black leading-[1.05] tracking-tight md:text-8xl" style={{ animationDelay: "80ms" }}>
+          EVERY AI.<br />
+          <span style={{ background: "linear-gradient(135deg,#818CF8 0%,#C084FC 40%,#F472B6 80%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            ONE PLACE.
           </span>
         </h1>
 
-        <p className="mt-6 max-w-xl text-lg leading-relaxed" style={{ color: "#9CA3AF" }}>
-          Chat, generate images, create videos, and process media — all powered by the world's best AI models in a single unified workspace.
-        </p>
-
-        {/* Animated prompt bar */}
-        <div className="mt-10 flex w-full max-w-xl items-center gap-3 rounded-2xl border px-5 py-4 text-left" style={{ border: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.04)", backdropFilter: "blur(12px)" }}>
-          <Sparkles className="h-5 w-5 flex-shrink-0" style={{ color: "#6366F1" }} />
-          <span className="flex-1 text-sm" style={{ color: "#D1D5DB" }}>
-            {typed}
-            <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse align-middle" style={{ background: "#6366F1" }} />
-          </span>
-          <div className="rounded-lg px-3 py-1.5 text-xs font-medium text-white" style={{ background: "#6366F1" }}>
-            <ArrowRight className="h-4 w-4" />
-          </div>
-        </div>
-
-        {/* Model carousel */}
-        <div className="mt-5 flex items-center gap-2 text-sm" style={{ color: "#6B7280" }}>
-          <span>Currently using</span>
-          <span className="rounded-full border px-3 py-1 text-xs font-semibold transition-all" style={{ border: "1px solid rgba(99,102,241,0.40)", background: "rgba(99,102,241,0.10)", color: "#A5B4FC" }}>
+        {/* Sub */}
+        <p className="animate-fade-up mx-auto mt-6 max-w-lg text-lg leading-relaxed" style={{ color: "#9CA3AF", animationDelay: "160ms" }}>
+          Chat with{" "}
+          <span
+            className="font-semibold transition-opacity duration-300"
+            style={{ color: "#A5B4FC", opacity: modelFading ? 0 : 1 }}
+          >
             {MODELS[modelIdx]}
           </span>
-          <span>and {MODELS.length - 1} more</span>
-        </div>
+          {" "}— and generate images, videos, and more without switching apps.
+        </p>
 
         {/* CTAs */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="animate-fade-up mt-9 flex flex-wrap items-center justify-center gap-3" style={{ animationDelay: "240ms" }}>
           <Link
             href="/register"
-            className="flex items-center gap-2 rounded-xl px-7 py-3.5 text-sm font-semibold text-white transition-all hover:scale-105 hover:shadow-xl"
-            style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)", boxShadow: "0 4px 30px rgba(99,102,241,0.4)" }}
+            className="flex items-center gap-2 rounded-xl px-7 py-3.5 text-sm font-bold text-white transition-all hover:scale-105"
+            style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)", boxShadow: "0 0 30px rgba(99,102,241,0.45)", animation: "pulse-ring 2.5s ease infinite" }}
           >
             Start for free
-            <ChevronRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             href="/chat"
-            className="flex items-center gap-2 rounded-xl border px-7 py-3.5 text-sm font-semibold transition-all hover:border-indigo-500/50 hover:bg-white/5"
+            className="flex items-center gap-2 rounded-xl border px-7 py-3.5 text-sm font-semibold transition-all hover:bg-white/5"
             style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#E5E7EB" }}
           >
-            <Play className="h-4 w-4" />
-            Live demo
+            <Play className="h-4 w-4" style={{ color: "#6366F1" }} />
+            Try the demo
           </Link>
         </div>
 
-        {/* Social proof */}
-        <div className="mt-12 flex items-center gap-6 text-sm" style={{ color: "#6B7280" }}>
-          <div className="flex -space-x-2">
-            {["u1","u2","u3","u4"].map(s => (
-              <img key={s} src={`https://picsum.photos/seed/${s}/28/28`} className="h-7 w-7 rounded-full border-2 object-cover" style={{ borderColor: "#0a0a0f" }} alt="" />
+        {/* Social proof avatars */}
+        <div className="animate-fade-up mt-10 flex items-center justify-center gap-3" style={{ animationDelay: "320ms" }}>
+          <div className="flex -space-x-2.5">
+            {["u1","u2","u3","u4","u5"].map(s => (
+              <img key={s} src={`https://picsum.photos/seed/${s}/32/32`} className="h-8 w-8 rounded-full border-2 object-cover" style={{ borderColor: "#08080c" }} alt="" />
             ))}
           </div>
-          <span>Trusted by <strong style={{ color: "#E5E7EB" }}>12,000+</strong> creators</span>
-        </div>
-      </section>
-
-      {/* ── STATS ── */}
-      <section className="px-6 py-20">
-        <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 md:grid-cols-4">
-          {[
-            { label: "AI Models", value: 12, suffix: "+" },
-            { label: "Images Generated", value: 2400000, suffix: "+" },
-            { label: "Active Users", value: 12000, suffix: "+" },
-            { label: "Uptime", value: 99, suffix: ".9%" },
-          ].map(stat => (
-            <div key={stat.label} className="text-center">
-              <div className="text-4xl font-bold" style={{ background: "linear-gradient(135deg,#6366F1,#A78BFA)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                <CountUp target={stat.value} suffix={stat.suffix} />
-              </div>
-              <div className="mt-1 text-sm" style={{ color: "#6B7280" }}>{stat.label}</div>
+          <div className="text-left text-xs" style={{ color: "#6B7280" }}>
+            <div className="flex gap-0.5">
+              {[1,2,3,4,5].map(i => <Star key={i} className="h-3 w-3 fill-current" style={{ color: "#FBBF24" }} />)}
             </div>
-          ))}
+            <span>Loved by <strong style={{ color: "#D1D5DB" }}>12,000+</strong> creators</span>
+          </div>
         </div>
       </section>
 
-      {/* ── FEATURES ── */}
-      <section id="features" className="px-6 py-24">
+      {/* ── MARQUEE GALLERY ── */}
+      <section className="mt-10 flex flex-col gap-3 py-4" style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}>
+        <MarqueeRow />
+        <MarqueeRow reverse />
+      </section>
+
+      {/* ── BENTO GRID ── */}
+      <section className="px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-16 text-center">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium" style={{ background: "rgba(99,102,241,0.10)", color: "#A5B4FC", border: "1px solid rgba(99,102,241,0.25)" }}>
-              <Layers className="h-3.5 w-3.5" />
-              Everything you need
-            </div>
-            <h2 className="text-4xl font-bold md:text-5xl">One workspace for all AI</h2>
-            <p className="mt-4 max-w-xl mx-auto text-base" style={{ color: "#9CA3AF" }}>
-              Stop juggling 5 different AI tools. AnetAIS brings chat, image, video, and media processing into one beautiful interface.
-            </p>
+          <div className="mb-4 text-center">
+            <span className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#4B5563" }}>What you can build</span>
           </div>
+          <h2 className="mb-10 text-center text-4xl font-black tracking-tight md:text-5xl">ONE WORKSPACE.<br />INFINITE POSSIBILITIES.</h2>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {FEATURES.map((f) => (
-              <div
-                key={f.title}
-                className="group relative overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-                style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)" }}
-              >
-                <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{ background: `radial-gradient(circle at 30% 30%, ${f.color}10 0%, transparent 60%)` }} />
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl" style={{ background: `${f.color}18` }}>
-                  <f.icon className="h-5 w-5" style={{ color: f.color }} />
-                </div>
-                <h3 className="mb-2 text-base font-semibold">{f.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#9CA3AF" }}>{f.desc}</p>
-              </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3" style={{ gridAutoRows: "240px" }}>
+            {/* Wide tall card — Chat */}
+            <BentoCard
+              label="Multi-Model Chat"
+              tag="10+ Models"
+              title="Talk to any AI. Switch in one click."
+              desc="GPT-4o, Claude 3.7, Gemini, DeepSeek — all in one thread. No tab-switching, no re-explaining context."
+              img="https://picsum.photos/seed/city2/800/600"
+              wide
+              accent="#6366F1"
+            />
+
+            {/* Tall card — Image */}
+            <BentoCard
+              label="Image Studio"
+              tag="8 Style Presets"
+              title="Words → visuals in seconds."
+              desc="Photorealistic, anime, watercolor, cinematic — pick a style and generate."
+              img="https://picsum.photos/seed/portrait8/400/600"
+              tall
+              accent="#A78BFA"
+            />
+
+            {/* Normal — Video */}
+            <BentoCard
+              label="Video Studio"
+              title="Prompts become motion."
+              desc="Multi-stage rendering with live progress and download."
+              img="https://picsum.photos/seed/ocean3/400/300"
+              accent="#EC4899"
+            />
+
+            {/* Normal — Tools */}
+            <BentoCard
+              label="AI Tools"
+              title="Remove backgrounds. Instantly."
+              desc="Drag & drop any image. Get a clean cutout with before/after comparison."
+              img="https://picsum.photos/seed/forest4/400/300"
+              accent="#10B981"
+            />
+
+            {/* Wide — Assistants */}
+            <BentoCard
+              label="Smart Assistants"
+              tag="4 Personas"
+              title="Pre-built AI experts, ready to go."
+              desc="Academic writer, code reviewer, recipe critic, storyteller — already configured and waiting."
+              img="https://picsum.photos/seed/arch6/800/300"
+              wide
+              accent="#F59E0B"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ── HORIZONTAL SCROLLER — Provider logos ── */}
+      <section className="py-12" style={{ borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <div className="overflow-hidden" style={{ maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)" }}>
+          <div style={{ display: "flex", gap: "3rem", animation: "marquee 20s linear infinite", width: "max-content" }}>
+            {[...["OpenAI","Anthropic","Google","DeepSeek","xAI","Alibaba Cloud","Mistral","Meta AI","Cohere","Together AI"],
+              ...["OpenAI","Anthropic","Google","DeepSeek","xAI","Alibaba Cloud","Mistral","Meta AI","Cohere","Together AI"]].map((n, i) => (
+              <span key={i} className="flex-shrink-0 text-sm font-bold uppercase tracking-widest" style={{ color: "#2D3748", letterSpacing: "0.15em" }}>{n}</span>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── DEMO PREVIEW ── */}
-      <section className="px-6 py-20">
+      {/* ── HOW IT WORKS ── */}
+      <section className="px-6 py-24">
         <div className="mx-auto max-w-5xl">
-          <div className="overflow-hidden rounded-3xl border" style={{ border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)" }}>
-            {/* Window bar */}
-            <div className="flex items-center gap-2 border-b px-5 py-3.5" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-              <div className="h-3 w-3 rounded-full bg-red-500/70" />
-              <div className="h-3 w-3 rounded-full bg-yellow-500/70" />
-              <div className="h-3 w-3 rounded-full bg-green-500/70" />
-              <div className="ml-4 flex-1 rounded-md px-3 py-1 text-center text-xs" style={{ background: "rgba(255,255,255,0.05)", color: "#6B7280" }}>
-                anetais.app/chat
-              </div>
-            </div>
-            {/* Fake chat UI */}
-            <div className="p-6 md:p-10">
-              <div className="flex flex-col gap-5">
-                <div className="flex justify-end">
-                  <div className="max-w-sm rounded-2xl rounded-tr-sm px-4 py-3 text-sm" style={{ background: "#6366F1", color: "white" }}>
-                    Explain quantum entanglement like I'm 10 years old
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full" style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)" }}>
-                    <Sparkles className="h-4 w-4 text-white" />
-                  </div>
-                  <div className="max-w-lg rounded-2xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed" style={{ background: "rgba(255,255,255,0.06)", color: "#E5E7EB" }}>
-                    Imagine you have two magic coins. No matter how far apart you put them — even on opposite sides of the universe — when you flip one, the other <em>instantly</em> lands on the opposite side. That's quantum entanglement: two particles connected by an invisible thread that doesn't care about distance. ✨
-                  </div>
-                </div>
-                <div className="flex justify-end">
-                  <div className="max-w-sm rounded-2xl rounded-tr-sm px-4 py-3 text-sm" style={{ background: "#6366F1", color: "white" }}>
-                    Now generate an image of those magic coins in space
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full" style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)" }}>
-                    <Sparkles className="h-4 w-4 text-white" />
-                  </div>
-                  <div className="overflow-hidden rounded-2xl rounded-tl-sm" style={{ background: "rgba(255,255,255,0.06)" }}>
-                    <img src="https://picsum.photos/seed/space5/320/180" alt="Generated" className="h-40 w-72 object-cover" />
-                    <div className="px-4 py-2 text-xs" style={{ color: "#9CA3AF" }}>Generated with Qwen Image · 1024×1024</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="mb-14 text-center">
+            <span className="mb-3 block text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#4B5563" }}>How it works</span>
+            <h2 className="text-4xl font-black tracking-tight md:text-5xl">ZERO SETUP.<br />START IN 30 SECONDS.</h2>
           </div>
-        </div>
-      </section>
 
-      {/* ── TRUSTED BY ── */}
-      <section className="px-6 py-16">
-        <div className="mx-auto max-w-5xl text-center">
-          <p className="mb-10 text-sm uppercase tracking-widest" style={{ color: "#4B5563" }}>Works with all leading providers</p>
-          <div className="flex flex-wrap items-center justify-center gap-8">
-            {["OpenAI", "Anthropic", "Google", "DeepSeek", "xAI", "Alibaba Cloud", "Mistral"].map(name => (
-              <span key={name} className="text-sm font-semibold" style={{ color: "#374151" }}>{name}</span>
+          <div className="grid gap-8 md:grid-cols-3">
+            {[
+              { step: "01", title: "Create free account", desc: "No credit card. No trials. Instant access to every AI model on the platform.", color: "#6366F1" },
+              { step: "02", title: "Pick your tool", desc: "Chat, generate an image, create a video, or drop a file into the background remover.", color: "#8B5CF6" },
+              { step: "03", title: "Create anything", desc: "Switch models mid-conversation. Generate images from chat. Everything talks to everything.", color: "#EC4899" },
+            ].map(item => (
+              <div key={item.step} className="flex flex-col gap-4">
+                <div className="text-5xl font-black" style={{ color: item.color, opacity: 0.25 }}>{item.step}</div>
+                <h3 className="text-lg font-bold">{item.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "#9CA3AF" }}>{item.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section id="testimonials" className="px-6 py-24">
+      <section className="px-6 py-20" style={{ background: "rgba(99,102,241,0.04)", borderTop: "1px solid rgba(99,102,241,0.10)", borderBottom: "1px solid rgba(99,102,241,0.10)" }}>
         <div className="mx-auto max-w-5xl">
-          <div className="mb-14 text-center">
-            <h2 className="text-4xl font-bold">Loved by creators</h2>
-            <p className="mt-3 text-base" style={{ color: "#9CA3AF" }}>Real words from real users</p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {TESTIMONIALS.map(t => (
-              <div key={t.name} className="flex flex-col gap-4 rounded-2xl border p-6" style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)" }}>
-                <div className="flex gap-0.5">
-                  {Array.from({ length: t.stars }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-current" style={{ color: "#F59E0B" }} />
-                  ))}
+          <h2 className="mb-12 text-center text-3xl font-black uppercase tracking-tight md:text-4xl">WHAT CREATORS SAY</h2>
+          <div className="grid gap-5 md:grid-cols-3">
+            {[
+              { q: "Replaced four AI subscriptions. The image studio alone is worth it.", name: "Sarah K.", role: "Product Designer", seed: "sarah" },
+              { q: "Switching models mid-conversation without losing context is a genuine superpower.", name: "Marcus T.", role: "Full-Stack Engineer", seed: "marcus" },
+              { q: "The streaming responses feel so natural. Closest thing I've used to talking to a real assistant.", name: "Priya R.", role: "Content Strategist", seed: "priya" },
+            ].map(t => (
+              <div key={t.name} className="flex flex-col gap-5 rounded-2xl p-6" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                <div className="flex gap-1">
+                  {[1,2,3,4,5].map(i => <Star key={i} className="h-3.5 w-3.5 fill-current" style={{ color: "#FBBF24" }} />)}
                 </div>
-                <p className="text-sm leading-relaxed" style={{ color: "#D1D5DB" }}>&ldquo;{t.quote}&rdquo;</p>
-                <div className="flex items-center gap-3 mt-auto pt-2">
-                  <img src={t.avatar} className="h-9 w-9 rounded-full object-cover" alt={t.name} />
+                <p className="flex-1 text-sm leading-relaxed" style={{ color: "#D1D5DB" }}>&ldquo;{t.q}&rdquo;</p>
+                <div className="flex items-center gap-3">
+                  <img src={`https://picsum.photos/seed/${t.seed}/40/40`} className="h-9 w-9 rounded-full object-cover" alt={t.name} />
                   <div>
                     <div className="text-sm font-semibold">{t.name}</div>
                     <div className="text-xs" style={{ color: "#6B7280" }}>{t.role}</div>
@@ -420,49 +409,50 @@ export default function LandingPage() {
       <section id="pricing" className="px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <div className="mb-14 text-center">
-            <h2 className="text-4xl font-bold">Simple pricing</h2>
-            <p className="mt-3 text-base" style={{ color: "#9CA3AF" }}>Start free. Scale when you're ready.</p>
+            <span className="mb-3 block text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#4B5563" }}>Pricing</span>
+            <h2 className="text-4xl font-black tracking-tight md:text-5xl">SIMPLE.<br />TRANSPARENT.</h2>
+            <p className="mt-4 text-base" style={{ color: "#6B7280" }}>Start free. Scale when you're ready. Cancel any time.</p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
+
+          <div className="grid gap-5 md:grid-cols-3">
             {PLANS.map(plan => (
               <div
                 key={plan.name}
-                className="relative flex flex-col rounded-2xl border p-7"
+                className="relative flex flex-col rounded-2xl p-8"
                 style={{
-                  border: plan.highlight ? "1px solid rgba(99,102,241,0.5)" : "1px solid rgba(255,255,255,0.07)",
-                  background: plan.highlight ? "rgba(99,102,241,0.07)" : "rgba(255,255,255,0.02)",
-                  boxShadow: plan.highlight ? "0 0 40px rgba(99,102,241,0.15)" : undefined,
+                  background: plan.highlight ? "rgba(99,102,241,0.10)" : "rgba(255,255,255,0.02)",
+                  border: plan.highlight ? "1px solid rgba(99,102,241,0.45)" : "1px solid rgba(255,255,255,0.07)",
+                  boxShadow: plan.highlight ? "0 0 50px rgba(99,102,241,0.18)" : "none",
                 }}
               >
                 {plan.highlight && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full px-4 py-1 text-xs font-semibold text-white" style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)" }}>
-                    Most Popular
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full px-4 py-1 text-xs font-black uppercase text-white" style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)" }}>
+                    Most popular
                   </div>
                 )}
-                <div className="mb-1 text-base font-semibold">{plan.name}</div>
-                <div className="flex items-end gap-1">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="mb-1 text-sm" style={{ color: "#6B7280" }}>{plan.period}</span>
+                <div className="mb-1 text-xs font-black uppercase tracking-widest" style={{ color: plan.highlight ? "#A5B4FC" : "#6B7280" }}>{plan.name}</div>
+                <div className="mt-2 flex items-end gap-1">
+                  <span className="text-5xl font-black">{plan.price}</span>
+                  <span className="mb-1.5 text-sm" style={{ color: "#6B7280" }}>{plan.period}</span>
                 </div>
-                <ul className="my-7 flex flex-col gap-3">
+                <ul className="my-8 flex flex-col gap-3">
                   {plan.features.map(f => (
                     <li key={f} className="flex items-center gap-2.5 text-sm">
-                      <Check className="h-4 w-4 flex-shrink-0" style={{ color: "#6366F1" }} />
-                      <span style={{ color: "#D1D5DB" }}>{f}</span>
+                      <Check className="h-4 w-4 flex-shrink-0" style={{ color: plan.highlight ? "#818CF8" : "#4B5563" }} />
+                      <span style={{ color: plan.highlight ? "#E5E7EB" : "#9CA3AF" }}>{f}</span>
                     </li>
                   ))}
                 </ul>
                 <Link
                   href="/register"
-                  className="mt-auto flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold transition-all hover:scale-105"
+                  className="mt-auto flex items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold transition-all hover:scale-105"
                   style={{
                     background: plan.highlight ? "linear-gradient(135deg,#6366F1,#8B5CF6)" : "rgba(255,255,255,0.06)",
-                    color: plan.highlight ? "white" : "#E5E7EB",
+                    color: "white",
                     border: plan.highlight ? "none" : "1px solid rgba(255,255,255,0.10)",
                   }}
                 >
-                  {plan.cta}
-                  <ChevronRight className="h-4 w-4" />
+                  {plan.cta} <ChevronRight className="h-4 w-4" />
                 </Link>
               </div>
             ))}
@@ -470,48 +460,54 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── CTA BANNER ── */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-4xl overflow-hidden rounded-3xl p-12 text-center" style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.25) 0%, rgba(139,92,246,0.20) 50%, rgba(236,72,153,0.15) 100%)", border: "1px solid rgba(99,102,241,0.25)" }}>
-          <div className="mb-4 flex justify-center">
-            <Sparkles className="h-10 w-10" style={{ color: "#A78BFA" }} />
-          </div>
-          <h2 className="text-4xl font-bold md:text-5xl">Ready to create?</h2>
-          <p className="mx-auto mt-4 max-w-md text-base" style={{ color: "#9CA3AF" }}>
-            Join 12,000+ creators already using AnetAIS. No credit card required.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/register"
-              className="flex items-center gap-2 rounded-xl px-8 py-4 text-sm font-bold text-white transition-all hover:scale-105 hover:shadow-2xl"
-              style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)", boxShadow: "0 4px 30px rgba(99,102,241,0.5)" }}
-            >
-              Get started free
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link href="/login" className="text-sm transition-colors hover:text-white" style={{ color: "#9CA3AF" }}>
-              Already have an account? Sign in →
-            </Link>
+      {/* ── BIG CTA ── */}
+      <section className="px-6 pb-24">
+        <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl" style={{ background: "linear-gradient(135deg,#1e1b4b 0%,#312e81 40%,#4c1d95 100%)", border: "1px solid rgba(99,102,241,0.30)" }}>
+          {/* decorative images */}
+          <img src="https://picsum.photos/seed/gen1/200/200" alt="" className="absolute right-0 top-0 h-48 w-36 object-cover opacity-20" style={{ clipPath: "polygon(0 0,100% 0,100% 100%,40% 100%)" }} />
+          <img src="https://picsum.photos/seed/gen3/200/200" alt="" className="absolute bottom-0 right-32 h-36 w-36 object-cover opacity-10 rounded-tl-2xl" />
+
+          <div className="relative z-10 flex flex-col items-center px-10 py-16 text-center">
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.10)" }}>
+              <Sparkles className="h-7 w-7 text-white" />
+            </div>
+            <h2 className="text-4xl font-black uppercase tracking-tight text-white md:text-6xl">
+              START CREATING<br />TODAY.
+            </h2>
+            <p className="mt-4 max-w-md text-base" style={{ color: "rgba(255,255,255,0.60)" }}>
+              Free forever. No credit card. Access every model — GPT-4o, Claude, Gemini, and more — in under a minute.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/register"
+                className="flex items-center gap-2 rounded-xl px-8 py-4 text-sm font-black uppercase tracking-wide text-white transition-all hover:scale-105"
+                style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)", backdropFilter: "blur(8px)" }}
+              >
+                Create free account <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link href="/login" className="text-sm transition-colors hover:text-white" style={{ color: "rgba(255,255,255,0.45)" }}>
+                Already have an account? Sign in →
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="border-t px-6 py-10" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+      <footer className="px-6 pb-10 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 md:flex-row md:justify-between">
-          <div className="flex items-center gap-2">
+          <Link href="/landing" className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg" style={{ background: "linear-gradient(135deg,#6366F1,#8B5CF6)" }}>
               <Sparkles className="h-3.5 w-3.5 text-white" />
             </div>
             <span className="text-sm font-bold">AnetAIS</span>
+          </Link>
+          <div className="flex gap-6 text-xs" style={{ color: "#374151" }}>
+            {["Privacy","Terms","Status","Docs","GitHub"].map(l => (
+              <span key={l} className="cursor-pointer transition-colors hover:text-white">{l}</span>
+            ))}
           </div>
-          <div className="flex gap-6 text-xs" style={{ color: "#6B7280" }}>
-            <span>Privacy</span>
-            <span>Terms</span>
-            <span>Status</span>
-            <span>Docs</span>
-          </div>
-          <p className="text-xs" style={{ color: "#4B5563" }}>© 2025 AnetAIS. All rights reserved.</p>
+          <p className="text-xs" style={{ color: "#374151" }}>© 2025 AnetAIS. All rights reserved.</p>
         </div>
       </footer>
     </div>
