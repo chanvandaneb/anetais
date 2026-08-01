@@ -29,13 +29,13 @@ export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
 
   return (
     <aside
-      className="fixed inset-y-0 left-0 z-40 flex w-[72px] flex-col items-center justify-between border-r py-3"
+      className="fixed inset-y-0 left-0 z-40 flex w-[72px] flex-col items-center justify-between border-r py-4"
       style={{ background: "var(--bg-subtle)", borderColor: "var(--border)" }}
     >
       {/* TOP — logo + nav */}
-      <div className="flex w-full flex-col items-center gap-1">
+      <div className="flex w-full flex-col items-center gap-0.5 px-2">
         {/* Logo */}
-        <Link href="/home" className="mb-3 block h-10 w-10 overflow-hidden rounded-xl">
+        <Link href="/home" className="mb-4 block h-10 w-10 overflow-hidden rounded-xl">
           <img src="/logo.svg" alt="AnetAIS" className="h-full w-full object-cover" />
         </Link>
 
@@ -50,7 +50,7 @@ export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
               key={i}
               href={item.href}
               className={cn(
-                "flex w-full flex-col items-center gap-0.5 rounded-xl px-1 py-2 transition-colors",
+                "flex w-full flex-col items-center gap-1 rounded-xl py-2.5 transition-colors",
                 active
                   ? "text-[var(--text-primary)]"
                   : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
@@ -65,12 +65,12 @@ export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
       </div>
 
       {/* BOTTOM — actions + profile */}
-      <div className="flex w-full flex-col items-center gap-1">
+      <div className="flex w-full flex-col items-center gap-0.5 px-2">
         <button
           type="button"
           onClick={onOpenCmd}
           title="Search (⌘K)"
-          className="flex w-full flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[var(--text-tertiary)] transition-colors hover:text-[var(--text-secondary)]"
+          className="flex w-full flex-col items-center gap-1 rounded-xl py-2.5 text-[var(--text-tertiary)] transition-colors hover:text-[var(--text-secondary)]"
         >
           <Search className="h-5 w-5" />
           <span className="text-[9px] font-medium leading-none">Search</span>
@@ -80,7 +80,7 @@ export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
           type="button"
           onClick={toggle}
           title={theme === "dark" ? "Light mode" : "Dark mode"}
-          className="flex w-full flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[var(--text-tertiary)] transition-colors hover:text-[var(--text-secondary)]"
+          className="flex w-full flex-col items-center gap-1 rounded-xl py-2.5 text-[var(--text-tertiary)] transition-colors hover:text-[var(--text-secondary)]"
         >
           {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           <span className="text-[9px] font-medium leading-none">Theme</span>
@@ -89,7 +89,7 @@ export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
         <Link
           href="/billing"
           className={cn(
-            "flex w-full flex-col items-center gap-0.5 rounded-xl px-1 py-2 transition-colors",
+            "flex w-full flex-col items-center gap-1 rounded-xl py-2.5 transition-colors",
             pathname?.startsWith("/billing")
               ? "text-[var(--text-primary)]"
               : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
@@ -101,7 +101,7 @@ export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {
         </Link>
 
         {/* Avatar */}
-        <div className="relative mt-1">
+        <div className="relative mt-2">
           <button
             ref={avatarRef}
             type="button"
