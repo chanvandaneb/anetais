@@ -17,8 +17,6 @@ const NAV = [
   { href: "/chat",         icon: MessageSquare,  label: "Chat"     },
   { href: "/image-studio", icon: ImageIcon,      label: "Image"    },
   { href: "/video-studio", icon: Video,          label: "Video"    },
-  { href: "/tools",        icon: Wand2,          label: "Tools"    },
-  { href: "/chat",         icon: Sparkles,       label: "Assistants", exact: false },
 ];
 
 export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {

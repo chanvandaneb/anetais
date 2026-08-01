@@ -13,21 +13,46 @@ export const mockChats: ChatItem[] = [
   { id: "5", title: "Trip planning to Kyoto", model: "grok-4", timestamp: "12-08" },
 ];
 
-export type Provider = {
+export type AIModel = {
   id: string;
   name: string;
-  subtitle?: string;
+  label: string;
+  provider: string;
+  color: string;       // brand accent
+  bg: string;         // logo bg
+  tag?: string;       // "Latest" | "Fast" | "Vision" etc.
+  description: string;
 };
 
+export const AI_MODELS: AIModel[] = [
+  // Anthropic
+  { id: "claude-opus-5",        name: "claude-opus-5",        label: "Claude Opus 5",       provider: "Anthropic", color: "#D97757", bg: "#2A1F1A", tag: "Powerful",  description: "Most capable Claude model for complex tasks" },
+  { id: "claude-sonnet-5",      name: "claude-sonnet-5",      label: "Claude Sonnet 5",     provider: "Anthropic", color: "#D97757", bg: "#2A1F1A", tag: "Latest",    description: "Balanced performance and speed" },
+  { id: "claude-haiku-4-5",     name: "claude-haiku-4-5",     label: "Claude Haiku 4.5",    provider: "Anthropic", color: "#D97757", bg: "#2A1F1A", tag: "Fast",      description: "Lightning-fast for everyday tasks" },
+  // OpenAI
+  { id: "gpt-4o",               name: "gpt-4o",               label: "GPT-4o",              provider: "OpenAI",    color: "#10A37F", bg: "#0D2119", tag: "Vision",    description: "Multimodal flagship with vision" },
+  { id: "gpt-4o-mini",          name: "gpt-4o-mini",          label: "GPT-4o Mini",         provider: "OpenAI",    color: "#10A37F", bg: "#0D2119", tag: "Fast",      description: "Affordable and capable everyday model" },
+  { id: "o3",                   name: "o3",                   label: "o3",                  provider: "OpenAI",    color: "#10A37F", bg: "#0D2119", tag: "Reasoning", description: "Advanced reasoning and problem-solving" },
+  // Google
+  { id: "gemini-2.5-pro",       name: "gemini-2.5-pro",       label: "Gemini 2.5 Pro",      provider: "Google",    color: "#4285F4", bg: "#0D1A2E", tag: "Latest",    description: "Google's most capable thinking model" },
+  { id: "gemini-2.5-flash",     name: "gemini-2.5-flash",     label: "Gemini 2.5 Flash",    provider: "Google",    color: "#4285F4", bg: "#0D1A2E", tag: "Fast",      description: "Fastest Gemini with great quality" },
+  { id: "gemini-flash-latest",  name: "gemini-flash-latest",  label: "Gemini Flash",        provider: "Google",    color: "#4285F4", bg: "#0D1A2E",                   description: "Efficient and versatile" },
+  // xAI
+  { id: "grok-4",               name: "grok-4",               label: "Grok 4",              provider: "xAI",       color: "#FFFFFF", bg: "#111111", tag: "Latest",    description: "xAI's most powerful model" },
+  { id: "grok-3-mini",          name: "grok-3-mini",          label: "Grok 3 Mini",         provider: "xAI",       color: "#FFFFFF", bg: "#111111", tag: "Fast",      description: "Quick and efficient reasoning" },
+  // DeepSeek
+  { id: "deepseek-v3",          name: "deepseek-v3",          label: "DeepSeek V3",         provider: "DeepSeek",  color: "#4D6FFF", bg: "#0D1433", tag: "Open",      description: "Open-source frontier model" },
+  { id: "deepseek-r2",          name: "deepseek-r2",          label: "DeepSeek R2",         provider: "DeepSeek",  color: "#4D6FFF", bg: "#0D1433", tag: "Reasoning", description: "Advanced chain-of-thought reasoning" },
+];
+
+// Keep backward compat
+export type Provider = { id: string; name: string; subtitle?: string };
 export const providers: Provider[] = [
-  { id: "bailian", name: "Bailian", subtitle: "阿里云百炼" },
   { id: "anthropic", name: "Anthropic" },
-  { id: "google", name: "Google" },
-  { id: "xai", name: "xAI" },
-  { id: "doubao", name: "Doubao", subtitle: "豆包" },
-  { id: "openai", name: "OpenAI" },
-  { id: "deepseek", name: "DeepSeek" },
-  { id: "grok", name: "Grok", subtitle: "xAI" },
+  { id: "openai",    name: "OpenAI"    },
+  { id: "google",    name: "Google"    },
+  { id: "xai",       name: "xAI"       },
+  { id: "deepseek",  name: "DeepSeek"  },
 ];
 
 export type Assistant = {
@@ -90,7 +115,9 @@ export type GalleryImage = {
   src: string;
   prompt: string;
   tall?: boolean;
+  ratio?: string;
   gradient?: string;
+  processing?: boolean;
 };
 
 const GALLERY_ITEMS: { seed: string; prompt: string; tall?: boolean }[] = [

@@ -94,7 +94,7 @@ export default function VideoStudioPage() {
       onClick={onClick}
       className={cn(
         "flex-1 rounded-md py-1.5 text-xs font-medium transition-colors",
-        active ? "bg-[#1D7BFF] text-black" : "hover:text-[var(--text-primary)]"
+        active ? "bg-[#1D7BFF] text-white" : "hover:text-[var(--text-primary)]"
       )}
       style={!active ? { color: "var(--text-tertiary)" } : {}}
     >
@@ -263,7 +263,7 @@ export default function VideoStudioPage() {
               type="button"
               onClick={handleGenerate}
               disabled={!prompt.trim() || generating}
-              className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#1D7BFF] py-2.5 text-sm font-medium text-black transition-colors hover:bg-[#1666E8] disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#1D7BFF] py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1666E8] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
               {generating ? "Generating…" : "Generate"}

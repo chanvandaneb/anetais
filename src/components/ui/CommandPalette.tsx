@@ -87,7 +87,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
   let flatIdx = 0;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-start justify-center pt-24" onClick={onClose}>
+    <div className="fixed inset-0 z-[200] flex items-start justify-center pt-24 backdrop-blur-sm" style={{ background: "rgba(0,0,0,0.45)" }} onClick={onClose}>
       <div
         className="w-full max-w-xl overflow-hidden rounded-2xl border shadow-2xl"
         style={{ background: "var(--bg-subtle)", borderColor: "var(--border)" }}

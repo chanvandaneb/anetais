@@ -36,10 +36,9 @@ import {
   ThumbsUp,
   ThumbsDown,
   RefreshCw,
-  Zap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { mockChats, assistants, faqs, faqAnswers, type ChatItem } from "@/lib/mock-data";
+import { mockChats, assistants, faqs, faqAnswers, AI_MODELS, type ChatItem, type AIModel } from "@/lib/mock-data";
 import { ModelPicker } from "@/components/chat/ModelPicker";
 import { GenerationParams } from "@/components/chat/GenerationParams";
 import { useToast } from "@/components/ui/Toast";
@@ -51,6 +50,7 @@ type Message = {
   content: string;
   streaming?: boolean;
   reaction?: "up" | "down";
+  createdAt?: Date;
 };
 
 const toolbarIcons = [
@@ -70,6 +70,15 @@ function greeting() {
   if (h < 12) return "Good Morning";
   if (h < 17) return "Good Afternoon";
   return "Good Evening";
+}
+
+function ProviderLogoSmall({ provider }: { provider: string }) {
+  if (provider === "Anthropic") return <svg width="12" height="12" viewBox="0 0 24 24"><path d="M13.827 3.52h3.603L24 20.48h-3.603l-6.57-16.96zm-7.258 0h3.767L16.906 20.48h-3.674l-1.343-3.461H5.017l-1.344 3.46H0L6.569 3.522zm4.132 9.959L8.453 7.687l-2.005 5.794h4.253z" fill="#D97757"/></svg>;
+  if (provider === "OpenAI")    return <svg width="12" height="12" viewBox="0 0 24 24"><path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.77.77 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872zm16.597 3.855l-5.833-3.387 2.02-1.168a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.412-.663zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z" fill="#10A37F"/></svg>;
+  if (provider === "Google")    return <svg width="12" height="12" viewBox="0 0 24 24"><path d="M12 11.25v2.75h4.42c-.18 1.15-1.35 3.38-4.42 3.38-2.66 0-4.83-2.2-4.83-4.92s2.17-4.92 4.83-4.92c1.51 0 2.53.65 3.11 1.2l2.12-2.05C15.68 5.52 14 4.75 12 4.75c-3.87 0-7 3.13-7 7s3.13 7 7 7c4.04 0 6.72-2.84 6.72-6.84 0-.46-.05-.81-.11-1.16H12z" fill="#4285F4"/></svg>;
+  if (provider === "xAI")       return <svg width="12" height="12" viewBox="0 0 24 24"><path d="M13.538 10.449L20.8 1.6h-2.194l-6.116 7.386L7.23 1.6H1.6l7.616 10.82L1.6 22.4h2.194l6.463-7.806 5.513 7.806H21.6l-8.062-11.95zm-2.29 2.766l-.749-1.07L4.398 2.9h2.567l4.811 6.88.749 1.07 6.25 8.94h-2.567l-4.96-7.575z" fill="white"/></svg>;
+  if (provider === "DeepSeek")  return <svg width="12" height="12" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 14.5l-5-3-5 3V7l5 3 5-3v9.5z" fill="#4D6FFF"/></svg>;
+  return null;
 }
 
 function CopyButton({ text }: { text: string }) {
@@ -95,7 +104,7 @@ function CopyButton({ text }: { text: string }) {
 export default function ChatPage() {
   const [chats, setChats] = useState<ChatItem[]>(mockChats);
   const [activeChatId, setActiveChatId] = useState(mockChats[0].id);
-  const [modelName, setModelName] = useState("gemini-flash-latest");
+  const [activeModel, setActiveModel] = useState<AIModel>(AI_MODELS.find(m => m.id === "gemini-flash-latest") ?? AI_MODELS[0]);
   const [modelPickerOpen, setModelPickerOpen] = useState(false);
   const [paramsOpen, setParamsOpen] = useState(false);
   const [threads, setThreads] = useState<Record<string, Message[]>>({});
@@ -130,7 +139,7 @@ export default function ChatPage() {
     const streamId = "a-" + Date.now();
     setThreads(prev => ({
       ...prev,
-      [chatId]: [...(prev[chatId] ?? []), { id: streamId, role: "assistant", content: "", streaming: true }],
+      [chatId]: [...(prev[chatId] ?? []), { id: streamId, role: "assistant", content: "", streaming: true, createdAt: new Date() }],
     }));
 
     let idx = 0;
@@ -141,7 +150,7 @@ export default function ChatPage() {
         clearInterval(interval);
         delete streamIntervals.current[streamId];
         const tokens = Math.round(fullContent.length / 4);
-        addUsage("Chat Completion", modelName, tokens, Math.max(1, Math.round(tokens / 50)));
+        addUsage("Chat Completion", activeModel.id, tokens, Math.max(1, Math.round(tokens / 50)));
         setThreads(prev => ({
           ...prev,
           [chatId]: (prev[chatId] ?? []).map(m =>
@@ -167,7 +176,7 @@ export default function ChatPage() {
 
   function handleNewChat() {
     const id = "c-" + Date.now();
-    const chat: ChatItem = { id, title: "New Chat", model: modelName, timestamp: "now" };
+    const chat: ChatItem = { id, title: "New Chat", model: activeModel.id, timestamp: "now" };
     setChats((prev) => [chat, ...prev]);
     setActiveChatId(id);
     setThreads((prev) => ({ ...prev, [id]: [] }));
@@ -177,7 +186,7 @@ export default function ChatPage() {
     const assistant = assistants.find((a) => a.id === assistantId);
     if (!assistant) return;
     const id = "c-" + Date.now();
-    const chat: ChatItem = { id, title: assistant.name, model: modelName, timestamp: "now" };
+    const chat: ChatItem = { id, title: assistant.name, model: activeModel.id, timestamp: "now" };
     setChats((prev) => [chat, ...prev]);
     setActiveChatId(id);
     setThreads((prev) => ({
@@ -188,7 +197,7 @@ export default function ChatPage() {
   }
 
   function handleFaqClick(question: string) {
-    const userMsg: Message = { id: "u-" + Date.now(), role: "user", content: question };
+    const userMsg: Message = { id: "u-" + Date.now(), role: "user", content: question, createdAt: new Date() };
     setThreads(prev => ({ ...prev, [activeChatId]: [...(prev[activeChatId] ?? []), userMsg] }));
     replyTo(activeChatId);
   }
@@ -197,7 +206,7 @@ export default function ChatPage() {
     if (!input.trim() || isStreaming) return;
     const text = input.trim();
     setInput("");
-    const userMsg: Message = { id: "u-" + Date.now(), role: "user", content: text };
+    const userMsg: Message = { id: "u-" + Date.now(), role: "user", content: text, createdAt: new Date() };
     setThreads(prev => ({ ...prev, [activeChatId]: [...(prev[activeChatId] ?? []), userMsg] }));
     if (chats.find(c => c.id === activeChatId)?.title === "New Chat") {
       setChats(prev => prev.map(c => c.id === activeChatId ? { ...c, title: text.slice(0, 40) } : c));
@@ -237,8 +246,8 @@ export default function ChatPage() {
       ) : (
         <div className="flex w-[300px] flex-shrink-0 flex-col border-r" style={{ borderColor: "var(--border)", background: "var(--bg-subtle)" }}>
           <div className="flex items-center justify-between px-4 py-4">
-            <span className="bg-gradient-to-r from-[#1D7BFF] to-violet-500 bg-clip-text text-lg font-bold tracking-tight text-transparent">
-              AnetAIS
+            <span className="text-lg font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
+              Chat
             </span>
             <button
               type="button"
@@ -300,7 +309,9 @@ export default function ChatPage() {
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-sm font-medium" style={{ color: chat.id === activeChatId ? "var(--text-primary)" : "var(--text-secondary)" }}>{chat.title}</div>
                     <div className="mt-0.5 flex items-center gap-1.5">
-                      <span className="truncate text-[10px]" style={{ color: "var(--text-tertiary)" }}>{chat.model}</span>
+                      <span className="truncate text-[10px]" style={{ color: "var(--text-tertiary)" }}>
+                        {AI_MODELS.find(m => m.id === chat.model)?.label ?? chat.model}
+                      </span>
                     </div>
                   </div>
                   <span className="flex-shrink-0 text-[10px]" style={{ color: "var(--text-tertiary)" }}>{chat.timestamp}</span>
@@ -322,18 +333,28 @@ export default function ChatPage() {
             <button
               type="button"
               onClick={() => setModelPickerOpen((v) => !v)}
-              className="flex items-center gap-1.5 rounded-lg border border-[#1D7BFF]/30 bg-[#1D7BFF]/10 px-3 py-1.5 text-sm text-[#60A5FA] hover:bg-[#1D7BFF]/20 transition-colors"
+              className="flex items-center gap-2 rounded-xl border px-3 py-1.5 text-sm transition-colors hover:bg-[var(--bg-hover)]"
+              style={{ borderColor: "var(--border)", background: "var(--bg-subtle)" }}
             >
-              <Zap className="h-3.5 w-3.5" />
-              {modelName}
-              <ChevronDown className="h-3.5 w-3.5" />
+              <span className="flex h-5 w-5 items-center justify-center rounded-md" style={{ background: activeModel.bg }}>
+                <ProviderLogoSmall provider={activeModel.provider} />
+              </span>
+              <span className="font-medium" style={{ color: "var(--text-primary)" }}>{activeModel.label}</span>
+              {activeModel.tag && (
+                <span className="rounded-full px-1.5 py-0.5 text-[9px] font-semibold"
+                  style={{ background: `${activeModel.color}20`, color: activeModel.color }}>
+                  {activeModel.tag}
+                </span>
+              )}
+              <ChevronDown className="h-3.5 w-3.5" style={{ color: "var(--text-tertiary)" }} />
             </button>
             {modelPickerOpen && (
               <ModelPicker
+                currentModel={activeModel.id}
                 onClose={() => setModelPickerOpen(false)}
-                onSelect={(name) => {
-                  setModelName(name);
-                  showToast(`Switched to ${name}`, "info");
+                onSelect={(model) => {
+                  setActiveModel(model);
+                  showToast(`Switched to ${model.label}`, "info");
                 }}
               />
             )}
@@ -444,6 +465,11 @@ export default function ChatPage() {
                     {/* Actions */}
                     {!m.streaming && (
                       <div className={cn("flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100", m.role === "user" && "flex-row-reverse")}>
+                        {m.createdAt && (
+                          <span className="px-1 text-[10px]" style={{ color: "var(--text-tertiary)" }}>
+                            {m.createdAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                        )}
                         <CopyButton text={m.content} />
                         {m.role === "assistant" && (
                           <>
