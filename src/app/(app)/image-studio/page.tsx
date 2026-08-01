@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   Cpu, Maximize2, Hash, Paperclip, Sparkles, Loader2,
   Download, X, ChevronLeft, ChevronRight, Wand2,
-  Heart, Share2, BookmarkPlus, Copy, Eye, Tag, Clock, Play,
+  Heart, Share2, BookmarkPlus, Copy, Eye, Tag, Clock, Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { randomCreationImage, type GalleryImage } from "@/lib/mock-data";
@@ -234,10 +235,13 @@ function DetailModal({ item, items, imgSrc, onClose, onNav }: {
 
             {/* Actions */}
             <div className="flex flex-col gap-2">
-              <button className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold text-white transition-all hover:opacity-90"
+              <Link
+                href={`/design-studio?prompt=${encodeURIComponent(item.prompt)}`}
+                onClick={onClose}
+                className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.98]"
                 style={{ background: "linear-gradient(135deg,#1D7BFF,#06B6D4)", boxShadow: "0 4px 16px rgba(29,123,255,0.35)" }}>
-                <Play className="h-4 w-4" /> Try this prompt
-              </button>
+                <Layers className="h-4 w-4" /> Try in Design Studio
+              </Link>
               <div className="grid grid-cols-3 gap-2">
                 <button onClick={() => setLiked(v => !v)}
                   className="flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-semibold transition-all"

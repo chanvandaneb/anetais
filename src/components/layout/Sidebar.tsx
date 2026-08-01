@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home, MessageSquare, Image as ImageIcon, Video,
-  Wand2, Sparkles, SlidersHorizontal, Sun, Moon, Search,
+  Wand2, Sparkles, SlidersHorizontal, Sun, Moon, Search, Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sidebarUser } from "@/lib/mock-data";
@@ -13,10 +13,10 @@ import { ProfileMenu } from "./ProfileMenu";
 import { useTheme } from "@/components/ui/ThemeContext";
 
 const NAV = [
-  { href: "/home",         icon: Home,           label: "Explore"  },
-  { href: "/chat",         icon: MessageSquare,  label: "Chat"     },
-  { href: "/image-studio", icon: ImageIcon,      label: "Image"    },
-  { href: "/video-studio", icon: Video,          label: "Video"    },
+  { href: "/home",           icon: Home,          label: "Explore" },
+  { href: "/chat",           icon: MessageSquare, label: "Chat"    },
+  { href: "/image-studio",   icon: ImageIcon,     label: "Image"   },
+  { href: "/video-studio",   icon: Video,         label: "Video"   },
 ];
 
 export function Sidebar({ onOpenCmd }: { onOpenCmd?: () => void }) {

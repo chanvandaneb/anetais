@@ -7,7 +7,9 @@ import {
   Sparkles, ArrowRight, Play, Zap, Search,
   Heart, Download, Share2, Eye, X, Copy,
   BookmarkPlus, ChevronLeft, ChevronRight, ChevronUp,
-  Clock, Tag,
+  Clock, Tag, Layers, MoreHorizontal, Send, Film,
+  ChevronDown, Settings2, Info, Star, ThumbsUp, Flag,
+  Cpu, Sliders, Check,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -151,22 +153,54 @@ function formatLikes(n: number) {
 }
 
 /* ── Detail Modal ── */
+const AVATAR_GRADIENTS = [
+  "linear-gradient(135deg,#1D7BFF,#06B6D4)",
+  "linear-gradient(135deg,#8B5CF6,#EC4899)",
+  "linear-gradient(135deg,#10B981,#06B6D4)",
+  "linear-gradient(135deg,#F59E0B,#EF4444)",
+  "linear-gradient(135deg,#6366F1,#8B5CF6)",
+];
+
+const MODEL_CARDS = [
+  { name: "Flux Pro 1.1",   type: "Checkpoint", gem: "diamond", color: "#06B6D4", bg: "rgba(6,182,212,0.12)" },
+  { name: "LCM Scheduler",  type: "Sampler",    gem: "gold",    color: "#F59E0B", bg: "rgba(245,158,11,0.12)" },
+  { name: "Detail Enhancer",type: "LoRA",       gem: "silver",  color: "#8B5CF6", bg: "rgba(139,92,246,0.12)" },
+  { name: "AnetAIS v2",     type: "VAE",        gem: "bronze",  color: "#10B981", bg: "rgba(16,185,129,0.12)" },
+];
+
+const GEM_COLOR: Record<string, string> = {
+  diamond: "#06B6D4",
+  gold:    "#F59E0B",
+  silver:  "#94A3B8",
+  bronze:  "#CD7F32",
+};
+
+const MOCK_COMMENTS = [
+  { user: "pixel_x",  text: "Incredible detail on the lighting!",              time: "2h ago",  seed: 1 },
+  { user: "art_nova",  text: "The composition is absolutely stunning 🔥",       time: "5h ago",  seed: 2 },
+  { user: "ai_studio", text: "Can you share the exact settings you used?",      time: "1d ago",  seed: 3 },
+];
+
 function DetailModal({ item, items, onClose, onNav }: {
   item: GItem;
   items: GItem[];
   onClose: () => void;
   onNav: (item: GItem) => void;
 }) {
-  const [liked, setLiked] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [liked, setLiked]               = useState(false);
+  const [saved, setSaved]               = useState(false);
+  const [followed, setFollowed]         = useState(false);
+  const [copied, setCopied]             = useState(false);
+  const [paramsOpen, setParamsOpen]     = useState(true);
+  const [commentText, setCommentText]   = useState("");
+  const [moreOpen, setMoreOpen]         = useState(false);
+  const [showAllComments, setShowAllComments] = useState(false);
   const idx = items.indexOf(item);
-  const related = items.filter((_, i) => i !== idx).slice(0, 6);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft" && idx > 0) onNav(items[idx - 1]);
+      if (e.key === "ArrowLeft"  && idx > 0)                onNav(items[idx - 1]);
       if (e.key === "ArrowRight" && idx < items.length - 1) onNav(items[idx + 1]);
     };
     window.addEventListener("keydown", onKey);
@@ -179,183 +213,360 @@ function DetailModal({ item, items, onClose, onNav }: {
     setTimeout(() => setCopied(false), 2000);
   }
 
-  const tags = item.prompt.split(",").map(t => t.trim().split(" ").slice(0, 2).join(" ")).slice(0, 5);
-  const imgH = item.tall ? 520 : 360;
+  /* derive title from first comma-segment, max ~40 chars */
+  const title = (() => {
+    const first = item.prompt.split(",")[0].trim();
+    return first.length > 44 ? first.slice(0, 44) + "…" : first;
+  })();
+
+  /* tag keywords: words ≥4 chars from each comma segment */
+  const tags = item.prompt.split(",")
+    .map(s => s.trim().split(/\s+/).find(w => w.length >= 4) ?? "")
+    .filter(Boolean).slice(0, 6);
+
+  const gradient = AVATAR_GRADIENTS[item.seed % AVATAR_GRADIENTS.length];
+  const resolution = item.tall ? "1024×1536" : (item.ratio === "16/9" ? "1920×1080" : "1024×1024");
+  const createdAt = item.createdAt ?? "2025-11-05";
+  const visibleComments = showAllComments ? MOCK_COMMENTS : MOCK_COMMENTS.slice(0, 2);
 
   return (
     <div
       className="fixed inset-0 z-[300] flex items-center justify-center p-4 backdrop-blur-sm"
-      style={{ background: "rgba(0,0,0,0.75)" }}
+      style={{ background: "rgba(0,0,0,0.80)" }}
       onClick={onClose}
     >
       <div
-        className="relative flex w-full max-w-5xl overflow-hidden rounded-2xl shadow-2xl"
-        style={{ background: "var(--bg-subtle)", border: "1px solid var(--border)", maxHeight: "90vh" }}
+        className="relative flex w-full overflow-hidden rounded-2xl shadow-2xl"
+        style={{ background: "var(--bg-base)", border: "1px solid var(--border)", maxHeight: "92vh", maxWidth: 1100 }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Close */}
-        <button onClick={onClose} className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-colors hover:bg-white/20"
-          style={{ background: "rgba(0,0,0,0.40)" }}>
-          <X className="h-4 w-4 text-white" />
+        {/* ── Close ── */}
+        <button onClick={onClose}
+          className="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-[var(--bg-hover)]"
+          style={{ background: "var(--bg-subtle)" }}>
+          <X className="h-4 w-4" style={{ color: "var(--text-secondary)" }} />
         </button>
 
-        {/* Left — image */}
-        <div className="relative flex-shrink-0 w-[52%]" style={{ background: "#000" }}>
-          {/* Prev / Next inside image panel */}
+        {/* ═══════════════ LEFT — Image Panel ═══════════════ */}
+        <div className="relative flex-shrink-0 w-[54%]" style={{ background: "#0a0a0a", minHeight: 500 }}>
+          {/* Prev nav */}
           {idx > 0 && (
             <button onClick={() => onNav(items[idx - 1])}
-              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-sm transition-colors hover:bg-white/20"
-              style={{ background: "rgba(0,0,0,0.45)" }}>
+              className="absolute left-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-105"
+              style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.12)" }}>
               <ChevronLeft className="h-5 w-5 text-white" />
             </button>
           )}
+          {/* Next nav */}
           {idx < items.length - 1 && (
             <button onClick={() => onNav(items[idx + 1])}
-              className="absolute right-4 top-1/2 z-10 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-sm transition-colors hover:bg-white/20"
-              style={{ background: "rgba(0,0,0,0.45)" }}>
+              className="absolute right-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-105"
+              style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.12)" }}>
               <ChevronRight className="h-5 w-5 text-white" />
             </button>
           )}
-          <div className="absolute inset-0 animate-pulse" style={{ background: "var(--bg-muted)" }} />
+
+          <div className="absolute inset-0 animate-pulse" style={{ background: "#111" }} />
           <img
-            src={aiImg(item.prompt, 600, imgH, item.seed)}
+            src={aiImg(item.prompt, 640, 900, item.seed)}
             alt={item.prompt}
             className="relative h-full w-full object-cover"
-            style={{ minHeight: 360 }}
+            style={{ minHeight: 500 }}
           />
-          {/* image counter */}
-          <div className="absolute bottom-3 left-3 rounded-full px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur-sm"
-            style={{ background: "rgba(0,0,0,0.55)" }}>
-            {idx + 1} / {items.length}
+
+          {/* Image counter + quick action bar at bottom */}
+          <div className="absolute inset-x-0 bottom-0 flex items-center justify-between px-4 py-3"
+            style={{ background: "linear-gradient(to top, rgba(0,0,0,0.70) 0%, transparent 100%)" }}>
+            <span className="rounded-full px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur-sm"
+              style={{ background: "rgba(0,0,0,0.50)" }}>
+              {idx + 1} / {items.length}
+            </span>
+            <div className="flex items-center gap-2">
+              <button className="flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-105"
+                style={{ background: "rgba(0,0,0,0.50)" }}>
+                <Share2 className="h-3.5 w-3.5 text-white" />
+              </button>
+              <button className="flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-105"
+                style={{ background: "rgba(0,0,0,0.50)" }}>
+                <Download className="h-3.5 w-3.5 text-white" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Right — details */}
-        <div className="flex flex-1 flex-col overflow-y-auto">
-          {/* Header */}
-          <div className="flex items-center gap-3 border-b p-5" style={{ borderColor: "var(--border)" }}>
-            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
-              style={{ background: "linear-gradient(135deg,#1D7BFF,#06B6D4)" }}>
-              {item.author.slice(0, 2).toUpperCase()}
-            </div>
-            <div>
-              <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>@{item.author}</p>
-              <div className="flex items-center gap-2 text-[11px]" style={{ color: "var(--text-tertiary)" }}>
-                <Clock className="h-3 w-3" /> <span>2 hours ago</span>
-              </div>
-            </div>
-            <button className="ml-auto rounded-lg px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:opacity-90"
-              style={{ background: "linear-gradient(135deg,#1D7BFF,#06B6D4)" }}>
-              Follow
-            </button>
-          </div>
+        {/* ═══════════════ RIGHT — Detail Panel ═══════════════ */}
+        <div className="flex flex-1 flex-col" style={{ borderLeft: "1px solid var(--border)", minWidth: 0 }}>
 
-          <div className="flex flex-col gap-5 p-5">
-            {/* Stats row */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5 text-sm" style={{ color: "var(--text-secondary)" }}>
-                <Eye className="h-4 w-4" /><span>{item.views}</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-sm" style={{ color: "var(--text-secondary)" }}>
-                <Heart className="h-4 w-4" /><span>{formatLikes(item.likes + (liked ? 1 : 0))}</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-sm" style={{ color: "var(--text-secondary)" }}>
-                <Download className="h-4 w-4" /><span>{formatLikes(Math.floor(item.likes * 0.3))}</span>
-              </div>
-            </div>
+          {/* ── Scrollable body ── */}
+          <div className="flex-1 overflow-y-auto">
 
-            {/* Prompt */}
-            <div className="rounded-xl p-4" style={{ background: "var(--bg-muted)", border: "1px solid var(--border)" }}>
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "var(--text-tertiary)" }}>Prompt</span>
-                <button onClick={copyPrompt} className="flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-medium transition-colors hover:bg-white/10"
-                  style={{ color: copied ? "#10B981" : "var(--text-tertiary)" }}>
-                  <Copy className="h-3 w-3" />{copied ? "Copied!" : "Copy"}
-                </button>
+            {/* §1 — User row */}
+            <div className="flex items-center gap-3 px-5 pt-5 pb-4" style={{ borderBottom: "1px solid var(--border)" }}>
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-white"
+                style={{ background: gradient }}>
+                {item.author.slice(0, 2).toUpperCase()}
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>{item.prompt}</p>
-            </div>
-
-            {/* Tags */}
-            <div>
-              <div className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider" style={{ color: "var(--text-tertiary)" }}>
-                <Tag className="h-3 w-3" /> Tags
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold leading-tight truncate" style={{ color: "var(--text-primary)" }}>
+                  @{item.author}
+                </p>
+                <p className="text-[11px] mt-0.5" style={{ color: "var(--text-tertiary)" }}>
+                  {formatLikes(Math.floor(item.likes * 1.4))} followers
+                </p>
               </div>
-              <div className="flex flex-wrap gap-1.5">
-                {tags.map(tag => (
-                  <span key={tag} className="rounded-full px-2.5 py-1 text-xs font-medium transition-colors cursor-pointer hover:opacity-80"
-                    style={{ background: "rgba(29,123,255,0.12)", color: "#1D7BFF", border: "1px solid rgba(29,123,255,0.25)" }}>
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Model info */}
-            <div className="flex items-center gap-3 rounded-xl p-3" style={{ background: "var(--bg-muted)", border: "1px solid var(--border)" }}>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: "rgba(139,92,246,0.15)" }}>
-                <Wand2 className="h-4 w-4" style={{ color: "#8B5CF6" }} />
-              </div>
-              <div>
-                <p className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>AI Image Studio</p>
-                <p className="text-[11px]" style={{ color: "var(--text-tertiary)" }}>Flux Pro · 1024×{item.tall ? "1536" : "1024"} · Steps 30</p>
-              </div>
-            </div>
-
-            {/* Action buttons */}
-            <div className="flex flex-col gap-2">
-              <Link href="/image-studio"
-                className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold text-white transition-all hover:opacity-90"
-                style={{ background: "linear-gradient(135deg,#1D7BFF,#06B6D4)", boxShadow: "0 4px 16px rgba(29,123,255,0.35)" }}>
-                <Play className="h-4 w-4" /> Try this prompt
-              </Link>
-              <div className="grid grid-cols-3 gap-2">
-                <button onClick={() => setLiked(v => !v)}
-                  className="flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-semibold transition-all"
-                  style={{
-                    background: liked ? "rgba(239,68,68,0.15)" : "var(--bg-muted)",
-                    color: liked ? "#EF4444" : "var(--text-secondary)",
-                    border: `1px solid ${liked ? "rgba(239,68,68,0.3)" : "var(--border)"}`,
-                  }}>
-                  <Heart className="h-3.5 w-3.5" fill={liked ? "currentColor" : "none"} />
-                  {liked ? "Liked" : "Like"}
-                </button>
-                <button onClick={() => setSaved(v => !v)}
-                  className="flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-semibold transition-all"
-                  style={{
-                    background: saved ? "rgba(29,123,255,0.15)" : "var(--bg-muted)",
-                    color: saved ? "#1D7BFF" : "var(--text-secondary)",
-                    border: `1px solid ${saved ? "rgba(29,123,255,0.3)" : "var(--border)"}`,
-                  }}>
-                  <BookmarkPlus className="h-3.5 w-3.5" /> Save
-                </button>
-                <button className="flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-semibold transition-all"
-                  style={{ background: "var(--bg-muted)", color: "var(--text-secondary)", border: "1px solid var(--border)" }}>
-                  <Share2 className="h-3.5 w-3.5" /> Share
-                </button>
-              </div>
-              <button className="flex w-full items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-semibold transition-all"
-                style={{ background: "var(--bg-muted)", color: "var(--text-secondary)", border: "1px solid var(--border)" }}>
-                <Download className="h-3.5 w-3.5" /> Download HD
+              <button
+                onClick={() => setFollowed(v => !v)}
+                className="flex-shrink-0 rounded-lg px-4 py-1.5 text-xs font-semibold transition-all hover:opacity-90"
+                style={followed
+                  ? { background: "var(--bg-muted)", color: "var(--text-secondary)", border: "1px solid var(--border)" }
+                  : { background: "linear-gradient(135deg,#1D7BFF,#06B6D4)", color: "#fff" }}>
+                {followed ? "Following" : "Follow"}
               </button>
+              <button
+                onClick={() => setLiked(v => !v)}
+                className="flex flex-shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all"
+                style={{
+                  background: liked ? "rgba(239,68,68,0.12)" : "var(--bg-muted)",
+                  color: liked ? "#EF4444" : "var(--text-secondary)",
+                  border: `1px solid ${liked ? "rgba(239,68,68,0.3)" : "var(--border)"}`,
+                }}>
+                <Heart className="h-3.5 w-3.5" fill={liked ? "currentColor" : "none"} />
+                {formatLikes(item.likes + (liked ? 1 : 0))}
+              </button>
+              <div className="relative">
+                <button onClick={() => setMoreOpen(v => !v)}
+                  className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-[var(--bg-hover)]">
+                  <MoreHorizontal className="h-4 w-4" style={{ color: "var(--text-tertiary)" }} />
+                </button>
+                {moreOpen && (
+                  <div className="absolute right-0 top-10 z-30 w-40 overflow-hidden rounded-xl shadow-xl"
+                    style={{ background: "var(--bg-base)", border: "1px solid var(--border)" }}>
+                    {[
+                      { icon: BookmarkPlus, label: "Save to collection" },
+                      { icon: Share2,       label: "Share link" },
+                      { icon: Download,     label: "Download HD" },
+                      { icon: Flag,         label: "Report", danger: true },
+                    ].map(({ icon: Icon, label, danger }) => (
+                      <button key={label} onClick={() => setMoreOpen(false)}
+                        className="flex w-full items-center gap-2.5 px-3 py-2 text-xs font-medium transition-colors hover:bg-[var(--bg-hover)]"
+                        style={{ color: danger ? "#EF4444" : "var(--text-secondary)" }}>
+                        <Icon className="h-3.5 w-3.5" /> {label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
-            {/* Related */}
-            {related.length > 0 && (
+            <div className="flex flex-col gap-5 px-5 py-5">
+
+              {/* §2 — Title + meta */}
               <div>
-                <p className="mb-2.5 text-[11px] font-semibold uppercase tracking-wider" style={{ color: "var(--text-tertiary)" }}>Related</p>
-                <div className="grid grid-cols-3 gap-1.5">
-                  {related.map((r, i) => (
-                    <button key={i} onClick={() => onNav(r)}
-                      className="relative overflow-hidden rounded-lg transition-opacity hover:opacity-80"
-                      style={{ aspectRatio: "1", background: "var(--bg-muted)" }}>
-                      <img src={aiImg(r.prompt, 120, 120, r.seed)} alt={r.prompt}
-                        className="h-full w-full object-cover" loading="lazy" />
-                    </button>
-                  ))}
+                <h2 className="text-base font-bold leading-snug mb-2.5" style={{ color: "var(--text-primary)" }}>
+                  {title}
+                </h2>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="flex items-center gap-1 text-[11px]" style={{ color: "var(--text-tertiary)" }}>
+                    <Clock className="h-3 w-3" /> {createdAt}
+                  </span>
+                  <span className="text-[11px]" style={{ color: "var(--border)" }}>·</span>
+                  <span className="rounded-md px-2 py-0.5 text-[11px] font-medium"
+                    style={{ background: "rgba(29,123,255,0.12)", color: "#1D7BFF" }}>
+                    AnetAIS Studio
+                  </span>
+                  <span className="rounded-md px-2 py-0.5 text-[11px] font-medium"
+                    style={{ background: "rgba(16,185,129,0.12)", color: "#10B981" }}>
+                    AI Generated
+                  </span>
+                  <span className="flex items-center gap-1 text-[11px] ml-auto" style={{ color: "var(--text-tertiary)" }}>
+                    <Eye className="h-3 w-3" /> {item.views}
+                  </span>
                 </div>
               </div>
-            )}
+
+              {/* §3 — Tags */}
+              <div className="flex flex-wrap gap-1.5">
+                {tags.map(tag => (
+                  <button key={tag}
+                    className="rounded-full px-2.5 py-1 text-[11px] font-medium transition-all cursor-pointer hover:opacity-80"
+                    style={{ background: "var(--bg-muted)", color: "var(--text-secondary)", border: "1px solid var(--border)" }}>
+                    #{tag}
+                  </button>
+                ))}
+              </div>
+
+              {/* §4 — Generation Parameters (collapsible) */}
+              <div className="rounded-xl overflow-hidden" style={{ border: "1px solid var(--border)" }}>
+                {/* Header */}
+                <button
+                  onClick={() => setParamsOpen(v => !v)}
+                  className="flex w-full items-center justify-between px-4 py-3 transition-colors hover:bg-[var(--bg-hover)]"
+                  style={{ background: "var(--bg-subtle)" }}>
+                  <div className="flex items-center gap-2">
+                    <Settings2 className="h-3.5 w-3.5" style={{ color: "var(--text-tertiary)" }} />
+                    <span className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>Generation Parameters</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-md px-2 py-0.5 text-[10px] font-medium cursor-pointer hover:opacity-80"
+                      style={{ background: "rgba(29,123,255,0.12)", color: "#1D7BFF" }}>
+                      View Workflow
+                    </span>
+                    {paramsOpen
+                      ? <ChevronUp className="h-3.5 w-3.5" style={{ color: "var(--text-tertiary)" }} />
+                      : <ChevronDown className="h-3.5 w-3.5" style={{ color: "var(--text-tertiary)" }} />}
+                  </div>
+                </button>
+
+                {paramsOpen && (
+                  <div className="flex flex-col gap-4 p-4" style={{ background: "var(--bg-base)" }}>
+                    {/* Prompt */}
+                    <div className="rounded-lg p-3" style={{ background: "var(--bg-muted)" }}>
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--text-tertiary)" }}>Prompt</span>
+                        <button onClick={copyPrompt}
+                          className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors hover:bg-[var(--bg-hover)]"
+                          style={{ color: copied ? "#10B981" : "var(--text-tertiary)" }}>
+                          {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                          {copied ? "Copied!" : "Copy"}
+                        </button>
+                      </div>
+                      <p className="text-xs leading-relaxed" style={{ color: "var(--text-primary)" }}>{item.prompt}</p>
+                    </div>
+
+                    {/* Model cards 2×2 */}
+                    <div>
+                      <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--text-tertiary)" }}>Models Used</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        {MODEL_CARDS.map(mc => (
+                          <div key={mc.name} className="flex items-center gap-2 rounded-lg p-2.5"
+                            style={{ background: mc.bg, border: `1px solid ${mc.color}22` }}>
+                            <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg"
+                              style={{ background: mc.bg, border: `1px solid ${mc.color}44` }}>
+                              <Cpu className="h-3.5 w-3.5" style={{ color: mc.color }} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[11px] font-semibold truncate" style={{ color: "var(--text-primary)" }}>{mc.name}</p>
+                              <p className="text-[9px]" style={{ color: "var(--text-tertiary)" }}>{mc.type}</p>
+                            </div>
+                            <Star className="h-3 w-3 flex-shrink-0" style={{ color: GEM_COLOR[mc.gem] }} fill={GEM_COLOR[mc.gem]} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Base info row */}
+                    <div className="flex items-center gap-3 rounded-lg px-3 py-2.5"
+                      style={{ background: "var(--bg-muted)" }}>
+                      <Info className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "var(--text-tertiary)" }} />
+                      <div className="flex flex-wrap gap-x-4 gap-y-1">
+                        {[
+                          ["Resolution", resolution],
+                          ["Steps", "30"],
+                          ["CFG Scale", "7.5"],
+                          ["Sampler", "DPM++ 2M"],
+                        ].map(([k, v]) => (
+                          <div key={k} className="flex items-center gap-1">
+                            <span className="text-[10px]" style={{ color: "var(--text-tertiary)" }}>{k}:</span>
+                            <span className="text-[10px] font-semibold" style={{ color: "var(--text-primary)" }}>{v}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* §5 — Comments */}
+              <div>
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>
+                    Comments ({MOCK_COMMENTS.length})
+                  </span>
+                  <button className="text-[11px] font-medium transition-colors hover:opacity-80" style={{ color: "#1D7BFF" }}>
+                    See all
+                  </button>
+                </div>
+
+                {/* Comment input */}
+                <div className="mb-4 flex items-center gap-2">
+                  <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white"
+                    style={{ background: "linear-gradient(135deg,#1D7BFF,#06B6D4)" }}>
+                    ME
+                  </div>
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      value={commentText}
+                      onChange={e => setCommentText(e.target.value)}
+                      placeholder="Add a comment…"
+                      className="w-full rounded-full px-4 py-2 text-xs outline-none transition-all"
+                      style={{
+                        background: "var(--bg-muted)",
+                        border: "1px solid var(--border)",
+                        color: "var(--text-primary)",
+                        paddingRight: commentText ? 36 : 16,
+                      }}
+                    />
+                    {commentText && (
+                      <button className="absolute right-3 top-1/2 -translate-y-1/2"
+                        style={{ color: "#1D7BFF" }}>
+                        <Send className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Comment list */}
+                <div className="flex flex-col gap-3">
+                  {visibleComments.map((c, i) => (
+                    <div key={i} className="flex gap-2.5">
+                      <div className="h-7 w-7 flex-shrink-0 rounded-full overflow-hidden">
+                        <img src={`https://picsum.photos/seed/u${c.seed}/28/28`} alt={c.user} className="h-full w-full object-cover" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="text-[11px] font-semibold" style={{ color: "var(--text-primary)" }}>@{c.user}</span>
+                          <span className="text-[10px]" style={{ color: "var(--text-tertiary)" }}>{c.time}</span>
+                        </div>
+                        <p className="mt-0.5 text-[11px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>{c.text}</p>
+                        <div className="mt-1 flex items-center gap-3">
+                          <button className="flex items-center gap-1 text-[10px] transition-colors hover:opacity-80" style={{ color: "var(--text-tertiary)" }}>
+                            <ThumbsUp className="h-3 w-3" /> Like
+                          </button>
+                          <button className="text-[10px] transition-colors hover:opacity-80" style={{ color: "var(--text-tertiary)" }}>Reply</button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {MOCK_COMMENTS.length > 2 && !showAllComments && (
+                    <button onClick={() => setShowAllComments(true)}
+                      className="text-[11px] font-medium transition-colors hover:opacity-80" style={{ color: "#1D7BFF" }}>
+                      View {MOCK_COMMENTS.length - 2} more comment{MOCK_COMMENTS.length - 2 > 1 ? "s" : ""}
+                    </button>
+                  )}
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* ── Sticky bottom action bar ── */}
+          <div className="flex-shrink-0 flex items-center gap-2 px-5 py-4"
+            style={{ borderTop: "1px solid var(--border)", background: "var(--bg-base)" }}>
+            <Link
+              href={`/video-studio`}
+              onClick={onClose}
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all hover:opacity-90 active:scale-[0.98]"
+              style={{ border: "1px solid var(--border)", color: "var(--text-primary)", background: "var(--bg-muted)" }}>
+              <Film className="h-4 w-4" /> Generate Video
+            </Link>
+            <Link
+              href={`/design-studio?prompt=${encodeURIComponent(item.prompt)}`}
+              onClick={onClose}
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.98]"
+              style={{ background: "linear-gradient(135deg,#1D7BFF,#06B6D4)", boxShadow: "0 4px 14px rgba(29,123,255,0.35)" }}>
+              <Layers className="h-4 w-4" /> Try in Design Studio
+            </Link>
           </div>
         </div>
       </div>
