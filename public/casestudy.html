@@ -628,39 +628,298 @@ footer{border-top:1px solid #f3f4f6;background:#fafafa}
       </div>
     </div>
 
-    <h3 style="font-size:1rem;font-weight:600;margin-top:28px;margin-bottom:16px">Information Architecture</h3>
-    <div class="grid2">
-      <div>
-        <div style="border:1px solid #f3f4f6;border-radius:14px;padding:20px">
-          <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#a3a3a3;font-weight:700;margin-bottom:12px">Sidebar Nav (global)</div>
-          <div style="display:flex;flex-direction:column;gap:4px;font-size:.875rem;color:#374151">
-            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;background:#EFF6FF;color:#1D7BFF;font-weight:500">🏠 Explore (Home)</div>
-            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px">💬 Chat</div>
-            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px">🖼 Image Studio</div>
-            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px">🎬 Video Studio</div>
-            <div style="height:1px;background:#f3f4f6;margin:6px 0"></div>
-            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;color:#737373">🔍 Search</div>
-            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;color:#737373">🌙 Theme</div>
-            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;color:#737373">⚙️ Settings</div>
-            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;color:#737373">👤 Profile avatar</div>
+    <h3 style="font-size:1rem;font-weight:600;margin-top:28px;margin-bottom:20px">Information Architecture</h3>
+
+    <!-- IA Diagram -->
+    <div style="overflow-x:auto;border:1px solid #f3f4f6;border-radius:20px;background:#fafafa;padding:32px 20px">
+      <div style="min-width:860px">
+
+        <!-- Root -->
+        <div style="display:flex;justify-content:center;margin-bottom:0">
+          <div style="background:linear-gradient(135deg,#1D7BFF,#06B6D4);color:#fff;border-radius:12px;padding:10px 24px;font-weight:700;font-size:.875rem;text-align:center;position:relative">
+            AnetAIS
+            <div style="position:absolute;bottom:-20px;left:50%;width:2px;height:20px;background:#d1d5db;transform:translateX(-50%)"></div>
+          </div>
+        </div>
+
+        <!-- L1 horizontal connector -->
+        <div style="position:relative;height:20px;margin:0 auto;max-width:860px">
+          <div style="position:absolute;top:0;left:10%;right:10%;height:2px;background:#d1d5db;top:20px"></div>
+        </div>
+
+        <!-- L1 nodes: 5 main sections -->
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:0;position:relative">
+          <!-- Explore -->
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="width:2px;height:20px;background:#d1d5db;margin-bottom:0"></div>
+            <div style="background:#EFF6FF;border:2px solid #1D7BFF;border-radius:10px;padding:8px 12px;text-align:center;width:100%">
+              <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:#1D7BFF;font-weight:700">Primary</div>
+              <div style="font-weight:700;font-size:.8125rem;color:#1e3a8a;margin-top:2px">🏠 Explore</div>
+              <div style="font-size:.65rem;color:#3b82f6;margin-top:2px">/home</div>
+            </div>
+            <!-- L2 children connector -->
+            <div style="width:2px;height:16px;background:#d1d5db"></div>
+            <div style="position:relative;width:100%">
+              <div style="border-left:2px solid #d1d5db;border-right:2px solid #d1d5db;border-top:2px solid #d1d5db;height:10px;border-radius:2px 2px 0 0;margin:0 18px"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;width:100%;margin-top:0">
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 4px;text-align:center">
+                <div style="font-size:.6rem;font-weight:600;color:#374151">Gallery</div>
+                <div style="font-size:.55rem;color:#9ca3af;margin-top:1px">9 tabs · search</div>
+              </div>
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 4px;text-align:center">
+                <div style="font-size:.6rem;font-weight:600;color:#374151">Detail Modal</div>
+                <div style="font-size:.55rem;color:#9ca3af;margin-top:1px">prompt · model · CTA</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat -->
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="width:2px;height:20px;background:#d1d5db"></div>
+            <div style="background:#F0FDF4;border:2px solid #10B981;border-radius:10px;padding:8px 12px;text-align:center;width:100%">
+              <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:#10B981;font-weight:700">Primary</div>
+              <div style="font-weight:700;font-size:.8125rem;color:#065f46;margin-top:2px">💬 Chat</div>
+              <div style="font-size:.65rem;color:#10B981;margin-top:2px">/chat</div>
+            </div>
+            <div style="width:2px;height:16px;background:#d1d5db"></div>
+            <div style="position:relative;width:100%">
+              <div style="border-left:2px solid #d1d5db;border-right:2px solid #d1d5db;border-top:2px solid #d1d5db;height:10px;border-radius:2px 2px 0 0;margin:0 18px"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;width:100%;margin-top:0">
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 4px;text-align:center">
+                <div style="font-size:.6rem;font-weight:600;color:#374151">Model picker</div>
+                <div style="font-size:.55rem;color:#9ca3af;margin-top:1px">10+ AI models</div>
+              </div>
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 4px;text-align:center">
+                <div style="font-size:.6rem;font-weight:600;color:#374151">History</div>
+                <div style="font-size:.55rem;color:#9ca3af;margin-top:1px">saved threads</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image Studio -->
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="width:2px;height:20px;background:#d1d5db"></div>
+            <div style="background:#F5F3FF;border:2px solid #8B5CF6;border-radius:10px;padding:8px 12px;text-align:center;width:100%">
+              <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:#8B5CF6;font-weight:700">Primary</div>
+              <div style="font-weight:700;font-size:.8125rem;color:#4c1d95;margin-top:2px">🖼 Image Studio</div>
+              <div style="font-size:.65rem;color:#8B5CF6;margin-top:2px">/image-studio</div>
+            </div>
+            <div style="width:2px;height:16px;background:#d1d5db"></div>
+            <div style="position:relative;width:100%">
+              <div style="border-left:2px solid #d1d5db;border-right:2px solid #d1d5db;border-top:2px solid #d1d5db;height:10px;border-radius:2px 2px 0 0;margin:0 6px"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;width:100%;margin-top:0">
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px 2px;text-align:center">
+                <div style="font-size:.55rem;font-weight:600;color:#374151">Prompt</div>
+                <div style="font-size:.5rem;color:#9ca3af;margin-top:1px">8 styles</div>
+              </div>
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px 2px;text-align:center">
+                <div style="font-size:.55rem;font-weight:600;color:#374151">Explore</div>
+                <div style="font-size:.5rem;color:#9ca3af;margin-top:1px">gallery</div>
+              </div>
+              <div style="background:#EEF2FF;border:1px solid #c7d2fe;border-radius:8px;padding:5px 2px;text-align:center">
+                <div style="font-size:.55rem;font-weight:600;color:#4338ca">My Work</div>
+                <div style="font-size:.5rem;color:#818cf8;margin-top:1px">→ Design</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Studio -->
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="width:2px;height:20px;background:#d1d5db"></div>
+            <div style="background:#FFF1F2;border:2px solid #EC4899;border-radius:10px;padding:8px 12px;text-align:center;width:100%">
+              <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:#EC4899;font-weight:700">Primary</div>
+              <div style="font-weight:700;font-size:.8125rem;color:#831843;margin-top:2px">🎬 Video Studio</div>
+              <div style="font-size:.65rem;color:#EC4899;margin-top:2px">/video-studio</div>
+            </div>
+            <div style="width:2px;height:16px;background:#d1d5db"></div>
+            <div style="position:relative;width:100%">
+              <div style="border-left:2px solid #d1d5db;border-right:2px solid #d1d5db;border-top:2px solid #d1d5db;height:10px;border-radius:2px 2px 0 0;margin:0 6px"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;width:100%;margin-top:0">
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px 2px;text-align:center">
+                <div style="font-size:.55rem;font-weight:600;color:#374151">Generate</div>
+                <div style="font-size:.5rem;color:#9ca3af;margin-top:1px">5 models</div>
+              </div>
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px 2px;text-align:center">
+                <div style="font-size:.55rem;font-weight:600;color:#374151">Controls</div>
+                <div style="font-size:.5rem;color:#9ca3af;margin-top:1px">motion·FPS</div>
+              </div>
+              <div style="background:#FFF1F2;border:1px solid #fbcfe8;border-radius:8px;padding:5px 2px;text-align:center">
+                <div style="font-size:.55rem;font-weight:600;color:#be185d">History</div>
+                <div style="font-size:.5rem;color:#f9a8d4;margin-top:1px">library</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings + Auth -->
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="width:2px;height:20px;background:#d1d5db"></div>
+            <div style="background:#FFFBEB;border:2px solid #F59E0B;border-radius:10px;padding:8px 12px;text-align:center;width:100%">
+              <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:#F59E0B;font-weight:700">Utility</div>
+              <div style="font-weight:700;font-size:.8125rem;color:#78350f;margin-top:2px">⚙️ Settings</div>
+              <div style="font-size:.65rem;color:#F59E0B;margin-top:2px">/settings</div>
+            </div>
+            <div style="width:2px;height:16px;background:#d1d5db"></div>
+            <div style="position:relative;width:100%">
+              <div style="border-left:2px solid #d1d5db;border-right:2px solid #d1d5db;border-top:2px solid #d1d5db;height:10px;border-radius:2px 2px 0 0;margin:0 6px"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;width:100%;margin-top:0">
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px 2px;text-align:center">
+                <div style="font-size:.55rem;font-weight:600;color:#374151">Profile</div>
+                <div style="font-size:.5rem;color:#9ca3af;margin-top:1px">account</div>
+              </div>
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px 2px;text-align:center">
+                <div style="font-size:.55rem;font-weight:600;color:#374151">Billing</div>
+                <div style="font-size:.5rem;color:#9ca3af;margin-top:1px">credits</div>
+              </div>
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px 2px;text-align:center">
+                <div style="font-size:.55rem;font-weight:600;color:#374151">API Keys</div>
+                <div style="font-size:.5rem;color:#9ca3af;margin-top:1px">developer</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Design Studio — gated node -->
+        <div style="margin-top:28px;border-top:2px dashed #d1d5db;padding-top:24px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;font-weight:700">Flow-gated access — not in sidebar nav</div>
+            <div style="flex:1;height:1px;background:#f3f4f6"></div>
+          </div>
+          <div style="display:flex;justify-content:center">
+            <div style="max-width:580px;width:100%">
+              <div style="background:#0f172a;border:2px solid #1D7BFF;border-radius:12px;padding:10px 20px;text-align:center;position:relative">
+                <div style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);display:flex;gap:20px">
+                  <div style="display:flex;flex-direction:column;align-items:center">
+                    <div style="font-size:.6rem;background:#EFF6FF;border:1px solid #BFDBFE;color:#1D7BFF;border-radius:9999px;padding:2px 8px;font-weight:600;white-space:nowrap">Detail Modal CTA</div>
+                    <div style="width:1px;height:10px;background:#93c5fd"></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center">
+                    <div style="font-size:.6rem;background:#EEF2FF;border:1px solid #c7d2fe;color:#4338ca;border-radius:9999px;padding:2px 8px;font-weight:600;white-space:nowrap">My Creations click</div>
+                    <div style="width:1px;height:10px;background:#a5b4fc"></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center">
+                    <div style="font-size:.6rem;background:#FFF1F2;border:1px solid #fbcfe8;color:#be185d;border-radius:9999px;padding:2px 8px;font-weight:600;white-space:nowrap">Video → Edit</div>
+                    <div style="width:1px;height:10px;background:#f9a8d4"></div>
+                  </div>
+                </div>
+                <div style="color:#60A5FA;font-weight:700;font-size:.875rem">✏️ Design Studio</div>
+                <div style="color:rgba(255,255,255,.4);font-size:.65rem;margin-top:2px">/design-studio?prompt=…</div>
+              </div>
+              <!-- L2 children of Design Studio -->
+              <div style="width:2px;height:14px;background:#d1d5db;margin:0 auto"></div>
+              <div style="position:relative;width:80%;margin:0 auto">
+                <div style="border-left:2px solid #d1d5db;border-right:2px solid #d1d5db;border-top:2px solid #d1d5db;height:10px;border-radius:2px 2px 0 0"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;width:80%;margin:0 auto">
+                <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:7px 4px;text-align:center">
+                  <div style="font-size:.6rem;font-weight:600;color:#374151">Canvas</div>
+                  <div style="font-size:.52rem;color:#9ca3af;margin-top:1px">drag·resize</div>
+                </div>
+                <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:7px 4px;text-align:center">
+                  <div style="font-size:.6rem;font-weight:600;color:#374151">Layers</div>
+                  <div style="font-size:.52rem;color:#9ca3af;margin-top:1px">order·rename</div>
+                </div>
+                <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:7px 4px;text-align:center">
+                  <div style="font-size:.6rem;font-weight:600;color:#374151">Templates</div>
+                  <div style="font-size:.52rem;color:#9ca3af;margin-top:1px">6 presets</div>
+                </div>
+                <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:7px 4px;text-align:center">
+                  <div style="font-size:.6rem;font-weight:600;color:#374151">AI Prompt</div>
+                  <div style="font-size:.52rem;color:#9ca3af;margin-top:1px">img · video</div>
+                </div>
+                <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:7px 4px;text-align:center">
+                  <div style="font-size:.6rem;font-weight:600;color:#374151">Export</div>
+                  <div style="font-size:.52rem;color:#9ca3af;margin-top:1px">download</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Auth layer -->
+        <div style="margin-top:24px;border-top:1px solid #f3f4f6;padding-top:16px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap">
+          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;font-weight:700;margin-right:6px">Auth layer</div>
+          <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px 12px;font-size:.72rem;font-weight:600;color:#374151">/login</div>
+          <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px 12px;font-size:.72rem;font-weight:600;color:#374151">/register</div>
+          <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px 12px;font-size:.72rem;font-weight:600;color:#374151">/forgot-password</div>
+          <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px 12px;font-size:.72rem;font-weight:600;color:#374151">/casestudy</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- IA rationale table -->
+    <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div style="border:1px solid #f3f4f6;border-radius:14px;padding:18px">
+        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#1D7BFF;font-weight:700;margin-bottom:12px">Navigation Decision</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.8125rem;color:#525252">
+          <li style="display:flex;gap:8px"><span style="color:#1D7BFF;font-weight:700;flex-shrink:0">→</span><span><strong>Explore as default:</strong> Inspiration before creation primes the user's intent and reduces blank-page anxiety.</span></li>
+          <li style="display:flex;gap:8px"><span style="color:#1D7BFF;font-weight:700;flex-shrink:0">→</span><span><strong>Design Studio omitted from nav:</strong> Gating it behind intent-driven CTAs prevents accidental discovery confusion and enforces a coherent mental model.</span></li>
+          <li style="display:flex;gap:8px"><span style="color:#1D7BFF;font-weight:700;flex-shrink:0">→</span><span><strong>Icon-only sidebar at 72px:</strong> Maximises canvas space for creative tools; tooltip labels surface on hover to aid discoverability without visual clutter.</span></li>
+        </ul>
+      </div>
+      <div style="border:1px solid #f3f4f6;border-radius:14px;padding:18px">
+        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#8B5CF6;font-weight:700;margin-bottom:12px">Depth Model</div>
+        <div style="font-size:.75rem;color:#374151;margin-bottom:10px">All primary routes are 1-click from the sidebar. Secondary views are contextual overlays or inline panels, never full page navigations, to preserve creative context.</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:.75rem">
+            <div style="background:#EFF6FF;color:#1D7BFF;border-radius:6px;padding:2px 8px;font-weight:600;font-size:.65rem;white-space:nowrap">Depth 0</div>
+            <span style="color:#525252">Sidebar global nav (Explore, Chat, Image, Video, Settings)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.75rem">
+            <div style="background:#F5F3FF;color:#8B5CF6;border-radius:6px;padding:2px 8px;font-weight:600;font-size:.65rem;white-space:nowrap">Depth 1</div>
+            <span style="color:#525252">Studio panels, gallery tabs, settings sections</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.75rem">
+            <div style="background:#FFF1F2;color:#EC4899;border-radius:6px;padding:2px 8px;font-weight:600;font-size:.65rem;white-space:nowrap">Depth 2</div>
+            <span style="color:#525252">Detail modal, Profile popup, generation overlays, layer context menu</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.75rem">
+            <div style="background:#FFFBEB;color:#F59E0B;border-radius:6px;padding:2px 8px;font-weight:600;font-size:.65rem;white-space:nowrap">Flow-gated</div>
+            <span style="color:#525252">Design Studio — only reachable via explicit creative intent</span>
           </div>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="border:1px solid #f3f4f6;border-radius:12px;padding:14px">
-          <h4 style="font-size:.875rem;font-weight:600;color:#171717;margin-bottom:4px">Design Studio — access only via flow</h4>
-          <p style="font-size:.8rem;color:#737373">Intentionally removed from sidebar nav to prevent confusion — accessed only through "Try in Design Studio" CTA or clicking a My Creation. This reduces cognitive load on new users.</p>
+    </div>
+
+    <!-- Cross-product flow map -->
+    <div style="margin-top:20px;border:1px solid #f3f4f6;border-radius:14px;padding:20px;background:#fafafa">
+      <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#737373;font-weight:700;margin-bottom:14px">Cross-product Flow Map — How Screens Connect</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <div style="background:#EFF6FF;border:1px solid #BFDBFE;color:#1e3a8a;border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:600">🏠 Explore</div>
+          <span style="font-size:.75rem;color:#9ca3af">click card →</span>
+          <div style="background:#e0f2fe;border:1px solid #bae6fd;color:#0c4a6e;border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:600">Detail Modal</div>
+          <span style="font-size:.75rem;color:#9ca3af">"Try in Design Studio" →</span>
+          <div style="background:#0f172a;border:1px solid #1D7BFF;color:#60A5FA;border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:600">✏️ Design Studio</div>
         </div>
-        <div style="border:1px solid #f3f4f6;border-radius:12px;padding:14px">
-          <h4 style="font-size:.875rem;font-weight:600;color:#171717;margin-bottom:4px">Profile popup vs. dedicated page</h4>
-          <p style="font-size:.8rem;color:#737373">Profile panel floats from the avatar with credit bar, stats, and upgrade CTA — key actions without leaving the current tool. Full account management lives at /account.</p>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <div style="background:#F5F3FF;border:1px solid #DDD6FE;color:#4c1d95;border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:600">🖼 Image Studio</div>
+          <span style="font-size:.75rem;color:#9ca3af">generate → My Creations → click →</span>
+          <div style="background:#0f172a;border:1px solid #1D7BFF;color:#60A5FA;border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:600">✏️ Design Studio</div>
         </div>
-        <div style="border:1px solid #f3f4f6;border-radius:12px;padding:14px">
-          <h4 style="font-size:.875rem;font-weight:600;color:#171717;margin-bottom:4px">Settings as billing hub</h4>
-          <p style="font-size:.8rem;color:#737373">7-section settings page: General, Appearance, Notifications, API Keys, Security, Usage & Credits, Plans — prevents scattered preference management.</p>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <div style="background:#FFF1F2;border:1px solid #FBCFE8;color:#831843;border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:600">🎬 Video Studio</div>
+          <span style="font-size:.75rem;color:#9ca3af">generate → "Edit in Design Studio" →</span>
+          <div style="background:#0f172a;border:1px solid #1D7BFF;color:#60A5FA;border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:600">✏️ Design Studio</div>
+        </div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <div style="background:#0f172a;border:1px solid #1D7BFF;color:#60A5FA;border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:600">✏️ Design Studio</div>
+          <span style="font-size:.75rem;color:#9ca3af">AI prompt bar → generate →</span>
+          <div style="background:#F5F3FF;border:1px solid #DDD6FE;color:#4c1d95;border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:600">Canvas element added</div>
+        </div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <div style="background:#EFF6FF;border:1px solid #BFDBFE;color:#1e3a8a;border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:600">🏠 Detail Modal</div>
+          <span style="font-size:.75rem;color:#9ca3af">"Generate Video" →</span>
+          <div style="background:#FFF1F2;border:1px solid #FBCFE8;color:#831843;border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:600">🎬 Video Studio (prefilled)</div>
         </div>
       </div>
     </div>
+
   </div>
 </section>
 
