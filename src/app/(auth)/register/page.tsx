@@ -88,7 +88,7 @@ export default function RegisterPage() {
 
         <div className="rounded-2xl border p-5" style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)" }}>
           <div className="flex items-center gap-3 mb-3">
-            <img src="https://picsum.photos/seed/sarah/36/36" className="h-9 w-9 rounded-full object-cover" alt="" />
+            <img src="/gallery/sarah_sq.svg" className="h-9 w-9 rounded-full object-cover" alt="" />
             <div>
               <div className="text-sm font-medium">Sarah K.</div>
               <div className="text-xs" style={{ color: "#6B7280" }}>Product Designer</div>

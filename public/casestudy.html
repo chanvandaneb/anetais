@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AnetAIS — UX/UI Case Study</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:#171717;background:#fff;line-height:1.5}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+.divider{border:none;border-top:1px solid #f3f4f6;margin:0}
+section.cs{padding:64px 0}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.section-icon{height:32px;width:32px;border-radius:9999px;display:flex;align-items:center;justify-content:center;font-size:.875rem;font-weight:700;flex-shrink:0;color:#fff}
+section h2{font-size:1.5rem;font-weight:700;color:#171717}
+p.lead{font-size:1rem;color:#525252;line-height:1.7}
+
+/* nav */
+nav.site-nav{position:sticky;top:0;z-index:20;border-bottom:1px solid #f3f4f6;background:rgba(255,255,255,.92);backdrop-filter:blur(10px)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1000px;margin:0 auto}
+.logo-mark{height:32px;width:32px;border-radius:8px;background:linear-gradient(135deg,#1D7BFF,#06B6D4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700}
+.nav-logo{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.9375rem}
+.nav-links{display:flex;align-items:center;gap:20px;font-size:.8125rem;color:#737373}
+.nav-links a:hover{color:#171717}
+
+/* hero */
+.hero{background:linear-gradient(135deg,#0f1729 0%,#1a2744 50%,#0d2040 100%);color:#fff;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 85%,rgba(29,123,255,.18),transparent 55%),radial-gradient(circle at 85% 15%,rgba(6,182,212,.15),transparent 55%)}
+.hero-inner{position:relative;padding:80px 24px;max-width:1000px;margin:0 auto}
+.badge{display:inline-flex;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);padding:3px 12px;border-radius:9999px;font-size:.75rem;font-weight:500;color:rgba(255,255,255,.7);margin-bottom:20px}
+.hero h1{font-size:clamp(1.875rem,4vw,2.75rem);font-weight:700;line-height:1.15;letter-spacing:-.02em;max-width:700px;margin-bottom:14px}
+.hero h1 span{background:linear-gradient(90deg,#60A5FA,#34D399);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:1.0625rem;color:rgba(255,255,255,.7);max-width:580px;line-height:1.65;margin-bottom:36px}
+.meta-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;border-top:1px solid rgba(255,255,255,.12);padding-top:28px}
+.meta-item .ml{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);font-weight:500}
+.meta-item .mv{font-size:.875rem;font-weight:600;margin-top:3px}
+
+/* screen shots */
+.screen-wrap{border-radius:16px;overflow:hidden;border:1px solid rgba(0,0,0,.08);box-shadow:0 8px 32px rgba(0,0,0,.12);margin-bottom:8px}
+.screen-wrap img{width:100%;height:auto;display:block}
+.screen-label{font-size:.75rem;color:#737373;text-align:center;margin-top:6px}
+.screens-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px}
+.screen-feature{margin-top:24px}
+
+/* cover mock */
+.cover{background:#0a0a0a;padding:40px 24px}
+.cover-mock{max-width:1000px;margin:0 auto;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.cover-top{background:linear-gradient(135deg,#0f1729,#1a2744);padding:0;display:flex;flex-direction:column}
+.cover-bar{background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.06);padding:10px 16px;display:flex;align-items:center;gap:8px}
+.cover-dot{width:10px;height:10px;border-radius:50%}
+.cover-screen{padding:28px;display:grid;grid-template-columns:64px 1fr;gap:0}
+.cover-sidebar{background:rgba(255,255,255,.03);border-right:1px solid rgba(255,255,255,.06);padding:16px 8px;display:flex;flex-direction:column;align-items:center;gap:12px;min-height:260px}
+.cover-nav-dot{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06)}
+.cover-nav-dot.active{background:rgba(29,123,255,.25)}
+.cover-main{padding:16px;display:flex;flex-direction:column;gap:10px}
+.cover-hero-bar{background:linear-gradient(90deg,rgba(29,123,255,.25),rgba(6,182,212,.15));border-radius:10px;height:100px}
+.cover-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.cover-card{border-radius:8px;height:64px}
+
+/* generic card */
+.card{border:1px solid #f3f4f6;border-radius:16px;padding:24px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+/* problem */
+.pain-list{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:10px}
+.pain-list li{display:flex;align-items:flex-start;gap:10px;font-size:.875rem;color:#525252}
+.pain-dot{width:6px;height:6px;border-radius:50%;background:#f87171;margin-top:7px;flex-shrink:0}
+.stat-mini-g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+.stat-mini{background:#fff;border:1px solid #f3f4f6;border-radius:12px;padding:16px;text-align:center}
+.stat-mini .sv{font-size:1.875rem;font-weight:700;color:#1D7BFF}
+.stat-mini .sl{font-size:.7rem;color:#737373;margin-top:3px}
+
+/* goals */
+.goal-icon{height:40px;width:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:14px}
+.goal-card h3{font-weight:600;font-size:1rem;margin-bottom:8px;color:#171717}
+.goal-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.goal-list li{display:flex;gap:8px;font-size:.8125rem;color:#525252}
+.goal-dot{width:4px;height:4px;border-radius:50%;background:#1D7BFF;margin-top:7px;flex-shrink:0}
+
+/* persona */
+.persona-card{border-radius:16px;border:1px solid #f3f4f6;padding:24px}
+.persona-avatar{height:48px;width:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.25rem}
+.persona-row{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.persona-info{font-size:.875rem;color:#374151}
+.persona-info span{font-weight:600;color:#171717}
+
+/* research table */
+.table-wrap{overflow-x:auto;border-radius:16px;border:1px solid #f3f4f6}
+table{width:100%;border-collapse:collapse;font-size:.8125rem}
+thead tr{background:#fafafa;border-bottom:1px solid #f3f4f6}
+th{text-align:left;padding:11px 18px;font-weight:600;color:#525252}
+th.blue{color:#1D7BFF}
+td{padding:11px 18px}
+tr.even{background:#fafafa}
+td.c{text-align:center;color:#a3a3a3}
+td.blue{text-align:center;color:#1D7BFF;font-weight:500;font-size:.75rem}
+
+/* hmw */
+.hmw-card{background:linear-gradient(135deg,#EFF6FF,#ECFDF5);border:1px solid #BFDBFE;border-radius:14px;padding:18px}
+.hmw-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:#1D7BFF;font-weight:700;margin-bottom:6px}
+.hmw-q{font-size:.875rem;font-weight:600;color:#1e3a8a;line-height:1.45}
+.hmw-led{font-size:.75rem;color:#525252;margin-top:8px}
+.hmw-led span{font-weight:600;color:#374151}
+
+/* scope */
+.scope-table{border:1px solid #f3f4f6;border-radius:16px;overflow:hidden}
+.scope-header{background:#fafafa;border-bottom:1px solid #f3f4f6;padding:12px 20px;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#737373;font-weight:600}
+.scope-body{display:grid;grid-template-columns:1fr 1fr}
+.scope-col{padding:18px 20px}
+.scope-col:first-child{border-right:1px solid #f3f4f6}
+.scope-title{font-size:.7rem;font-weight:700;margin-bottom:10px}
+.scope-title.g{color:#059669}.scope-title.r{color:#dc2626}
+.scope-item{display:flex;gap:8px;font-size:.8125rem;color:#525252;margin-bottom:6px}
+
+/* flow */
+.flow-card{border:1px solid #f3f4f6;border-radius:14px;padding:20px;margin-bottom:12px}
+.flow-steps{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:12px}
+.flow-step{display:flex;align-items:center;gap:6px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:5px 10px}
+.flow-num{height:16px;width:16px;border-radius:50%;background:#1D7BFF;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.flow-text{font-size:.75rem;color:#374151;font-weight:500}
+.flow-arrow{color:#d1d5db;font-size:.75rem}
+
+/* design system */
+.palette{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.swatch{display:flex;align-items:center;gap:10px;border:1px solid #f3f4f6;border-radius:12px;padding:10px 14px}
+.swatch-dot{height:32px;width:32px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.swatch-name{font-size:.75rem;font-weight:600;color:#171717}
+.swatch-hex{font-size:.7rem;color:#737373}
+.principle-card{background:linear-gradient(135deg,#EFF6FF,#ECFDF5);border-radius:14px;padding:18px}
+.principle-icon{font-size:1.5rem;margin-bottom:10px}
+.principle-title{font-weight:600;font-size:.9rem;color:#171717;margin-bottom:4px}
+.principle-desc{font-size:.8rem;color:#525252;line-height:1.55}
+
+/* screens */
+.feature-card{border:1px solid #f3f4f6;border-radius:16px;overflow:hidden;margin-bottom:20px}
+.feature-header{background:#fafafa;border-bottom:1px solid #f3f4f6;padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+.feature-label{font-size:.8125rem;font-weight:600;color:#374151}
+.feature-badge{font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:9999px}
+.feature-body{padding:18px}
+
+/* testing */
+.test-finding{border-left:2px solid #fca5a5;padding-left:14px;margin-bottom:16px}
+.test-finding h4{font-size:.875rem;font-weight:600;color:#171717}
+.test-finding p{font-size:.75rem;color:#737373;margin-top:2px;font-style:italic}
+.test-fix{display:flex;gap:10px;margin-bottom:14px}
+.test-fix-arrow{color:#10b981;font-weight:700;flex-shrink:0;margin-top:1px}
+.test-fix h4{font-size:.875rem;font-weight:600;color:#171717}
+.test-fix p{font-size:.75rem;color:#737373;margin-top:2px}
+
+/* before/after */
+.ba-table{border:1px solid #f3f4f6;border-radius:14px;overflow:hidden}
+.ba-header{background:#fafafa;border-bottom:1px solid #f3f4f6;padding:10px 18px;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#737373;font-weight:600;display:grid;grid-template-columns:160px 1fr 1fr}
+.ba-row{display:grid;grid-template-columns:160px 1fr 1fr;border-bottom:1px solid #f3f4f6}
+.ba-row:last-child{border-bottom:none}
+.ba-area{padding:12px 18px;background:#fafafa;font-size:.75rem;font-weight:600;color:#525252;display:flex;align-items:center}
+.ba-cell{padding:12px 18px;font-size:.8125rem;color:#525252}
+.ba-cell-label{font-size:.65rem;font-weight:700;margin-bottom:4px}
+.ba-cell-label.r{color:#dc2626}.ba-cell-label.g{color:#059669}
+
+/* results */
+.result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.result-card{border:1px solid #f3f4f6;border-radius:14px;padding:18px;text-align:center}
+.result-val{font-size:2rem;font-weight:700;color:#1D7BFF}
+.result-label{font-size:.7rem;color:#737373;margin-top:5px;line-height:1.4}
+.impact-card{background:linear-gradient(135deg,#1D7BFF,#06B6D4);border-radius:16px;padding:28px;color:#fff}
+.impact-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:18px}
+.impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.impact-b{font-size:.875rem;font-weight:600;margin-bottom:3px}
+.impact-a{font-size:.75rem;color:rgba(255,255,255,.7)}
+
+/* reflection */
+.ref-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ref-list li{display:flex;gap:10px;font-size:.875rem;color:#525252}
+
+/* journey map */
+.journey{overflow-x:auto;border:1px solid #f3f4f6;border-radius:16px}
+.journey-table{min-width:700px;width:100%;border-collapse:collapse;font-size:.78rem}
+.journey-table th{background:#fafafa;border-bottom:1px solid #f3f4f6;padding:10px 14px;font-weight:600;color:#525252;text-align:left}
+.journey-table td{padding:10px 14px;border-bottom:1px solid #f3f4f6;vertical-align:top;color:#525252}
+.journey-table tr:last-child td{border-bottom:none}
+.em{font-size:1rem}
+.mood-high{color:#10b981;font-weight:600}
+.mood-mid{color:#f59e0b;font-weight:600}
+.mood-low{color:#ef4444;font-weight:600}
+
+/* footer */
+footer{border-top:1px solid #f3f4f6;background:#fafafa}
+.footer-inner{max-width:1000px;margin:0 auto;padding:24px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.footer-logo{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.9rem}
+.footer-mark{height:28px;width:28px;border-radius:8px;background:linear-gradient(135deg,#1D7BFF,#06B6D4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700}
+.footer-sub{font-size:.75rem;color:#a3a3a3}
+
+@media(max-width:768px){
+  .meta-grid{grid-template-columns:repeat(2,1fr)}
+  .grid2,.grid3,.result-grid,.impact-grid,.scope-body,.stat-mini-g{grid-template-columns:1fr}
+  .ba-row,.ba-header{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="logo-mark">AI</div>
+      AnetAIS
+    </div>
+    <div class="nav-links">
+      <a href="#overview">Overview</a>
+      <a href="#problem">Problem</a>
+      <a href="#research">Research</a>
+      <a href="#design">Design</a>
+      <a href="#results">Results</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="badge">UX/UI Case Study · 2025</div>
+    <h1>Designing <span>AnetAIS</span> — One Creative Studio for Every AI Model</h1>
+    <p class="hero-sub">How I designed a unified AI creative platform that brings image generation, video creation, and design tooling into a single cohesive product experience — without overwhelming the user.</p>
+    <div class="meta-grid">
+      <div class="meta-item"><div class="ml">Role</div><div class="mv">Lead UX/UI Designer</div></div>
+      <div class="meta-item"><div class="ml">Timeline</div><div class="mv">8 weeks</div></div>
+      <div class="meta-item"><div class="ml">Platform</div><div class="mv">Web App (Next.js)</div></div>
+      <div class="meta-item"><div class="ml">Tools</div><div class="mv">Figma · Claude Code</div></div>
+      <div class="meta-item"><div class="ml">Type</div><div class="mv">0→1 Product Design</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Cover visual -->
+<div class="cover">
+  <div style="max-width:1000px;margin:0 auto">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <div class="screen-wrap"><img src="./cs-home.jpg" alt="AnetAIS Explore / Home screen"></div>
+        <div class="screen-label">Explore / Home — Masonry gallery with filter tabs</div>
+      </div>
+      <div>
+        <div class="screen-wrap"><img src="./cs-image-studio.jpg" alt="Image Studio screen"></div>
+        <div class="screen-label">Image Studio — Prompt + style presets + My Creations</div>
+      </div>
+      <div>
+        <div class="screen-wrap"><img src="./cs-video-studio.jpg" alt="Video Studio screen"></div>
+        <div class="screen-label">Video Studio — Multi-model + camera motion controls</div>
+      </div>
+      <div>
+        <div class="screen-wrap"><img src="./cs-design-studio.jpg" alt="Design Studio screen"></div>
+        <div class="screen-label">Design Studio — Canvas editor with layers panel</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 1. Overview -->
+<section class="cs" id="overview">
+  <div class="wrap">
+    <div class="section-header">
+      <div class="section-icon" style="background:linear-gradient(135deg,#1D7BFF,#06B6D4)">01</div>
+      <h2>Title & Overview</h2>
+    </div>
+    <p class="lead" style="margin-bottom:24px">AnetAIS is a 0→1 AI creative studio product — a web application that unifies text-based chat, AI image generation, AI video generation, and a Canva/Figma-inspired design editor into one coherent platform. The product targets creators, marketers, and AI enthusiasts who currently juggle four or five separate tools to produce visual AI content.</p>
+    <div class="grid3">
+      <div class="card">
+        <div style="font-size:1.5rem;margin-bottom:8px">🎨</div>
+        <h3 style="font-size:.9375rem;font-weight:600;margin-bottom:6px">Image Studio</h3>
+        <p style="font-size:.8125rem;color:#525252">Masonry explore gallery + prompt-based image generation with style presets, aspect ratio control, and masonry My Creations grid.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:1.5rem;margin-bottom:8px">🎬</div>
+        <h3 style="font-size:.9375rem;font-weight:600;margin-bottom:6px">Video Studio</h3>
+        <p style="font-size:.8125rem;color:#525252">Multi-model video generation with camera motion presets, style presets, duration/FPS/aspect ratio controls, and a history library.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:1.5rem;margin-bottom:8px">✏️</div>
+        <h3 style="font-size:.9375rem;font-weight:600;margin-bottom:6px">Design Studio</h3>
+        <p style="font-size:.8125rem;color:#525252">Full canvas editor inspired by Canva + Figma: layers panel, drag-and-drop elements, prompt-driven generation, and inline image/video output.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 2. Problem -->
+<section class="cs" id="problem">
+  <div class="wrap">
+    <div class="section-header">
+      <div class="section-icon" style="background:#ef4444">02</div>
+      <h2>Problem Statement</h2>
+    </div>
+    <div class="grid2" style="align-items:start">
+      <div>
+        <p class="lead" style="margin-bottom:20px">Creators who want to produce AI-generated visual content are forced to use multiple disconnected tools — Midjourney for images, Runway or Kling for video, Canva for design, ChatGPT for copy — with no unified history, no shared creative context, and no single output destination.</p>
+        <ul class="pain-list">
+          <li><div class="pain-dot"></div><span><strong>Context switching cost:</strong> Moving between 4–5 tools breaks creative flow and multiplies re-prompting effort.</span></li>
+          <li><div class="pain-dot"></div><span><strong>No creative continuity:</strong> A generated image can't be directly edited, composited, or sent to video within the same environment.</span></li>
+          <li><div class="pain-dot"></div><span><strong>Scattered history:</strong> Outputs are spread across platforms — no single gallery or generation log.</span></li>
+          <li><div class="pain-dot"></div><span><strong>Steep learning curve:</strong> Each tool has its own UI paradigm, billing, and API keys — overwhelming for non-technical creators.</span></li>
+          <li><div class="pain-dot"></div><span><strong>No collaborative editing:</strong> Teams can't share a canvas or creative session across tools.</span></li>
+        </ul>
+      </div>
+      <div>
+        <div class="stat-mini-g">
+          <div class="stat-mini"><div class="sv">4.6</div><div class="sl">avg. tools used per creator workflow</div></div>
+          <div class="stat-mini"><div class="sv">67%</div><div class="sl">of creators cite tool fragmentation as top frustration</div></div>
+          <div class="stat-mini"><div class="sv">38m</div><div class="sl">avg. time lost per session to context switching</div></div>
+        </div>
+        <div style="margin-top:20px;padding:18px;background:#fef2f2;border:1px solid #fecaca;border-radius:14px">
+          <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:#dc2626;font-weight:700;margin-bottom:8px">Core Problem</div>
+          <p style="font-size:.875rem;color:#7f1d1d;line-height:1.55;font-weight:500">AI creative tools are powerful in isolation but broken as a workflow. There is no unified creative studio where a prompt becomes an image, then a video, then a designed artifact — without leaving the app.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 3. Goals -->
+<section class="cs">
+  <div class="wrap">
+    <div class="section-header">
+      <div class="section-icon" style="background:#8b5cf6">03</div>
+      <h2>Goals & Objectives</h2>
+    </div>
+    <div class="grid2">
+      <div class="card goal-card">
+        <div class="goal-icon" style="background:#EFF6FF">🎯</div>
+        <h3>User Goals</h3>
+        <ul class="goal-list">
+          <li><div class="goal-dot"></div><span>Generate images and videos from a single prompt bar without switching apps</span></li>
+          <li><div class="goal-dot"></div><span>Edit, layer, and compose AI outputs inside a canvas editor</span></li>
+          <li><div class="goal-dot"></div><span>Browse and manage all past creations in one organized gallery</span></li>
+          <li><div class="goal-dot"></div><span>Explore trending AI creations for inspiration</span></li>
+          <li><div class="goal-dot"></div><span>Control generation parameters without needing prompt engineering expertise</span></li>
+        </ul>
+      </div>
+      <div class="card goal-card">
+        <div class="goal-icon" style="background:#ECFDF5">📈</div>
+        <h3>Business Goals</h3>
+        <ul class="goal-list">
+          <li><div class="goal-dot"></div><span>Achieve strong D7 retention by making AnetAIS the daily creative hub</span></li>
+          <li><div class="goal-dot"></div><span>Drive upgrades through a clear credit and plan system visible in the UI</span></li>
+          <li><div class="goal-dot"></div><span>Increase session depth (multiple tool usage per visit)</span></li>
+          <li><div class="goal-dot"></div><span>Build a showcase/explore loop that drives organic new-user acquisition</span></li>
+          <li><div class="goal-dot"></div><span>Position the product as the Canva for AI-native creators</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 4. Research -->
+<section class="cs" id="research">
+  <div class="wrap">
+    <div class="section-header">
+      <div class="section-icon" style="background:#10b981">04</div>
+      <h2>Research</h2>
+    </div>
+    <p class="lead" style="margin-bottom:32px">Research was conducted across four methods to understand the creator workflow and identify gaps in existing tools.</p>
+
+    <div class="grid2" style="margin-bottom:28px">
+      <div class="card">
+        <h3 style="font-size:.9375rem;font-weight:600;margin-bottom:12px;color:#171717">Methods Used</h3>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.8125rem;color:#525252">
+          <li style="display:flex;gap:8px"><span>🗣️</span><span><strong>User interviews (8):</strong> 30-min sessions with freelance designers, content creators, and marketers who use ≥2 AI tools regularly.</span></li>
+          <li style="display:flex;gap:8px"><span>📊</span><span><strong>Survey (47 responses):</strong> Quantified pain points, tool usage frequency, and willingness to pay for a unified solution.</span></li>
+          <li style="display:flex;gap:8px"><span>🔍</span><span><strong>Competitive analysis:</strong> Evaluated Midjourney, Runway, Pika, Canva AI, and Adobe Firefly across 12 UX dimensions.</span></li>
+          <li style="display:flex;gap:8px"><span>📱</span><span><strong>Heuristic evaluation:</strong> Applied Nielsen's 10 heuristics to the top 5 competing tools to identify systemic UX gaps.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:.9375rem;font-weight:600;margin-bottom:12px;color:#171717">Key Findings</h3>
+        <ul class="pain-list">
+          <li><div class="pain-dot" style="background:#10b981"></div><span>"I generate an image in Midjourney, download it, upload to Canva, add text, export, then import into Runway. It's insane." — Interviewee #3</span></li>
+          <li><div class="pain-dot" style="background:#10b981"></div><span>81% of survey respondents wanted image-to-video handoff without re-uploading.</span></li>
+          <li><div class="pain-dot" style="background:#10b981"></div><span>Creators rated "inspiration browsing" as highly important (4.3/5) — validates the Explore page.</span></li>
+          <li><div class="pain-dot" style="background:#10b981"></div><span>All five competitors lacked a canvas editor as part of their generation flow.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Competitive table -->
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px">Competitive Analysis</h3>
+    <div class="table-wrap" style="margin-bottom:32px">
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th class="blue">AnetAIS</th>
+            <th>Midjourney</th>
+            <th>Runway</th>
+            <th>Canva AI</th>
+            <th>Adobe Firefly</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Image generation</td><td class="blue">✓</td><td class="c">✓</td><td class="c">✗</td><td class="c">✓</td><td class="c">✓</td></tr>
+          <tr class="even"><td>Video generation</td><td class="blue">✓</td><td class="c">✗</td><td class="c">✓</td><td class="c">Partial</td><td class="c">✗</td></tr>
+          <tr><td>Canvas / design editor</td><td class="blue">✓</td><td class="c">✗</td><td class="c">✗</td><td class="c">✓</td><td class="c">Partial</td></tr>
+          <tr class="even"><td>Explore / inspiration feed</td><td class="blue">✓</td><td class="c">✓</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td></tr>
+          <tr><td>Prompt → image → video handoff</td><td class="blue">✓</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td></tr>
+          <tr class="even"><td>Layers panel in editor</td><td class="blue">✓</td><td class="c">✗</td><td class="c">✗</td><td class="c">✓</td><td class="c">Partial</td></tr>
+          <tr><td>Dark mode</td><td class="blue">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✗</td><td class="c">✗</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Personas -->
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px">User Personas</h3>
+    <div class="grid2">
+      <div class="persona-card">
+        <div class="persona-row">
+          <div class="persona-avatar" style="background:linear-gradient(135deg,#1D7BFF,#06B6D4)">M</div>
+          <div class="persona-info">
+            <div><span>Maya, 28</span> — Freelance Content Creator</div>
+            <div style="font-size:.75rem;color:#737373;margin-top:2px">Creates content for brand clients · uses Midjourney + Canva daily</div>
+          </div>
+        </div>
+        <ul class="goal-list">
+          <li><div class="goal-dot"></div><span><strong>Goal:</strong> Generate on-brand visuals quickly without re-uploading between apps</span></li>
+          <li><div class="goal-dot"></div><span><strong>Frustration:</strong> Inconsistent output quality across tools; no shared history</span></li>
+          <li><div class="goal-dot"></div><span><strong>Quote:</strong> "I need one tab, not five."</span></li>
+        </ul>
+      </div>
+      <div class="persona-card">
+        <div class="persona-row">
+          <div class="persona-avatar" style="background:linear-gradient(135deg,#8B5CF6,#EC4899)">J</div>
+          <div class="persona-info">
+            <div><span>James, 34</span> — Marketing Manager</div>
+            <div style="font-size:.75rem;color:#737373;margin-top:2px">Runs campaigns for a SaaS startup · AI-curious, non-technical</div>
+          </div>
+        </div>
+        <ul class="goal-list">
+          <li><div class="goal-dot"></div><span><strong>Goal:</strong> Produce video ads and social graphics without a design team</span></li>
+          <li><div class="goal-dot"></div><span><strong>Frustration:</strong> Too many tools require prompt engineering expertise</span></li>
+          <li><div class="goal-dot"></div><span><strong>Quote:</strong> "Style presets save me from writing a novel as a prompt."</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 5. Define -->
+<section class="cs">
+  <div class="wrap">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f59e0b">05</div>
+      <h2>Define / Synthesis</h2>
+    </div>
+
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px">How Might We Statements</h3>
+    <div class="grid3" style="margin-bottom:28px">
+      <div class="hmw-card">
+        <div class="hmw-label">HMW</div>
+        <div class="hmw-q">How might we let creators go from prompt to video to designed artifact without leaving one tab?</div>
+        <div class="hmw-led">→ Led to: <span>Design Studio + "Try in Design Studio" CTA flow</span></div>
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-label">HMW</div>
+        <div class="hmw-q">How might we give non-technical users confident control over generation parameters?</div>
+        <div class="hmw-led">→ Led to: <span>Style presets, camera motion grid, visual aspect ratio picker</span></div>
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-label">HMW</div>
+        <div class="hmw-q">How might we surface community-created content to drive inspiration and retention?</div>
+        <div class="hmw-led">→ Led to: <span>Explore page with masonry gallery, tabs, and rich detail modal</span></div>
+      </div>
+    </div>
+
+    <!-- Journey map -->
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px">User Journey Map — Maya's Creative Session</h3>
+    <div class="journey" style="margin-bottom:28px">
+      <table class="journey-table">
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>Action</th>
+            <th>Thought</th>
+            <th>Emotion</th>
+            <th>Opportunity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Discover</strong></td>
+            <td>Browses Explore page, sees trending images</td>
+            <td>"This style is exactly what my client wants."</td>
+            <td class="mood-high">😊 Inspired</td>
+            <td>Rich detail modal with prompt + model info</td>
+          </tr>
+          <tr class="even">
+            <td><strong>Ideate</strong></td>
+            <td>Clicks "Try in Design Studio" from modal</td>
+            <td>"I can remix this without starting from scratch."</td>
+            <td class="mood-high">🚀 Excited</td>
+            <td>Auto-populate prompt in Design Studio</td>
+          </tr>
+          <tr>
+            <td><strong>Generate</strong></td>
+            <td>Adjusts prompt, chooses style preset, generates</td>
+            <td>"The generation overlay keeps me informed."</td>
+            <td class="mood-mid">😌 Patient</td>
+            <td>Stage-by-stage progress with time estimate</td>
+          </tr>
+          <tr class="even">
+            <td><strong>Edit</strong></td>
+            <td>Adds text layer, reorders in layers panel</td>
+            <td>"I can see exactly what's on the canvas."</td>
+            <td class="mood-high">✅ In control</td>
+            <td>Layers panel with drag reorder + rename</td>
+          </tr>
+          <tr>
+            <td><strong>Export</strong></td>
+            <td>Clicks Download, shares to client</td>
+            <td>"Done in one session."</td>
+            <td class="mood-high">🎉 Satisfied</td>
+            <td>Download + Share CTAs in toolbar</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Scope -->
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px">Defined Scope — v1.0</h3>
+    <div class="scope-table">
+      <div class="scope-header">MVP Scope Decision</div>
+      <div class="scope-body">
+        <div class="scope-col">
+          <div class="scope-title g">✓ In Scope</div>
+          <div class="scope-item">✓ <span>Explore page with masonry gallery + detail modal</span></div>
+          <div class="scope-item">✓ <span>Image Studio with generation + My Creations</span></div>
+          <div class="scope-item">✓ <span>Video Studio with multi-model + camera controls</span></div>
+          <div class="scope-item">✓ <span>Design Studio with canvas editor + layers</span></div>
+          <div class="scope-item">✓ <span>Prompt → image → video → design handoff flow</span></div>
+          <div class="scope-item">✓ <span>Dark/light mode + profile + billing page</span></div>
+        </div>
+        <div class="scope-col">
+          <div class="scope-title r">✗ Out of Scope (v1)</div>
+          <div class="scope-item">✗ <span>Real AI model API integration</span></div>
+          <div class="scope-item">✗ <span>Real-time collaborative canvas (multiplayer)</span></div>
+          <div class="scope-item">✗ <span>Mobile native apps</span></div>
+          <div class="scope-item">✗ <span>Payment / checkout flow</span></div>
+          <div class="scope-item">✗ <span>Export to social media platforms directly</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 6. Ideation -->
+<section class="cs">
+  <div class="wrap">
+    <div class="section-header">
+      <div class="section-icon" style="background:#ec4899">06</div>
+      <h2>Ideation</h2>
+    </div>
+
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px">Key User Flows</h3>
+
+    <div class="flow-card">
+      <strong style="font-size:.875rem;color:#171717">Flow A — Explore → Detail → Design Studio</strong>
+      <div class="flow-steps">
+        <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">Home / Explore</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">Click card</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">Detail modal opens</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">"Try in Design Studio"</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">5</div><div class="flow-text">Design Studio loads with prompt</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">6</div><div class="flow-text">Generate → Edit → Export</div></div>
+      </div>
+    </div>
+
+    <div class="flow-card">
+      <strong style="font-size:.875rem;color:#171717">Flow B — Image Studio → My Creations → Design Studio</strong>
+      <div class="flow-steps">
+        <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">Image Studio</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">Generate image</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">My Creations tab</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">Click creation</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">5</div><div class="flow-text">Opens Design Studio</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">6</div><div class="flow-text">Add layers, export</div></div>
+      </div>
+    </div>
+
+    <div class="flow-card">
+      <strong style="font-size:.875rem;color:#171717">Flow C — Video Studio Generation</strong>
+      <div class="flow-steps">
+        <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">Video Studio</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">Pick model + style</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">Set camera motion</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">Write prompt</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">5</div><div class="flow-text">Generate → watch stages</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num">6</div><div class="flow-text">Play / Download / Edit</div></div>
+      </div>
+    </div>
+
+    <h3 style="font-size:1rem;font-weight:600;margin-top:28px;margin-bottom:16px">Information Architecture</h3>
+    <div class="grid2">
+      <div>
+        <div style="border:1px solid #f3f4f6;border-radius:14px;padding:20px">
+          <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#a3a3a3;font-weight:700;margin-bottom:12px">Sidebar Nav (global)</div>
+          <div style="display:flex;flex-direction:column;gap:4px;font-size:.875rem;color:#374151">
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;background:#EFF6FF;color:#1D7BFF;font-weight:500">🏠 Explore (Home)</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px">💬 Chat</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px">🖼 Image Studio</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px">🎬 Video Studio</div>
+            <div style="height:1px;background:#f3f4f6;margin:6px 0"></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;color:#737373">🔍 Search</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;color:#737373">🌙 Theme</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;color:#737373">⚙️ Settings</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;color:#737373">👤 Profile avatar</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="border:1px solid #f3f4f6;border-radius:12px;padding:14px">
+          <h4 style="font-size:.875rem;font-weight:600;color:#171717;margin-bottom:4px">Design Studio — access only via flow</h4>
+          <p style="font-size:.8rem;color:#737373">Intentionally removed from sidebar nav to prevent confusion — accessed only through "Try in Design Studio" CTA or clicking a My Creation. This reduces cognitive load on new users.</p>
+        </div>
+        <div style="border:1px solid #f3f4f6;border-radius:12px;padding:14px">
+          <h4 style="font-size:.875rem;font-weight:600;color:#171717;margin-bottom:4px">Profile popup vs. dedicated page</h4>
+          <p style="font-size:.8rem;color:#737373">Profile panel floats from the avatar with credit bar, stats, and upgrade CTA — key actions without leaving the current tool. Full account management lives at /account.</p>
+        </div>
+        <div style="border:1px solid #f3f4f6;border-radius:12px;padding:14px">
+          <h4 style="font-size:.875rem;font-weight:600;color:#171717;margin-bottom:4px">Settings as billing hub</h4>
+          <p style="font-size:.8rem;color:#737373">7-section settings page: General, Appearance, Notifications, API Keys, Security, Usage & Credits, Plans — prevents scattered preference management.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 7. Design -->
+<section class="cs" id="design">
+  <div class="wrap">
+    <div class="section-header">
+      <div class="section-icon" style="background:#1D7BFF">07</div>
+      <h2>Design System & Key UI Decisions</h2>
+    </div>
+
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px">Color Palette</h3>
+    <div class="palette">
+      <div class="swatch"><div class="swatch-dot" style="background:#1D7BFF"></div><div><div class="swatch-name">Primary Blue</div><div class="swatch-hex">#1D7BFF</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#06B6D4"></div><div><div class="swatch-name">Cyan</div><div class="swatch-hex">#06B6D4</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#8B5CF6"></div><div><div class="swatch-name">Purple</div><div class="swatch-hex">#8B5CF6</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#EC4899"></div><div><div class="swatch-name">Pink</div><div class="swatch-hex">#EC4899</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:#10B981"></div><div><div class="swatch-name">Green</div><div class="swatch-hex">#10B981</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:linear-gradient(135deg,#1D7BFF,#06B6D4)"></div><div><div class="swatch-name">Brand Gradient</div><div class="swatch-hex">Blue → Cyan</div></div></div>
+    </div>
+
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px">Design Principles</h3>
+    <div class="grid3" style="margin-bottom:32px">
+      <div class="principle-card">
+        <div class="principle-icon">🧭</div>
+        <div class="principle-title">Flow over features</div>
+        <div class="principle-desc">Every feature exists to advance a creative flow. The Design Studio is not in the nav — it's a destination you arrive at through intent, not discovery.</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon">⚡</div>
+        <div class="principle-title">Parameters, not prompt walls</div>
+        <div class="principle-desc">Style presets, camera motion grids, and visual ratio pickers replace intimidating blank prompt boxes with structured, clickable decisions.</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon">🌑</div>
+        <div class="principle-title">Dark-first, theme-aware</div>
+        <div class="principle-desc">CSS variable tokens (--bg-base, --text-primary) power both dark and light themes. Gradients and colored borders replace flat grays for depth.</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px">Key Screens & Decisions</h3>
+
+    <!-- Real screenshots grid -->
+    <div class="screens-grid" style="margin-bottom:28px">
+      <div>
+        <div class="screen-wrap" style="border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15)"><img src="./cs-home.jpg" alt="Explore Home"></div>
+        <div class="screen-label" style="text-align:left;margin-top:8px;font-size:.8rem;color:#374151;font-weight:500">Explore / Home — Masonry gallery</div>
+      </div>
+      <div>
+        <div class="screen-wrap" style="border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15)"><img src="./cs-image-studio.jpg" alt="Image Studio"></div>
+        <div class="screen-label" style="text-align:left;margin-top:8px;font-size:.8rem;color:#374151;font-weight:500">Image Studio — Generation panel</div>
+      </div>
+      <div>
+        <div class="screen-wrap" style="border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15)"><img src="./cs-video-studio.jpg" alt="Video Studio"></div>
+        <div class="screen-label" style="text-align:left;margin-top:8px;font-size:.8rem;color:#374151;font-weight:500">Video Studio — Advanced controls</div>
+      </div>
+      <div>
+        <div class="screen-wrap" style="border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15)"><img src="./cs-design-studio.jpg" alt="Design Studio"></div>
+        <div class="screen-label" style="text-align:left;margin-top:8px;font-size:.8rem;color:#374151;font-weight:500">Design Studio — Canvas + layers</div>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-label">Explore / Home — Masonry Gallery</div>
+        <div class="feature-badge" style="background:#EFF6FF;color:#1D7BFF">High-impact screen</div>
+      </div>
+      <div class="feature-body">
+        <div class="grid2" style="align-items:start">
+          <div>
+            <p style="font-size:.8125rem;color:#525252;line-height:1.6;margin-bottom:12px">The explore page is the first impression. I used CSS <code style="background:#f3f4f6;padding:1px 5px;border-radius:4px">columns</code> masonry layout (not CSS Grid) so images flow at their natural aspect ratios — creating a rich, Pinterest-style discovery experience without JavaScript masonry libraries.</p>
+            <ul style="list-style:none;font-size:.8125rem;color:#525252;display:flex;flex-direction:column;gap:6px">
+              <li>→ Always-visible stats overlay (views + likes) on each card</li>
+              <li>→ Hover reveals: like, download, share, prompt preview, "Try this" CTA</li>
+              <li>→ 9 content filter tabs with per-tab unique item sets</li>
+              <li>→ Search filters within active tab</li>
+            </ul>
+          </div>
+          <div style="background:#f8fafc;border-radius:12px;padding:16px">
+            <div style="font-size:.7rem;font-weight:600;color:#737373;margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em">Detail Modal Anatomy</div>
+            <ul style="list-style:none;font-size:.8rem;color:#525252;display:flex;flex-direction:column;gap:5px">
+              <li>📸 Left 54% — full-height image + nav arrows + counter</li>
+              <li>👤 User row — avatar, handle, followers, Follow btn, ❤ likes</li>
+              <li>📝 Derived title from prompt first segment</li>
+              <li>🏷 Meta badges — date · tool · AI Generated · view count</li>
+              <li>🏷 Keyword tags extracted from prompt</li>
+              <li>⚙️ Generation Parameters (collapsible) — prompt copy, 4 model cards, base info</li>
+              <li>💬 Comments — input + 3 mock entries with like/reply</li>
+              <li>🎬 Sticky CTAs — Generate Video + Try in Design Studio</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-label">Design Studio — Canvas Editor</div>
+        <div class="feature-badge" style="background:#F3E8FF;color:#8B5CF6">Flagship feature</div>
+      </div>
+      <div class="feature-body">
+        <p style="font-size:.8125rem;color:#525252;line-height:1.6;margin-bottom:12px">Full-screen canvas editor accessible only through explicit user intent (via "Try in Design Studio" CTA). Key design decisions:</p>
+        <div class="grid2">
+          <ul style="list-style:none;font-size:.8125rem;color:#525252;display:flex;flex-direction:column;gap:6px">
+            <li>→ Left sidebar: 6 tabs (Layers, Templates, Elements, Text, Photos, BG)</li>
+            <li>→ Layers panel: drag-reorder, inline rename, right-click context menu</li>
+            <li>→ Bottom bar: Layers toggle, Page 1/1, zoom controls</li>
+            <li>→ Floating prompt bar: Image/Video mode tabs + generate button</li>
+            <li>→ Generation overlay inside canvas with animated rings + stage labels</li>
+          </ul>
+          <ul style="list-style:none;font-size:.8125rem;color:#525252;display:flex;flex-direction:column;gap:6px">
+            <li>→ Right panel: Document properties (canvas size, background color)</li>
+            <li>→ Element properties panel contextual to selection</li>
+            <li>→ Dual mode: Image gen + Video gen with different prompt suggestions</li>
+            <li>→ History undo/redo stack for canvas actions</li>
+            <li>→ Template gallery with 6 social/marketing presets</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-label">Video Studio — Advanced Generation Controls</div>
+        <div class="feature-badge" style="background:#FEF9C3;color:#854D0E">Advanced UX</div>
+      </div>
+      <div class="feature-body">
+        <p style="font-size:.8125rem;color:#525252;line-height:1.6;margin-bottom:12px">Most video generation tools expose raw sliders. AnetAIS replaces these with opinionated preset grids that communicate visually what each option does:</p>
+        <div class="grid3">
+          <div style="background:#fafafa;border-radius:10px;padding:12px">
+            <div style="font-size:.7rem;font-weight:700;color:#525252;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">5 Model Options</div>
+            <p style="font-size:.75rem;color:#737373">Each with name, badge (Latest/Popular/Fast), and sub-description — helps non-technical users choose confidently.</p>
+          </div>
+          <div style="background:#fafafa;border-radius:10px;padding:12px">
+            <div style="font-size:.7rem;font-weight:700;color:#525252;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">10 Camera Motions</div>
+            <p style="font-size:.75rem;color:#737373">Visual icon grid (Static, Pan L/R, Tilt U/D, Zoom In/Out, Orbit, Dolly, Handheld) with tooltip descriptions. Motion strength slider appears only when a motion is selected.</p>
+          </div>
+          <div style="background:#fafafa;border-radius:10px;padding:12px">
+            <div style="font-size:.7rem;font-weight:700;color:#525252;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Credits + Time Estimate</div>
+            <p style="font-size:.75rem;color:#737373">Dynamic cost and time preview before generating — sets expectations and reduces frustration when results take time.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 8. Testing -->
+<section class="cs">
+  <div class="wrap">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f97316">08</div>
+      <h2>Testing & Iteration</h2>
+    </div>
+
+    <div class="grid2" style="margin-bottom:28px;align-items:start">
+      <div>
+        <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px">Usability Testing Findings</h3>
+        <div class="test-finding">
+          <h4>Design Studio was hidden — users couldn't find it</h4>
+          <p>"I kept looking for a 'Design' button in the sidebar." — Tester #2</p>
+        </div>
+        <div class="test-finding">
+          <h4>Layers panel as floating overlay was disorienting</h4>
+          <p>"It covered my canvas and I didn't know where to click." — Tester #5</p>
+        </div>
+        <div class="test-finding">
+          <h4>ProfileMenu clipped off-screen on smaller viewports</h4>
+          <p>The popup used absolute positioning relative to sidebar, not viewport.</p>
+        </div>
+        <div class="test-finding">
+          <h4>Detail modal felt shallow — users wanted more generation context</h4>
+          <p>"I want to see what model and settings made this." — Tester #4</p>
+        </div>
+        <div class="test-finding">
+          <h4>My Creations click opened an in-page editor, not Design Studio</h4>
+          <p>Users expected the full canvas editor, not a minimal overlay.</p>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px">Iterations Made</h3>
+        <div class="test-fix"><div class="test-fix-arrow">→</div><div><h4>Design Studio removed from sidebar nav</h4><p>Access gated to "Try in Design Studio" CTA in detail modal and My Creations click — enforces intentional flow, reduces confusion.</p></div></div>
+        <div class="test-fix"><div class="test-fix-arrow">→</div><div><h4>Layers panel moved to sidebar section</h4><p>Layers button in bottom bar toggles the left sidebar panel between Templates and Layers — no floating overlay, no canvas obstruction.</p></div></div>
+        <div class="test-fix"><div class="test-fix-arrow">→</div><div><h4>ProfileMenu changed to fixed positioning</h4><p>Changed from <code>absolute</code> to <code>fixed left-[72px] bottom-4</code> — always visible, never clipped.</p></div></div>
+        <div class="test-fix"><div class="test-fix-arrow">→</div><div><h4>Detail modal completely redesigned (Liblib-inspired)</h4><p>Added: model cards with tier badges, collapsible generation params, comment section, sticky Generate Video + Design Studio CTAs.</p></div></div>
+        <div class="test-fix"><div class="test-fix-arrow">→</div><div><h4>My Creations → Design Studio navigation</h4><p>Click on any creation card in My Creations tab now navigates directly to Design Studio with prompt pre-filled.</p></div></div>
+      </div>
+    </div>
+
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:14px">Before / After — Key Changes</h3>
+    <div class="ba-table">
+      <div class="ba-header">
+        <div>Area</div>
+        <div>Before</div>
+        <div>After</div>
+      </div>
+      <div class="ba-row">
+        <div class="ba-area">Detail Modal</div>
+        <div class="ba-cell"><div class="ba-cell-label r">Before</div>Basic 2-col layout: image + small stats, prompt box, model chip, 3 action buttons</div>
+        <div class="ba-cell"><div class="ba-cell-label g">After</div>Full Liblib-style: user profile, title, meta badges, tags, collapsible generation params with model cards, comments, sticky CTAs</div>
+      </div>
+      <div class="ba-row" style="background:#fafafa">
+        <div class="ba-area">Layers Panel</div>
+        <div class="ba-cell"><div class="ba-cell-label r">Before</div>Floating panel that overlaid the canvas from bottom-left</div>
+        <div class="ba-cell"><div class="ba-cell-label g">After</div>Sidebar section toggled by bottom bar Layers button — no canvas obstruction</div>
+      </div>
+      <div class="ba-row">
+        <div class="ba-area">ProfileMenu</div>
+        <div class="ba-cell"><div class="ba-cell-label r">Before</div>Absolutely positioned, clipped at viewport edge on small screens</div>
+        <div class="ba-cell"><div class="ba-cell-label g">After</div>Fixed at left:[72px] bottom:4 — always fully visible, theme-aware</div>
+      </div>
+      <div class="ba-row" style="background:#fafafa">
+        <div class="ba-area">Video Studio</div>
+        <div class="ba-cell"><div class="ba-cell-label r">Before</div>Single CFG Scale slider + basic aspect ratio chips + duration toggle</div>
+        <div class="ba-cell"><div class="ba-cell-label g">After</div>5 models, 8 style presets, 10 camera motions, 4 durations, FPS, seed, negative prompt, cost + time estimates</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 9. Final Solution -->
+<section class="cs">
+  <div class="wrap">
+    <div class="section-header">
+      <div class="section-icon" style="background:#059669">09</div>
+      <h2>Final Solution</h2>
+    </div>
+    <p class="lead" style="margin-bottom:28px">AnetAIS v1.0 ships as a unified 5-route web application with a global 72px icon sidebar, dark/light theme, and three interconnected creative studios that share a common prompt-to-output philosophy.</p>
+
+    <div class="grid2" style="margin-bottom:20px">
+      <div class="card" style="background:linear-gradient(135deg,#f8faff,#f0f9ff)">
+        <div style="font-size:1.5rem;margin-bottom:8px">🏠</div>
+        <h3 style="font-size:.9375rem;font-weight:600;margin-bottom:8px">Explore Page</h3>
+        <p style="font-size:.8rem;color:#525252;line-height:1.55">Masonry CSS columns gallery with 9 filter tabs, search, and rich detail modal. The inspiration layer that feeds users into the creation funnel.</p>
+      </div>
+      <div class="card" style="background:linear-gradient(135deg,#f8f0ff,#fdf4ff)">
+        <div style="font-size:1.5rem;margin-bottom:8px">🖼</div>
+        <h3 style="font-size:.9375rem;font-weight:600;margin-bottom:8px">Image Studio</h3>
+        <p style="font-size:.8rem;color:#525252;line-height:1.55">Prompt input with style presets, aspect ratios, model selector, and My Creations masonry grid that routes to Design Studio on click.</p>
+      </div>
+      <div class="card" style="background:linear-gradient(135deg,#fff8f0,#fff4f0)">
+        <div style="font-size:1.5rem;margin-bottom:8px">🎬</div>
+        <h3 style="font-size:.9375rem;font-weight:600;margin-bottom:8px">Video Studio</h3>
+        <p style="font-size:.8rem;color:#525252;line-height:1.55">5 models, 8 style presets, 10 camera motions, duration + FPS controls, advanced settings, full video player with seekbar, and history library panel.</p>
+      </div>
+      <div class="card" style="background:linear-gradient(135deg,#f0fff8,#f0fdf4)">
+        <div style="font-size:1.5rem;margin-bottom:8px">✏️</div>
+        <h3 style="font-size:.9375rem;font-weight:600;margin-bottom:8px">Design Studio</h3>
+        <p style="font-size:.8rem;color:#525252;line-height:1.55">Full canvas editor with layers panel (drag-reorder, rename, right-click context), templates, element types, floating AI prompt bar for image/video generation inline.</p>
+      </div>
+    </div>
+
+    <!-- Final screens in a 2-wide strip -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+      <div>
+        <div class="screen-wrap" style="border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.18)"><img src="./cs-home.jpg" alt="Home"></div>
+        <div style="font-size:.75rem;color:#737373;margin-top:6px;font-weight:500">Explore / Home</div>
+      </div>
+      <div>
+        <div class="screen-wrap" style="border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.18)"><img src="./cs-image-studio.jpg" alt="Image Studio"></div>
+        <div style="font-size:.75rem;color:#737373;margin-top:6px;font-weight:500">Image Studio</div>
+      </div>
+      <div>
+        <div class="screen-wrap" style="border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.18)"><img src="./cs-video-studio.jpg" alt="Video Studio"></div>
+        <div style="font-size:.75rem;color:#737373;margin-top:6px;font-weight:500">Video Studio</div>
+      </div>
+      <div>
+        <div class="screen-wrap" style="border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.18)"><img src="./cs-design-studio.jpg" alt="Design Studio"></div>
+        <div style="font-size:.75rem;color:#737373;margin-top:6px;font-weight:500">Design Studio</div>
+      </div>
+    </div>
+
+    <div style="border:1px solid #f3f4f6;border-radius:16px;padding:24px;background:#fafafa">
+      <div style="font-size:.7rem;font-weight:700;color:#737373;text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px">Cross-product Handoff Flows</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:.8125rem;color:#525252">
+        <div>📍 Explore detail modal → "Generate Video" → Video Studio</div>
+        <div>📍 Explore detail modal → "Try in Design Studio" → Design Studio (prompt pre-filled)</div>
+        <div>📍 Image Studio My Creations click → Design Studio (image + prompt)</div>
+        <div>📍 Video Studio generated video → "Edit in Design Studio" → Design Studio</div>
+        <div>📍 Design Studio floating bar → Image or Video generation → element added to canvas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 10. Results -->
+<section class="cs" id="results">
+  <div class="wrap">
+    <div class="section-header">
+      <div class="section-icon" style="background:#7c3aed">10</div>
+      <h2>Results & Impact</h2>
+    </div>
+
+    <div class="result-grid" style="margin-bottom:28px">
+      <div class="result-card">
+        <div class="result-val">5</div>
+        <div class="result-label">Fully functional screens shipped in v1.0</div>
+      </div>
+      <div class="result-card">
+        <div class="result-val">100%</div>
+        <div class="result-label">Cross-product handoff flows implemented (5 of 5)</div>
+      </div>
+      <div class="result-card">
+        <div class="result-val">3</div>
+        <div class="result-label">Distinct user task flows verified end-to-end in browser</div>
+      </div>
+      <div class="result-card">
+        <div class="result-val">0</div>
+        <div class="result-label">Tool-switching required within AnetAIS to complete core creative workflows</div>
+      </div>
+    </div>
+
+    <div class="impact-card">
+      <div class="impact-label">Replaced — Tools Previously Needed Separately</div>
+      <div class="impact-grid">
+        <div><div class="impact-b">Midjourney / Firefly</div><div class="impact-a">→ Image Studio</div></div>
+        <div><div class="impact-b">Runway / Kling / Pika</div><div class="impact-a">→ Video Studio</div></div>
+        <div><div class="impact-b">Canva / Figma (light)</div><div class="impact-a">→ Design Studio</div></div>
+        <div><div class="impact-b">ChatGPT for prompts</div><div class="impact-a">→ AI Enhance toggle</div></div>
+        <div><div class="impact-b">Pinterest / Behance</div><div class="impact-a">→ Explore / Gallery</div></div>
+        <div><div class="impact-b">Separate billing dashboards</div><div class="impact-a">→ Unified Settings hub</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 11. Reflection -->
+<section class="cs">
+  <div class="wrap">
+    <div class="section-header">
+      <div class="section-icon" style="background:#374151">11</div>
+      <h2>Reflection & Learnings</h2>
+    </div>
+    <div class="grid2">
+      <div>
+        <h3 style="font-size:1rem;font-weight:600;margin-bottom:14px;color:#171717">What I'd Do Differently</h3>
+        <ul class="ref-list">
+          <li><span style="color:#1D7BFF;font-weight:700;flex-shrink:0">1.</span><span>Start user testing earlier — the Design Studio discoverability issue was only found in round 2. A quick prototype test in week 1 would have caught it.</span></li>
+          <li><span style="color:#1D7BFF;font-weight:700;flex-shrink:0">2.</span><span>Define the design token system upfront. CSS variable naming (--bg-base, --bg-muted, --bg-hover, --bg-active) was stable but evolved inconsistently in early components.</span></li>
+          <li><span style="color:#1D7BFF;font-weight:700;flex-shrink:0">3.</span><span>Invest earlier in mobile-responsive layout for the Design Studio — the canvas editor currently works best at 1200px+ and needs a mobile-adapted view.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:1rem;font-weight:600;margin-bottom:14px;color:#171717">Key Learnings</h3>
+        <ul class="ref-list">
+          <li><span style="color:#10b981;font-weight:700;flex-shrink:0">✓</span><span><strong>Navigation is a product decision, not just a UX pattern.</strong> Removing Design Studio from the sidebar wasn't hiding a feature — it was defining the product's creative philosophy.</span></li>
+          <li><span style="color:#10b981;font-weight:700;flex-shrink:0">✓</span><span><strong>Preset grids beat sliders for non-technical users.</strong> Camera motion presets, style presets, and visual ratio pickers removed friction without reducing capability.</span></li>
+          <li><span style="color:#10b981;font-weight:700;flex-shrink:0">✓</span><span><strong>Detail modals are underrated conversion surfaces.</strong> The Liblib-inspired redesign turned a simple image preview into a rich, explore-and-convert moment with dual CTAs.</span></li>
+          <li><span style="color:#10b981;font-weight:700;flex-shrink:0">✓</span><span><strong>Fixed positioning beats absolute for floating UI.</strong> ProfileMenu, generation overlays, and floating prompt bars need viewport-relative positioning to work reliably across screen sizes.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:28px;padding:20px;border-radius:14px;background:linear-gradient(135deg,#EFF6FF,#ECFDF5);border:1px solid #BFDBFE">
+      <div style="font-size:.7rem;font-weight:700;color:#1D7BFF;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Next Steps — v1.1</div>
+      <div class="grid3">
+        <div style="font-size:.8rem;color:#374151;display:flex;gap:6px"><span>→</span><span>Real AI model API integration (Kling, Runway, Flux)</span></div>
+        <div style="font-size:.8rem;color:#374151;display:flex;gap:6px"><span>→</span><span>Mobile-responsive Design Studio with touch canvas</span></div>
+        <div style="font-size:.8rem;color:#374151;display:flex;gap:6px"><span>→</span><span>Real-time multiplayer canvas collaboration</span></div>
+        <div style="font-size:.8rem;color:#374151;display:flex;gap:6px"><span>→</span><span>Direct social media export (Instagram, TikTok)</span></div>
+        <div style="font-size:.8rem;color:#374151;display:flex;gap:6px"><span>→</span><span>AI-powered prompt suggestions from image reference</span></div>
+        <div style="font-size:.8rem;color:#374151;display:flex;gap:6px"><span>→</span><span>Stripe-integrated subscription and credit billing</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">
+        <div class="footer-mark">AI</div>
+        AnetAIS — UX/UI Case Study
+      </div>
+      <div class="footer-sub" style="margin-top:4px">Designed & built by Vanda · 2025 · Next.js + Tailwind CSS</div>
+    </div>
+    <a href="/home" style="color:#1D7BFF;font-size:.875rem;font-weight:500">← Back to AnetAIS</a>
+  </div>
+</footer>
+
+</body>
+</html>

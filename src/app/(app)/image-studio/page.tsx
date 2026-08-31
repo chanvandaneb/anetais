@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Cpu, Maximize2, Hash, Paperclip, Sparkles, Loader2,
@@ -13,8 +14,9 @@ import { useToast } from "@/components/ui/Toast";
 import { useUsage } from "@/components/ui/UsageContext";
 
 /* ── helpers ── */
-function img(seed: string, w: number, h: number) {
-  return `https://picsum.photos/seed/${seed}/${w}/${h}`;
+function img(seed: string, _w: number, h: number) {
+  const isTall = h > _w;
+  return `/gallery/${seed}${isTall ? "_tall" : "_sq"}.jpg`;
 }
 function formatNum(n: number) {
   return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
@@ -554,6 +556,7 @@ const INITIAL_CREATIONS: GalleryImage[] = [
 
 /* ── Page ── */
 export default function ImageStudioPage() {
+  const router = useRouter();
   const [tab, setTab] = useState<"explore" | "creations">("explore");
   const [prompt, setPrompt] = useState("");
   const [negativePrompt, setNegativePrompt] = useState("");
@@ -604,7 +607,7 @@ export default function ImageStudioPage() {
     setDetail({ item, items: EXPLORE_ITEMS, src: img(item.seed, 600, item.tall ? 800 : 600) });
   }
   function openCreation(creation: GalleryImage) {
-    setCanvas(creation);
+    router.push(`/design-studio?prompt=${encodeURIComponent(creation.prompt)}`);
   }
   function navTo(next: ExploreItem | GalleryImage) {
     const src = "seed" in next

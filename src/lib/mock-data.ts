@@ -135,7 +135,7 @@ const GALLERY_ITEMS: { seed: string; prompt: string; tall?: boolean }[] = [
 
 export const galleryImages: GalleryImage[] = GALLERY_ITEMS.map((item, i) => ({
   id: `img-${i}`,
-  src: `https://picsum.photos/seed/${item.seed}/600/${item.tall ? 800 : 600}`,
+  src: `/gallery/${item.seed}${item.tall ? "_tall" : "_sq"}.jpg`,
   prompt: item.prompt,
   tall: item.tall,
 }));
@@ -152,7 +152,7 @@ export function randomCreationImage(tall?: boolean): GalleryImage {
   const h = tall ? 800 : 600;
   return {
     id: `creation-${Date.now()}-${_creationIdx}`,
-    src: `https://picsum.photos/seed/${seed}/${w}/${h}`,
+    src: `/gallery/${seed}_${tall ? "tall" : "sq"}.jpg`,
     prompt: "",
     tall,
   };

@@ -225,8 +225,15 @@ const VIDEO_PROMPT_SUGGESTIONS = [
   "Time-lapse of a city from day to night",
 ];
 
-function picsumUrl(seed: string, w: number, h: number) {
-  return `https://picsum.photos/seed/${seed}/${w}/${h}`;
+function picsumUrl(seed: string, _w: number, h: number) {
+  // Use numeric seeds mapped to local ds files, named seeds as-is
+  const numSeed = parseInt(seed);
+  if (!isNaN(numSeed)) {
+    const idx = ((numSeed - 1) % 30) + 1;
+    return `/gallery/ds${idx}.svg`;
+  }
+  const isTall = h > _w;
+  return `/gallery/${seed}${isTall ? "_tall" : "_sq"}.jpg`;
 }
 
 /* ── Resize handle ── */

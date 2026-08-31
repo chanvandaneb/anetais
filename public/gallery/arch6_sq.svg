@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%" gradientTransform="rotate(160,0.5,0.5)">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <radialGradient id="g2" cx="506" cy="193" r="322" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#EC4899" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="g3" cx="139" cy="576" r="193.2" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="blur1"><feGaussianBlur stdDeviation="40"/></filter>
+    <filter id="blur2"><feGaussianBlur stdDeviation="25"/></filter>
+  </defs>
+  <rect width="600" height="600" fill="#1f0a14"/>
+  <rect width="600" height="600" fill="url(#g1)" opacity="0.3"/>
+  <ellipse cx="506" cy="193" rx="386.4" ry="289.8" fill="#EC4899" opacity="0.25" filter="url(#blur1)"/>
+  <ellipse cx="139" cy="576" rx="257.6" ry="354.20000000000005" fill="#F59E0B" opacity="0.3" filter="url(#blur2)"/>
+  <ellipse cx="300" cy="360" rx="180" ry="120" fill="#EC4899" opacity="0.1" filter="url(#blur1)"/>
+</svg>

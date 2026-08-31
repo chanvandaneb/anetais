@@ -13,9 +13,22 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/* ── AI-style image via Unsplash ── */
+/* ── Local gallery images (picsum pre-downloaded) ── */
 function aiImg(_prompt: string, w: number, h: number, seed: number) {
-  return `https://picsum.photos/seed/ai${seed}/${w}/${h}`;
+  // Use local cached images to avoid external network dependency
+  if (w > 400 && h < 400) {
+    // wide/banner: banner999, wide998, wide997
+    const wides: Record<number, string> = { 999: "/gallery/banner999.svg", 998: "/gallery/wide998.svg", 997: "/gallery/wide997.svg" };
+    if (wides[seed]) return wides[seed];
+  }
+  if (w >= 500 && h >= 700) {
+    // tall portrait: v1-v20
+    const idx = ((seed - 100) % 20) + 1;
+    return `/gallery/v${Math.max(1, Math.min(20, idx))}.svg`;
+  }
+  // square / generic
+  const idx = ((seed - 100) % 20) + 1;
+  return `/gallery/sq${Math.max(1, Math.min(20, idx))}.svg`;
 }
 
 /* ── Feature shortcut cards ── */
@@ -521,7 +534,7 @@ function DetailModal({ item, items, onClose, onNav }: {
                   {visibleComments.map((c, i) => (
                     <div key={i} className="flex gap-2.5">
                       <div className="h-7 w-7 flex-shrink-0 rounded-full overflow-hidden">
-                        <img src={`https://picsum.photos/seed/u${c.seed}/28/28`} alt={c.user} className="h-full w-full object-cover" />
+                        <img src={`/gallery/av${((c.seed - 1) % 10) + 1}.svg`} alt={c.user} className="h-full w-full object-cover" />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-baseline gap-1.5">
